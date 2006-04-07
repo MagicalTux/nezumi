@@ -1,5 +1,7 @@
 // $Id$
 
+***** RELEASE 1.0.1
+
 2006-04-07
 	* Fixed: area skills should be removed when caster changes map. from Project-Freya(Mikey) [Harbin]
 	* Updated: weapon produce rate modifiers. credits to SuzakuX [Harbin]
