@@ -124,7 +124,8 @@ int SkillStatusChangeTable[]={
 	-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
 	-1,
 	SC_KEEPING,
-	-1,-1,
+	-1,
+	SC_COMA,
 	SC_BARRIER,
 	-1,-1,
 	SC_HALLUCINATION,
@@ -181,7 +182,9 @@ int SkillStatusChangeTable[]={
 /* 290- */
 	-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,
 /* 300- */
-	-1,-1,-1,-1,-1,-1,
+	-1,-1,-1,
+	SC_COMA,
+	-1,-1,
 	SC_LULLABY,
 	SC_RICHMANKIM,
 	SC_ETERNALCHAOS,
@@ -3334,13 +3337,14 @@ int status_change_start(struct block_list *bl, int type, intptr_t val1, intptr_t
 				return 0;
 	}
 
-	if((type == SC_ADRENALINE || type == SC_WEAPONPERFECTION) &&
+	if((type == SC_ADRENALINE || type == SC_WEAPONPERFECTION || type == SC_OVERTHRUST) &&
 		sc_data[type].timer != -1 && sc_data[type].val2 && !val2)
 		return 0;
 
-	if(mode & 0x20 && (type==SC_STONE || type==SC_FREEZE ||
-		type==SC_STAN || type==SC_SLEEP || type==SC_SILENCE || type==SC_QUAGMIRE || type == SC_DECREASEAGI || type == SC_SIGNUMCRUCIS || type == SC_PROVOKE ||
-		(type == SC_BLESSING && (undead_flag || race == 6))) && !(flag&1)){
+	if(mode & 0x20 && (type == SC_STONE || type == SC_FREEZE || type == SC_STAN || type == SC_SLEEP || type == SC_CURSE ||
+		 								 type == SC_SILENCE || type == SC_BLIND || type == SC_QUAGMIRE || type == SC_DECREASEAGI || 
+		 								 type == SC_SIGNUMCRUCIS || type == SC_PROVOKE || type == SC_ROKISWEIL || type == SC_COMA ||
+										(type == SC_BLESSING && (undead_flag || race == 6))) && !(flag&1))
 		return 0;
 	}
 	if (type == SC_FREEZE || type == SC_STAN || type == SC_SLEEP)
@@ -3994,21 +3998,24 @@ int status_change_start(struct block_list *bl, int type, intptr_t val1, intptr_t
 		case SC_DOUBLECASTING:
 			break;
 
-		case SC_REJECTSWORD:	/* リジェクトソード */
-			val2 = 3; //3回攻撃を跳ね返す
-			val3 = 0; // Damage reflect state - [Aalye]
+		case SC_REJECTSWORD:
+			val2 = 3;
+			val3 = 0;
 			break;
 
 		case SC_MEMORIZE:
-			val2 = 5; // Memorize is supposed to reduce the cast time of the next 5 spells by half (thanks to [BLB] from freya's bug report)
+			val2 = 5;
 			break;
+
+		case SC_COMA:
+			battle_damage(NULL, bl, status_get_hp(bl)-1, 0);
+			return 0;
 
 		case SC_SPLASHER:	
 			break;
 
 		case SC_FOGWALL:
 			val2 = 75;
-			// calc_flag = 1;	// not sure of effects yet [celest]
 			break;
 
 		case SC_PRESERVE:

@@ -4288,10 +4288,11 @@ int skill_castend_nodamage_id(struct block_list *src, struct block_list *bl, int
 				switch (eff)
 				{
 				case 0:	// heals SP to 0
-					if (dstsd) pc_damage_sp(dstsd,0,100);
+					if (dstsd)
+						pc_heal(dstsd,0,-dstsd->status.sp);
 					break;
 				case 1:	// matk halved
-					status_change_start(bl,SC_INCMATKRATE,-50,skill_get_time2(skillid,skilllv));
+					status_change_start(bl,SC_INCMATKRATE,-50,0,0,0,30000,0);
 					break;
 				case 2:	// all buffs removed
 					status_change_clear_buffs(bl,1);
@@ -4306,7 +4307,7 @@ int skill_castend_nodamage_id(struct block_list *src, struct block_list *bl, int
 					}
 					break;
 				case 4:	// atk halved
-					status_change_start(bl,SC_INCATKRATE,-50,skill_get_time2(skillid,skilllv));
+					status_change_start(bl,SC_INCATKRATE,-50,0,0,0,30000,0);
 					break;
 				case 5:	// 2000HP heal, random teleported
 					battle_heal(src, src, 2000, 0, 0);
@@ -4324,37 +4325,37 @@ int skill_castend_nodamage_id(struct block_list *src, struct block_list *bl, int
 				case 7:	// stop freeze or stoned
 					{
 						int sc[] = { SC_STOP, SC_FREEZE, SC_STONE };
-						status_change_start(bl,sc[rand()%3],skilllv,skill_get_time2(skillid,skilllv));
+						status_change_start(bl,sc[rand()%3],skilllv,0,0,0,30000,0);
 					}
 					break;
 				case 8:	// curse coma and poison
-					status_change_start(bl,SC_COMA,skilllv,skill_get_time2(skillid,skilllv));
-					status_change_start(bl,SC_CURSE,skilllv,skill_get_time2(skillid,skilllv));
-					status_change_start(bl,SC_POISON,skilllv,skill_get_time2(skillid,skilllv));
+					status_change_start(bl,SC_COMA,skilllv,0,0,0,30000,0);
+					status_change_start(bl,SC_CURSE,skilllv,0,0,0,30000,0);
+					status_change_start(bl,SC_POISON,skilllv,0,0,0,30000,0);
 					break;
 				case 9:	// chaos
-					status_change_start(bl,SC_CONFUSION,skilllv,skill_get_time2(skillid,skilllv));
+					status_change_start(bl,SC_CONFUSION,skilllv,0,0,0,30000,0);
 					break;
 				case 10:	// 6666 damage, atk matk halved, cursed
 					battle_damage(src, bl, 6666, 0);
 					clif_damage(src,bl,tick,0,0,6666,0,0,0);
-					status_change_start(bl,SC_INCATKRATE,-50,skill_get_time2(skillid,skilllv));
-					status_change_start(bl,SC_INCMATKRATE,-50,skill_get_time2(skillid,skilllv));
-					status_change_start(bl,SC_CURSE,skilllv,skill_get_time2(skillid,skilllv));
+					status_change_start(bl,SC_INCATKRATE,-50,0,0,0,30000,0);
+					status_change_start(bl,SC_INCMATKRATE,-50,0,0,0,30000,0);
+					status_change_start(bl,SC_CURSE,skilllv,0,0,0,30000,0);
 					break;
 				case 11:	// 4444 damage
 					battle_damage(src, bl, 4444, 0);
 					clif_damage(src,bl,tick,0,0,4444,0,0,0);
 					break;
 				case 12:	// stun
-					status_change_start(bl,SC_STUN,skilllv,5000);
+					status_change_start(bl,SC_STAN,skilllv,0,0,0,5000,0);
 					break;
 				case 13:	// atk,matk,hit,flee,def reduced
-					status_change_start(bl,SC_INCATKRATE,-20,skill_get_time2(skillid,skilllv));
-					status_change_start(bl,SC_INCMATKRATE,-20,skill_get_time2(skillid,skilllv));
-					status_change_start(bl,SC_INCHITRATE,-20,skill_get_time2(skillid,skilllv));
-					status_change_start(bl,SC_INCFLEERATE,-20,skill_get_time2(skillid,skilllv));
-					status_change_start(bl,SC_INCDEFRATE,-20,skill_get_time2(skillid,skilllv));
+					status_change_start(bl,SC_INCATKRATE,-20,0,0,0,30000,0);
+					status_change_start(bl,SC_INCMATKRATE,-20,0,0,0,30000,0);
+					status_change_start(bl,SC_INCHITRATE,-20,0,0,0,30000,0);
+					status_change_start(bl,SC_INCFLEERATE,-20,0,0,0,30000,0);
+					status_change_start(bl,SC_INCDEFRATE,-20,0,0,0,30000,0);
 					break;
 				default:
 					break;			

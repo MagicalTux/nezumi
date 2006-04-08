@@ -200,6 +200,8 @@ enum {
 	SC_INCHITRATE,
 	SC_INCFLEERATE,
 
+	SC_COMA = 310,
+
 	SC_MAX,
 };
 extern int SkillStatusChangeTable[];
