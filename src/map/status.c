@@ -763,7 +763,6 @@ int status_calc_pc(struct map_session_data* sd, int first)
 
 	memcpy(sd->paramcard,sd->parame,sizeof(sd->paramcard));
 
-	// 装備品によるステータス変化はここで実行
 	for(i=0;i<10;i++) {
 		inv_index = idx = sd->equip_index[i];
 		if(idx < 0)
@@ -856,16 +855,14 @@ int status_calc_pc(struct map_session_data* sd, int first)
 	if(sd->aspd_add_rate != 100)
 		sd->aspd_rate += sd->aspd_add_rate - 100;
 
-	// 武器ATKサイズ補正 (右手)
 	sd->atkmods[0] = atkmods[0][sd->weapontype1];
 	sd->atkmods[1] = atkmods[1][sd->weapontype1];
 	sd->atkmods[2] = atkmods[2][sd->weapontype1];
-	//武器ATKサイズ補正 (左手)
+
 	sd->atkmods_[0] = atkmods[0][sd->weapontype2];
 	sd->atkmods_[1] = atkmods[1][sd->weapontype2];
 	sd->atkmods_[2] = atkmods[2][sd->weapontype2];
 
-	// jobボーナス分
 	for(i = 0; i < sd->status.job_level && i < MAX_LEVEL; i++) {
 		if (job_bonus[s_class.upper][s_class.job][i])
 			sd->paramb[job_bonus[s_class.upper][s_class.job][i]-1]++;
@@ -882,11 +879,9 @@ int status_calc_pc(struct map_session_data* sd, int first)
 		sd->base_atk += 4;
 	}
 
-	// kRO patch 14/12/04 - Dragonology give Int bonus every 2 level. [Aalye]
 	if ((skill = pc_checkskill(sd, SA_DRAGONOLOGY)) > 0)
 		sd->paramb[3] += (skill % 2 == 0) ? skill / 2 : (skill + 1) / 2;
 
-	// ステータス変化による基本パラメータ補正
 	if (sd->sc_count) {
 		if (sd->sc_data[SC_INCSTR].timer != -1)
 			sd->paramb[0] += sd->sc_data[SC_INCSTR].val1;
@@ -1191,7 +1186,10 @@ int status_calc_pc(struct map_session_data* sd, int first)
 		if(sd->nhealsp < 1) sd->nhealsp = 1;
 	}
 
-	if( (skill=pc_checkskill(sd,SA_DRAGONOLOGY))>0 ){
+	if((skill = pc_checkskill(sd,HP_MANARECHARGE)) > 0)
+		sd->dsprate -= 4 * skill;
+
+	if((skill = pc_checkskill(sd,SA_DRAGONOLOGY)) > 0){
 		skill = skill*4;
 		sd->addrace[9]+=skill;
 		sd->addrace_[9]+=skill;
@@ -1212,9 +1210,7 @@ int status_calc_pc(struct map_session_data* sd, int first)
 	if ((skill = pc_checkskill(sd, MO_DODGE)) > 0)	// 見切り
 		sd->flee += (skill * 3) >> 1;
 
-	// スキルやステータス異常による残りのパラメータ補正
 	if(sd->sc_count){
-		// ATK/DEF変化形
 		if(sd->sc_data[SC_ANGELUS].timer!=-1)	// エンジェラス
 			sd->def2 = sd->def2*(110+5*sd->sc_data[SC_ANGELUS].val1)/100;
 		if(sd->sc_data[SC_IMPOSITIO].timer!=-1)	{// インポシティオマヌス
@@ -1433,8 +1429,6 @@ int status_calc_pc(struct map_session_data* sd, int first)
 			sd->speed += 450;
 
 		if(sd->sc_data[SC_TRUESIGHT].timer!=-1)
-// Fixed True Sight Critical Formula
-//			sd->critical += sd->critical * (sd->sc_data[SC_TRUESIGHT].val1) * 10;		// New way to calculate critical bonus
 			sd->critical += sd->sc_data[SC_TRUESIGHT].val1 * 10;
 
 		if(sd->sc_data[SC_BERSERK].timer!=-1)

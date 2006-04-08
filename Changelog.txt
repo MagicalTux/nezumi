@@ -1,6 +1,7 @@
 // $Id$
 
 2006-04-08
+	* Added: Mana Recharge skill (High Priest) [akrus]
 	* Updated: NPC and databases [akrus]
 
 ***** RELEASE 1.0.1

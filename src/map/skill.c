@@ -180,6 +180,7 @@ const struct skill_name_db skill_names[] = {
  { GD_EMERGENCYCALL, "EMERGENCYCALL", "Emergency_Call" } ,
  { HP_ASSUMPTIO, "ASSUMPTIO", "Assumptio" } ,
  { HP_BASILICA, "BASILICA", "Basilica" } ,
+ { HP_MANARECHARGE, "MANARECHARGE", "Mana_Recharge" } ,
  { HP_MEDITATIO, "MEDITATIO", "Meditation" } ,
  { HT_ANKLESNARE, "ANKLESNARE", "Ankle_Snare" } ,
  { HT_BEASTBANE, "BEASTBANE", "Beast_Bane" } ,
