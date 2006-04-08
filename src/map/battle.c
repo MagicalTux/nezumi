@@ -881,7 +881,7 @@ static struct Damage battle_calc_pet_weapon_attack(struct block_list *src, struc
 				flag = (flag&~BF_RANGEMASK)|BF_LONG;
 				break;
 			case AC_SHOWER:
-				damage = damage*(75 + 5*skill_lv)/100;
+				damage = damage * (5 * skill_lv - 25) / 100;
 				flag=(flag&~BF_RANGEMASK)|BF_LONG;
 				break;
 			case AC_CHARGEARROW:
@@ -1374,8 +1374,8 @@ static struct Damage battle_calc_mob_weapon_attack(
 				damage = damage * (180 + 20 * skill_lv) / 100;
 				flag=(flag&~BF_RANGEMASK)|BF_LONG;
 				break;
-			case AC_SHOWER:	// アローシャワー
-				damage = damage*(75 + 5*skill_lv)/100;
+			case AC_SHOWER:
+				damage = damage * (5 * skill_lv - 25) / 100;
 				flag=(flag&~BF_RANGEMASK)|BF_LONG;
 				break;
 			case AC_CHARGEARROW:	// チャージアロー
@@ -2095,7 +2095,7 @@ static struct Damage battle_calc_pc_weapon_attack(struct block_list *src, struct
 					damage2 += arr;
 				}
 				damageskillmod += 5 * skill_lv - 25;
-				flag=(flag&~BF_RANGEMASK)|BF_LONG;
+				flag = (flag&~BF_RANGEMASK)|BF_LONG;
 				sd->state.arrow_atk = 1;
 				break;
 			case AC_CHARGEARROW:

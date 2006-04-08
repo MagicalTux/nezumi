@@ -1,8 +1,11 @@
+// ID,unit ID,unit ID 2,layout,range,interval,target,flag
+
  12,0x7e,    ,  0, 0,  -1,all,   0x003				// MG_SAFETYWALL
  18,0x7f,    , -1, 0,   1,enemy, 0x008				// MG_FIREWALL
  21,0x86,    ,  0, 2,1000,enemy, 0x008				// MG_THUNDERSTORM
  25,0x85,    ,  1, 0,  -1,all,   0x003				// AL_PNEUMA
  27,0x81,0x80,  0, 0,  -1,all,   0x006				// AL_WARP
+ 47,0x86,    ,  0, 2,1000,enemy, 0x080				// AC_SHOWER
  70,0x83,    , -1, 1,1000,all,   0x008				// PR_SANCTUARY
  79,0x84,    , -1, 1,3000,enemy, 0x000				// PR_MAGNUS
  80,0x87,0x88,  0, 1,2000,enemy, 0x006				// WZ_FIREPILLAR

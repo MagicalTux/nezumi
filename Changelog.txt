@@ -1,6 +1,8 @@
 // $Id$
 
 2006-04-08
+	* Updated: Arrow Shower should be ground-targeted [akrus]
+	- please check it
 	* Fixed: likely fixed compilation errors with gcc 3.x under Linux [akrus]
 	* Added: Mana Recharge skill (High Priest) [akrus]
 	* Updated: NPC and databases [akrus]

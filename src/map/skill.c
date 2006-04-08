@@ -4767,6 +4767,7 @@ int skill_castend_pos2(struct block_list *src, int x, int y, int skillid, int sk
 	case PF_SPIDERWEB:			/* スパイダーウェッブ */
 	case PF_FOGWALL:			/* フォグウォール */
 	case HT_TALKIEBOX:			/* トーキーボックス */
+	case AC_SHOWER:
 		skill_unitsetting(src,skillid,skilllv,x,y,0);
 			break;
 
