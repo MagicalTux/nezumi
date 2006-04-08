@@ -4,6 +4,7 @@
 #define	_MMO_H_
 
 #include <time.h>
+#include <stdint.h>
 #include "../common/utils.h"
 
 #if defined __CYGWIN || defined __WIN32

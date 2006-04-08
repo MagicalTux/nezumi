@@ -1,6 +1,7 @@
 // $Id$
 
 2006-04-08
+	* Fixed: compiler error on linux (mmo.h) [Harbin]
 	* Fixed: Arrow Shower formula [akrus]
 	- no more testing needed, it's okay now
 	* Added: Tarot Card of Fate (based on eAthena) [akrus]
