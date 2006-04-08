@@ -193,6 +193,13 @@ enum {
 	SC_RIDING,
 	SC_FALCON,
 	SC_PNEUMA,
+
+	SC_INCATKRATE = 300,
+	SC_INCMATKRATE,
+	SC_INCDEFRATE,
+	SC_INCHITRATE,
+	SC_INCFLEERATE,
+
 	SC_MAX,
 };
 extern int SkillStatusChangeTable[];
@@ -419,6 +426,9 @@ int status_change_clear(struct block_list *bl, int type);
 int status_change_end(struct block_list* bl, int type, int tid);
 TIMER_FUNC(status_change_timer);
 int status_change_timer_sub(struct block_list *bl, va_list ap);
+
+int status_change_clear_buffs(struct block_list *bl);
+int status_change_clear_debuffs(struct block_list *bl);
 
 int do_init_status(void);
 

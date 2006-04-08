@@ -146,6 +146,7 @@ const struct skill_name_db skill_names[] = {
  { CG_ARROWVULCAN, "ARROWVULCAN", "Vulcan_Arrow" } ,
  { CG_MARIONETTE, "MARIONETTE", "Marionette_Control" } ,
  { CG_MOONLIT, "MOONLIT", "Moonlight_Petals" } ,
+ { CG_TAROTCARD, "TAROTCARD", "Tarot_Card_of_Fate" } ,
  { CH_CHAINCRUSH, "CHAINCRUSH", "Chain_Crush_Combo" } ,
  { CH_PALMSTRIKE, "PALMSTRIKE", "Palm_Push_Strike" } ,
  { CH_SOULCOLLECT, "SOULCOLLECT", "Collect_Soul" } ,
@@ -4272,20 +4273,108 @@ int skill_castend_nodamage_id(struct block_list *src, struct block_list *bl, int
 		}
 	  }
 		break;
+
+	case CG_TAROTCARD:
+		{
+			int eff, count = -1;
+			if (rand() % 100 > skilllv * 8) {
+				if (sd) clif_skill_fail(sd,skillid,0,0);
+				map_freeblock_unlock();
+				return 0;
+			}
+			do {
+				eff = rand() % 14;
+				clif_specialeffect(bl, 523 + eff, 0);
+				switch (eff)
+				{
+				case 0:	// heals SP to 0
+					if (dstsd) pc_damage_sp(dstsd,0,100);
+					break;
+				case 1:	// matk halved
+					status_change_start(bl,SC_INCMATKRATE,-50,skill_get_time2(skillid,skilllv));
+					break;
+				case 2:	// all buffs removed
+					status_change_clear_buffs(bl,1);
+					break;
+				case 3:	// 1000 damage, random armor destroyed
+					{
+						int where[] = { EQP_ARMOR, EQP_SHIELD, EQP_HELM };
+						battle_damage(src, bl, 1000, 0);
+						clif_damage(src,bl,tick,0,0,1000,0,0,0);
+						if (dstsd)
+							pc_break_equip(dstsd, where[rand() % 3]);
+					}
+					break;
+				case 4:	// atk halved
+					status_change_start(bl,SC_INCATKRATE,-50,skill_get_time2(skillid,skilllv));
+					break;
+				case 5:	// 2000HP heal, random teleported
+					battle_heal(src, src, 2000, 0, 0);
+					if(sd && !map[src->m].flag.noteleport)
+						pc_randomwarp(sd);
+					else if(md)
+						mob_warp(md,-1,-1,-1,3);
+					break;
+				case 6:	// random 2 other effects
+					if (count == -1)
+						count = 3;
+					else
+						count++; //Should not retrigger this one.
+					break;
+				case 7:	// stop freeze or stoned
+					{
+						int sc[] = { SC_STOP, SC_FREEZE, SC_STONE };
+						status_change_start(bl,sc[rand()%3],skilllv,skill_get_time2(skillid,skilllv));
+					}
+					break;
+				case 8:	// curse coma and poison
+					status_change_start(bl,SC_COMA,skilllv,skill_get_time2(skillid,skilllv));
+					status_change_start(bl,SC_CURSE,skilllv,skill_get_time2(skillid,skilllv));
+					status_change_start(bl,SC_POISON,skilllv,skill_get_time2(skillid,skilllv));
+					break;
+				case 9:	// chaos
+					status_change_start(bl,SC_CONFUSION,skilllv,skill_get_time2(skillid,skilllv));
+					break;
+				case 10:	// 6666 damage, atk matk halved, cursed
+					battle_damage(src, bl, 6666, 0);
+					clif_damage(src,bl,tick,0,0,6666,0,0,0);
+					status_change_start(bl,SC_INCATKRATE,-50,skill_get_time2(skillid,skilllv));
+					status_change_start(bl,SC_INCMATKRATE,-50,skill_get_time2(skillid,skilllv));
+					status_change_start(bl,SC_CURSE,skilllv,skill_get_time2(skillid,skilllv));
+					break;
+				case 11:	// 4444 damage
+					battle_damage(src, bl, 4444, 0);
+					clif_damage(src,bl,tick,0,0,4444,0,0,0);
+					break;
+				case 12:	// stun
+					status_change_start(bl,SC_STUN,skilllv,5000);
+					break;
+				case 13:	// atk,matk,hit,flee,def reduced
+					status_change_start(bl,SC_INCATKRATE,-20,skill_get_time2(skillid,skilllv));
+					status_change_start(bl,SC_INCMATKRATE,-20,skill_get_time2(skillid,skilllv));
+					status_change_start(bl,SC_INCHITRATE,-20,skill_get_time2(skillid,skilllv));
+					status_change_start(bl,SC_INCFLEERATE,-20,skill_get_time2(skillid,skilllv));
+					status_change_start(bl,SC_INCDEFRATE,-20,skill_get_time2(skillid,skilllv));
+					break;
+				default:
+					break;			
+				}			
+			} while ((--count) > 0);
+			clif_skill_nodamage(src,bl,skillid,skilllv,1);
+		}
+		break;
+
 	case BD_ENCORE:
 		clif_skill_nodamage(src, bl, skillid, skilllv, 1);
 		if (sd)
 			skill_use_id(sd, src->id, sd->skillid_dance, sd->skilllv_dance);
 		break;
+
 	case AS_SPLASHER:
-//		if(status_get_max_hp(bl) * 2 / 3 < status_get_hp(bl))
-//		{
-//			map_freeblock_unlock();
-//			return 1;
-//		}
 		clif_skill_nodamage(src, bl, skillid, skilllv, 1);
 		status_change_start(bl, SkillStatusChangeTable[skillid], skilllv, skillid, src->id, skill_get_time(skillid, skilllv), 1000, 0);
 		break;
+
 	case PF_MINDBREAKER:
 	  {
 		struct status_change *sc_data = status_get_sc_data(bl);

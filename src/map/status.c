@@ -2164,6 +2164,8 @@ int status_get_flee(struct block_list *bl) {
 				         sc_data[SC_GOSPEL].val3 == 7)
 					flee = 0;
 			}
+			if(sc_data[SC_INCFLEERATE].timer!=-1)
+				flee += flee * sc_data[SC_INCFLEERATE].val1 / 100;
 		}
 	}
 
@@ -2200,10 +2202,10 @@ int status_get_hit(struct block_list *bl) {
 				hit += hit * (sc_data[SC_TRUESIGHT].val1) * 3 / 100;	// New way to calculate accuracy bonus
 			if (sc_data[SC_CONCENTRATION].timer != -1)
 				hit += hit * 10 * sc_data[SC_CONCENTRATION].val1 / 100;
-			if (sc_data[SC_GOSPEL].timer != -1 &&
-			    sc_data[SC_GOSPEL].val4 == BCT_PARTY &&
-			    sc_data[SC_GOSPEL].val3 == 14)
+			if (sc_data[SC_GOSPEL].timer != -1 && sc_data[SC_GOSPEL].val4 == BCT_PARTY && sc_data[SC_GOSPEL].val3 == 14)
 				hit += hit * 5 / 100;
+			if(sc_data[SC_INCHITRATE].timer != -1)
+				hit += hit * sc_data[SC_INCHITRATE].val1 / 100;
 		}
 	}
 	if (hit < 1)
@@ -2352,6 +2354,8 @@ int status_get_atk(struct block_list *bl) {
 				         sc_data[SC_GOSPEL].val3 == 6)
 					atk = 0;
 			}
+			if(sc_data[SC_INCATKRATE].timer != -1)
+				atk += atk * sc_data[SC_INCATKRATE].val1 / 100;
 		}
 	}
 	if (atk < 0)
@@ -2448,8 +2452,10 @@ int status_get_matk1(struct block_list *bl) {
 		matk = int_ + (int_ / 5) * (int_ / 5);
 
 		if (sc_data) {
-			if (sc_data[SC_MINDBREAKER].timer!=-1)
+			if (sc_data[SC_MINDBREAKER].timer != -1)
 				matk = matk * (100 + 2 * sc_data[SC_MINDBREAKER].val1) / 100;
+			if (sc_data[SC_INCMATKRATE].timer != -1)
+				matk = matk * (100 + sc_data[SC_INCMATKRATE].val1) /100;
 		}
 	}
 
@@ -2484,8 +2490,7 @@ int status_get_matk2(struct block_list *bl) {
 }
 
 /*==========================================
- * 対象のDefを返す(汎用)
- * 戻りは整数で0以上
+ * Get DEF Status
  *------------------------------------------
  */
 int status_get_def(struct block_list *bl) {
@@ -2510,7 +2515,6 @@ int status_get_def(struct block_list *bl) {
 
 	if(def < 1000000) {
 		if(sc_data) {
-			//凍結、石化時は右シフト
 			if(sc_data[SC_FREEZE].timer != -1 || (sc_data[SC_STONE].timer != -1 && sc_data[SC_STONE].val2 == 0))
 				def >>= 1;
 
@@ -2524,6 +2528,9 @@ int status_get_def(struct block_list *bl) {
 
 				if (sc_data[SC_DRUMBATTLE].timer != -1)
 					def += sc_data[SC_DRUMBATTLE].val3;
+
+				if (sc_data[SC_INCDEFRATE].timer != -1)
+					def += def * sc_data[SC_INCDEFRATE].val1 / 100;
 
 				if (sc_data[SC_POISON].timer != -1)
 					def = def * 75 / 100;
@@ -4015,6 +4022,11 @@ int status_change_start(struct block_list *bl, int type, intptr_t val1, intptr_t
 		case SC_SLOWDOWN:
 		case SC_SPEEDUP0:
 		case SC_INCSTR:
+		case SC_INCMATKRATE:
+		case SC_INCATKRATE:
+		case SC_INCDEFRATE:
+		case SC_INCHITRATE:
+		case SC_INCFLEERATE:
 			calc_flag = 1;
 			break;
 
@@ -4263,6 +4275,11 @@ int status_change_end(struct block_list* bl, int type, int tid)
 			case SC_SLOWDOWN:
 			case SC_SPEEDUP0:
 			case SC_INCSTR:
+			case SC_INCMATKRATE:
+			case SC_INCHITRATE:
+			case SC_INCATKRATE:
+			case SC_INCDEFRATE:
+			case SC_INCFLEERATE:
 			case SC_BATTLEORDERS:
 			case SC_REGENERATION:
 			case SC_GUILDAURA:
@@ -5059,6 +5076,58 @@ int status_change_timer_sub(struct block_list *bl, va_list ap) {
 		break;
 	}
 
+	return 0;
+}
+
+int status_change_clear_buffs (struct block_list *bl){
+	int i;
+	struct status_change *sc_data = status_get_sc_data(bl);
+	if (!sc_data)
+		return 0;
+
+	for (i = 0; i < SC_MAX; i++) {
+		if(i == SC_HALLUCINATION || i == SC_WEIGHT50 || i == SC_WEIGHT90
+			|| i == SC_QUAGMIRE || i == SC_SIGNUMCRUCIS || i == SC_DECREASEAGI 
+			|| i == SC_SLOWDOWN || i == SC_ANKLE|| i == SC_BLADESTOP
+			|| i == SC_MINDBREAKER || i == SC_STOP || i == SC_NOCHAT
+			|| i == SC_STRIPWEAPON || i == SC_STRIPSHIELD || i == SC_STRIPARMOR || i == SC_STRIPHELM
+			|| i == SC_COMBO || i == SC_DANCING || i == SC_GUILDAURA)
+			continue;
+		if(sc_data[i].timer != -1)
+			status_change_end(bl,i,-1);
+	}
+	return 0;
+}
+
+int status_change_clear_debuffs (struct block_list *bl){
+	int i;
+	struct status_change *sc_data = status_get_sc_data(bl);
+	if (!sc_data)
+		return 0;
+	for (i = SC_STONE; i <= SC_DIVINA; i++) {
+		if(sc_data[i].timer != -1)
+			status_change_end(bl, i, -1);
+	}
+	if(sc_data[SC_HALLUCINATION].timer != -1)
+		status_change_end(bl, SC_HALLUCINATION, -1);
+	if(sc_data[SC_QUAGMIRE].timer != -1)
+		status_change_end(bl, SC_QUAGMIRE, -1);
+	if(sc_data[SC_SIGNUMCRUCIS].timer != -1)
+		status_change_end(bl, SC_SIGNUMCRUCIS, -1);
+	if(sc_data[SC_DECREASEAGI].timer != -1)
+		status_change_end(bl, SC_DECREASEAGI, -1);
+	if(sc_data[SC_SLOWDOWN].timer != -1)
+		status_change_end(bl, SC_SLOWDOWN, -1);
+	if(sc_data[SC_MINDBREAKER].timer != -1)
+		status_change_end(bl, SC_MINDBREAKER, -1);
+	if(sc_data[SC_STRIPWEAPON].timer != -1)
+		status_change_end(bl, SC_STRIPWEAPON, -1);
+	if(sc_data[SC_STRIPSHIELD].timer != -1)
+		status_change_end(bl, SC_STRIPSHIELD, -1);
+	if(sc_data[SC_STRIPARMOR].timer != -1)
+		status_change_end(bl, SC_STRIPARMOR, -1);
+	if(sc_data[SC_STRIPHELM].timer != -1)
+		status_change_end(bl, SC_STRIPHELM, -1);
 	return 0;
 }
 
