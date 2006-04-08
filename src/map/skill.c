@@ -4295,7 +4295,7 @@ int skill_castend_nodamage_id(struct block_list *src, struct block_list *bl, int
 					status_change_start(bl,SC_INCMATKRATE,-50,0,0,0,30000,0);
 					break;
 				case 2:	// all buffs removed
-					status_change_clear_buffs(bl,1);
+					status_change_clear_buffs(bl);
 					break;
 				case 3:	// 1000 damage, random armor destroyed
 					{
@@ -4359,7 +4359,7 @@ int skill_castend_nodamage_id(struct block_list *src, struct block_list *bl, int
 					break;
 				default:
 					break;			
-				}			
+				}
 			} while ((--count) > 0);
 			clif_skill_nodamage(src,bl,skillid,skilllv,1);
 		}
