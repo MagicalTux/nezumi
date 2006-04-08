@@ -4009,7 +4009,7 @@ int status_change_start(struct block_list *bl, int type, intptr_t val1, intptr_t
 
 		case SC_COMA:
 			battle_damage(NULL, bl, status_get_hp(bl)-1, 0);
-			return 0;
+			break;
 
 		case SC_SPLASHER:	
 			break;
