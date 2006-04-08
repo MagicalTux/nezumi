@@ -10,6 +10,9 @@
 
 #include "inter.h"
 #include "int_pet.h"
+
+#include <mmo.h>
+
 #include "char.h"
 #include "../common/socket.h"
 #include "../common/db.h"
@@ -17,9 +20,7 @@
 #include "../common/malloc.h"
 #include "../common/utils.h"
 
-#ifdef TXT_ONLY
 char pet_txt[1024] = "save/pet.txt";
-#endif /* TXT_ONLY */
 
 static struct dbt *pet_db;
 static int pet_newid = 100;

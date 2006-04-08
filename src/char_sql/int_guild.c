@@ -7,7 +7,6 @@
 #include <stdlib.h>
 #include <stdint.h>
 
-#include <mmo.h>
 #include "../common/malloc.h"
 #include "../common/socket.h"
 #include "../common/utils.h"
@@ -15,6 +14,9 @@
 #include "char.h"
 #include "inter.h"
 #include "int_guild.h"
+
+#include <mmo.h>
+
 #include "int_storage.h"
 
 #ifdef TXT_ONLY

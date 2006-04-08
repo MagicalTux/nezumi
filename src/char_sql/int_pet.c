@@ -7,13 +7,9 @@
 #include <string.h>
 #include <stdint.h>
 
-#include "../common/malloc.h"
-
 #include "char.h"
 
-#ifdef TXT_ONLY
-char pet_txt[1024] = "save/pet.txt";
-#endif
+#include "../common/malloc.h"
 
 struct s_pet *pet_pt;
 static int pet_newid = 100;
