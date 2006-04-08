@@ -30,5 +30,5 @@ ayothaya.gat,0,0,0,0	monster	Wild Rose	1261,1,1,3600000,0
 einbroch.gat,0,0,0,0	monster	Wild Rose	1261,1,1,3600000,0
 einbech.gat,0,0,0,0	monster	Wild Rose	1261,1,1,3600000,0
 lighthalzen.gat,0,0,0,0	monster	Wild Rose	1261,1,1,3600000,0
-xmas.gat,0,0,0,0	monster	Wild Rose	1261,1,1,3600000,0 
-hugel.gat,0,0,0,0	monster	Wild Rose	1261,1,1,3600000,0 
+xmas.gat,0,0,0,0	monster	Wild Rose	1261,1,1,3600000,0
+hugel.gat,0,0,0,0	monster	Wild Rose	1261,1,1,3600000,0

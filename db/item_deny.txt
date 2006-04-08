@@ -16,5 +16,3 @@
 //2614,80 // Eye of Dullahan
 // Example 4: 5013 - Lord Kaho's Horn can't be created (used by default)
 //5013 // Lord Kaho's Horn
-
-5013 // Lord Kaho's Horn

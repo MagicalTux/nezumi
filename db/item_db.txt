@@ -96,6 +96,7 @@
 583,Ketupat_,Ketupat,0,,10,150,,,,,16777215,2,,,,,{},{}
 584,Skewer_Soup,Skewer Soup,0,50,,60,,,,127918079,2,,,,,{ itemheal rand(45,64),0; },{}
 585,Brusti,Brusti,0,15,,40,,,,127918079,2,,,,,{ itemheal rand(17,20),0; itemskill 74,3,"Magnificat"; },{}
+586,Mother's_Cake,Mother's Cake,0,,,10,,,,532676607,2,,,,,{ itemheal rand(325,404),0; },{}
 
 // Usable Items
 601,Fly_Wing,Fly Wing,2,60,0,50,,,,,10477567,2,,,,,{ warp "Random",0,0; },{}
@@ -168,7 +169,7 @@
 665,Gift_Box__,Gift Box,2,20,0,200,,,,,10477567,2,,,,,{ getitem -4,1; },{}
 666,Gift_Box___,Gift Box,2,20,0,200,,,,,10477567,2,,,,,{ getitem -4,1; },{}
 667,Gift_Box____,Gift Box,2,20,0,200,,,,,10477567,2,,,,,{ getitem -4,1; },{}
-668,Angpow,Angpow,0,1,0,2,,,,,10477567,2,,,,,{ set Zeny,Zeny+rand(1000,10000); },{}
+668,Red_Envelope,Red_Envelope,2,1,0,20,,,,,532676607,2,,,,,{ set Zeny,Zeny+rand(1000,10000); },{}
 669,Rice_Cake_Soup,Rice Cake Soup,2,20,0,100,,,,,,,,,,,{},{}
 
 670,Gold_Coin_Pouch,Gold Coin Pouch,2,20,0,400,,,,,,,,,,,{},{}
@@ -2389,14 +2390,15 @@
 12124,Rainbow_Rice_Cake,Rainbow Rice Cake,2,,70,0,,,,,10477567,2,,,,,{},{}
 
 // Cooking Sets
-12125,Outdoor_Cooker,Outdoor Cooker,2,,10,20,,,,,127918079,2,,,,,{ produce 11; }
-12126,Home_Cooking_Set,Home Cooking Set,2,,10,30,,,,,127918079,2,.,,,{ produce 11; }
-12127,Deluxe_Cooking_Set,Deluxe Cooking Set,2,,10,30,,,,,127918079,2,,,,,{ produce 11; }
-12128,Court_Cooking_Set,Court Cooking Set,2,,10,70,,,,,127918079,2,,,,,{ produce 11; }
-12129,Legendary_Cooking_Set,Legendary Cooking Set,2,,10,70,,,,,127918079,2,,,,,{ produce 11; }
 
-12130,Cookie_Bag,Cookie Bag,2,,10,70,,,,,10477567,2,,,,,{}
-12134,Red_Packet,Red Packet,2,,10,70,,,,,127918079,2,,,,,{}
+12125,Outdoor_Cooker,Outdoor Cooker,2,,10,20,,,,,127918079,2,,,,,{ produce 11; },{}
+12126,Home_Cooking_Set,Home Cooking Set,2,,10,30,,,,,127918079,2,,,,,{ produce 11; },{}
+12127,Deluxe_Cooking_Set,Deluxe Cooking Set,2,,10,30,,,,,127918079,2,,,,,{ produce 11; },{}
+12128,Court_Cooking_Set,Court Cooking Set,2,,10,70,,,,,127918079,2,,,,,{ produce 11; },{}
+12129,Legendary_Cooking_Set,Legendary Cooking Set,2,,10,70,,,,,127918079,2,,,,,{ produce 11; },{}
+
+12130,Cookie_Bag,Cookie Bag,2,,10,70,,,,,127918079,2,,,,,{},{}
+12134,Red_Envelope_,Red Envelope,2,,10,10,,,,,127918079,2,,,,,{ set Zeny,Zeny+rand(100,10000); },{}
 
 12137,1st_Step,1st Step,2,,,,,,,,127918079,2,,,,,{}
 12138,2nd_Step,2nd Step,2,,,,,,,,127918079,2,,,,,{}
