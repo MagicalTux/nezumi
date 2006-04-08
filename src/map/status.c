@@ -5111,7 +5111,7 @@ int status_change_clear_debuffs (struct block_list *bl){
 	struct status_change *sc_data = status_get_sc_data(bl);
 	if (!sc_data)
 		return 0;
-	for (i = SC_STONE; i <= SC_DIVINA; i++) {
+	for (i = SC_STONE; i <= SC_MAX; i++) {
 		if(sc_data[i].timer != -1)
 			status_change_end(bl, i, -1);
 	}
