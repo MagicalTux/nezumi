@@ -1,5 +1,8 @@
 // $Id: Changelog.txt akrus $
 
+04/09/2006
+	* Added: item notrade database [Harbin]
+
 04/05/2006
 	* Fixed: eternal chaos should effect all players except caster(s). from Project-Freya (Mikey) [Harbin]
 
