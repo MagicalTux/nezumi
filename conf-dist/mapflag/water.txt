@@ -1,5 +1,13 @@
-// 水の設定。
-// waterは水ありでall_waterは全て水だと判断するマップ。
+//===== Nezumi Script ========================================
+//= Water Mapflag File
+//===== By: ==================================================
+//= Original:	Athena Developer Team
+//= Updated:	Nezumi Developer Team
+//===== Current Version: =====================================
+//= 1.0.0
+//===== Compatible With: =====================================
+//= Nezumi 1.0.0 or newer
+//============================================================
 
 mjolnir_12.gat	mapflag	water
 mjolnir_02.gat	mapflag	water

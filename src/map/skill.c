@@ -200,6 +200,7 @@ const struct skill_name_db skill_names[] = {
  { HT_SPRINGTRAP, "SPRINGTRAP", "Spring_Trap" } ,
  { HT_STEELCROW, "STEELCROW", "Steel_Crow" } ,
  { HT_TALKIEBOX, "TALKIEBOX", "Talkie_Box" } ,
+ { HT_PHANTASMIC, "PHANTASMIC", "Phantasmic_Arrow" } ,
  { HW_GANBANTEIN, "GANBANTEIN", "Ganbantein" } ,
  { HW_GRAVITATION, "GRAVITATION", "Gravitation_Field" } ,
  { HW_MAGICCRASHER, "MAGICCRASHER", "Magic_Crasher" } ,
@@ -2033,11 +2034,10 @@ int skill_castend_damage_id(struct block_list* src, struct block_list *bl, int s
 	struct status_change *sc_data;
 	int i;
 
-	if (skillid < 0) {
-		//printf("skill_castend_damage_id: skillid=%i(lvl:%d)\ncall: %p %p %i %i %i %i", skillid, skilllv, src, bl, skillid, skilllv, tick, flag);
+	if(skillid < 0)
 		return 0;
-	}
-	if (skillid > 0 && skilllv <= 0) return 0;
+	if(skillid > 0 && skilllv <= 0)
+		return 0;
 
 	nullpo_retr(1, src);
 	nullpo_retr(1, bl);
@@ -2078,6 +2078,7 @@ int skill_castend_damage_id(struct block_list* src, struct block_list *bl, int s
 	case CR_HOLYCROSS:
 	case CR_SHIELDCHARGE:
 	case CR_SHIELDBOOMERANG:
+	case HT_PHANTASMIC:
 	case NPC_PIERCINGATT:
 	case NPC_MENTALBREAKER:
 	case NPC_RANGEATTACK:
@@ -2109,7 +2110,6 @@ int skill_castend_damage_id(struct block_list* src, struct block_list *bl, int s
 	case HW_MAGICCRASHER:
 	case ITM_TOMAHAWK:
 	case PA_SHIELDCHAIN:
-//	case WS_CARTTERMINATION:
 	case ASC_METEORASSAULT:
 		skill_attack(BF_WEAPON, src, src, bl, skillid, skilllv, tick, flag);
 		break;
@@ -6464,14 +6464,17 @@ int skill_check_condition(struct map_session_data *sd, int type) {
 		}
 		break;
 
+	// skill's which consume arrow(s)
 	case AC_DOUBLE:
 	case AC_SHOWER:
 	case AC_CHARGEARROW:
+	case HT_PHANTASMIC:
 	case BA_MUSICALSTRIKE:
 	case DC_THROWARROW:
 	case SN_SHARPSHOOTING:
 	case CG_ARROWVULCAN:
-		if (sd->equip_index[10] < 0) {
+		if(sd->equip_index[10] < 0)
+		{
 			clif_arrow_fail(sd, 0);
 			return 0;
 		}

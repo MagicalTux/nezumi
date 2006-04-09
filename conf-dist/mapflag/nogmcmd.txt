@@ -1,22 +1,12 @@
-//===== Freya Script =========================================
-//= Map flags that disable some GM commands
+//===== Nezumi Script ========================================
+//= Disable Some GM Commands on Specific Map
 //===== By: ==================================================
-//= GARTZ
+//= Original:	Freya Developer Team
+//= Updated:	Nezumi Developer Team
 //===== Current Version: =====================================
-//= 1.0
-//===== Description: =========================================
-//= nogmcmd: disable a GM commands on map
-//= <mapname> mapflag nogmcmd <minimum_level_of_forbidden_GM_commands>
-//= Disabled all GM commands for lowers then lv 40
-//= PvP areas
-//= GvG Areas
-//= Guild Castles
-//= Guild Dungeons (default: enabled)
-//= Job Quests
-//= Special Quests Places
-//= Arenas
-//===== Additional Comments: =================================
-//=
+//= 1.0.0
+//===== Compatible With: =====================================
+//= Nezumi 1.0.0 or newer
 //============================================================
 
 // PvP ====================

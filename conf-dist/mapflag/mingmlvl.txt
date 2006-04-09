@@ -1,22 +1,12 @@
-//===== Freya Script =========================================
-//= Map flags that disable some GM to use GM commands
+//===== Nezumi Script ========================================
+//= Disable Some GM Commands on Specific Map
 //===== By: ==================================================
-//= YOR (inspired from GARTZ mingmlvl file)
+//= Original:	Freya Developer Team
+//= Updated:	Nezumi Developer Team
 //===== Current Version: =====================================
-//= 1.0
-//===== Description: =========================================
-//= mingmlvl: disable a GM to use GM commands on map
-//= <mapname> mapflag mingmlvl <minimum_GM_level_to_use_GM_commands>
-//= Disabled all GM commands for GM lowers then lv 20
-//= PvP areas
-//= GvG Areas
-//= Guild Castles
-//= Guild Dungeons (default: enabled)
-//= Job Quests
-//= Special Quests Places
-//= Arenas
-//===== Additional Comments: =================================
-//=
+//= 1.0.0
+//===== Compatible With: =====================================
+//= Nezumi 1.0.0 or newer
 //============================================================
 
 // PvP ====================
@@ -130,12 +120,6 @@ prtg_cas02.gat	mapflag	mingmlvl	20
 prtg_cas03.gat	mapflag	mingmlvl	20
 prtg_cas04.gat	mapflag	mingmlvl	20
 prtg_cas05.gat	mapflag	mingmlvl	20
-
-// Guild Dungeons ==========
-//gld_dun01.gat	mapflag	mingmlvl	20
-//gld_dun02.gat	mapflag	mingmlvl	20
-//gld_dun03.gat	mapflag	mingmlvl	20
-//gld_dun04.gat	mapflag	mingmlvl	20
 
 // Job Quests ===========================
 sword_1-1.gat	mapflag	mingmlvl	20

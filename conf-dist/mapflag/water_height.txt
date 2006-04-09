@@ -1,5 +1,13 @@
-// …ê‚Ì‚‚³‚ğİ’è
-//water_height.txt—AthenaDBŒv‰æ 2004/03/31 18:52:09 +0900 (JST)
+//===== Nezumi Script ========================================
+//= Water Height Mapflag File
+//===== By: ==================================================
+//= Original:	Athena Developer Team
+//= Updated:	Nezumi Developer Team
+//===== Current Version: =====================================
+//= 1.0.0
+//===== Compatible With: =====================================
+//= Nezumi 1.0.0 or newer
+//============================================================
 
 xmas.gat	3
 mjolnir_01.gat	0
@@ -52,6 +60,7 @@ beach_dun2.gat	6
 beach_dun3.gat	0
 beach_dun.gat	9
 gef_fild13.gat	19
+gld_dun01.gat	5
 gld_dun02.gat	5
 gld_dun03.gat	14
 gld_dun04.gat	3
@@ -64,7 +73,16 @@ gefg_cas02.gat	8
 gefg_cas04.gat	15
 gefg_cas05.gat	5
 prtg_cas05.gat	13
+gon_dun01.gat	5
 tur_dun01.gat	-65
 ama_fild01.gat	5
 yuno_fild09.gat	10
 yuno_fild11.gat	-19
+jawaii.gat	-10
+sec_in02.gat	5 
+ayothaya.gat	20
+ayo_dun01.gat	20
+ayo_dun02.gat	15
+lhz_dun03.gat	30
+abyss_01.gat	20
+abyss_03.gat	-20

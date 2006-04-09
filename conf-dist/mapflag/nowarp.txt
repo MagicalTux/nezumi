@@ -1,5 +1,15 @@
-//===== Freya Script =========================================
+//===== Nezumi Script ========================================
+//= Disable Warp Skill on Specific Map
+//===== By: ==================================================
+//= Original:	eAthena Developer Team
+//= Updated:	Nezumi Developer Team
+//===== Current Version: =====================================
+//= 1.0.0
+//===== Compatible With: =====================================
+//= Nezumi 1.0.0 or newer
+//============================================================
 
+aldeg_cas01.gat	mapflag	nowarp
 aldeg_cas02.gat	mapflag	nowarp
 aldeg_cas03.gat	mapflag	nowarp
 aldeg_cas04.gat	mapflag	nowarp

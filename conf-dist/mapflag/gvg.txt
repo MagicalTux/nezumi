@@ -1,13 +1,12 @@
-//===== Freya Script =========================================
-//= GvG On Map Flags
+//===== Nezumi Script ========================================
+//= Guild Vs Guild Maps
 //===== By: ==================================================
-//= eAthena Dev Team
+//= Original:	English Athena Developer Team
+//= Updated:	Nezumi Developer Team
 //===== Current Version: =====================================
-//= 1.0
-//===== Description: =========================================
-//= gvg: Turns on GvG mode
-//===== Additional Comments: =================================
-//=
+//= 1.0.0
+//===== Compatible With: =====================================
+//= Nezumi 1.0.0 or newer
 //============================================================
 
 // GvG Arenas =============
@@ -39,7 +38,7 @@ prtg_cas03.gat	mapflag	gvg
 prtg_cas04.gat	mapflag	gvg
 prtg_cas05.gat	mapflag	gvg
 
-// Guild Dungeons ==========
+// Guild Dungeons =========
 gld_dun01.gat	mapflag	guild_dungeon
 gld_dun02.gat	mapflag	guild_dungeon
 gld_dun03.gat	mapflag	guild_dungeon

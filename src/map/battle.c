@@ -916,6 +916,10 @@ static struct Damage battle_calc_pet_weapon_attack(struct block_list *src, struc
 				damage = damage*(100+ 50*skill_lv)/100;
 				blewcount=0;
 				break;
+			case HT_PHANTASMIC:
+				damage = damage + (damage * 50 / 100);
+				flag = (flag & ~BF_RANGEMASK) | BF_LONG;
+				break;
 			case AS_GRIMTOOTH:
 				damage = damage*(100+ 20*skill_lv)/100;
 				flag=(flag&~BF_RANGEMASK)|BF_LONG;
@@ -1416,6 +1420,10 @@ static struct Damage battle_calc_mob_weapon_attack(
 				else
 					hitrate = 1000000;
 				flag=(flag&~BF_SKILLMASK)|BF_NORMAL;
+				break;
+			case HT_PHANTASMIC:
+				damage = damage + (damage * 50 / 100);
+				flag = (flag & ~BF_RANGEMASK) | BF_LONG;
 				break;
 			case AS_GRIMTOOTH:
 				damage = damage*(100+ 20*skill_lv)/100;
@@ -2154,6 +2162,10 @@ static struct Damage battle_calc_pc_weapon_attack(struct block_list *src, struct
 				else
 					hitrate = 1000000;
 				flag = (flag&~BF_SKILLMASK)|BF_NORMAL;
+				break;
+			case HT_PHANTASMIC:
+				damageskillmod += 50;
+				flag = (flag & ~BF_RANGEMASK) | BF_LONG;
 				break;
 			case PA_SHIELDCHAIN:
 				damageskillmod += 30 * skill_lv;

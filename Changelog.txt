@@ -1,6 +1,9 @@
 // $Id$
 
 2006-04-09
+	* Added: phantasmic arrow skill for hunters [Harbin]
+	* Updated: all mapflags. by Jetvictor [Harbin]
+	* Added: gunslinger questmaps into maplist [Harbin]
 	* Improved: rewrote whole item norefine reading function [Harbin]
 	* Added: makefile to make compiling easier and faster [Harbin]
 	* Added: support for sqlite on configure's makefile generator [Harbin]

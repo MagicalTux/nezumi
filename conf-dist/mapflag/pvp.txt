@@ -1,13 +1,12 @@
-//===== Freya Script =========================================
-//= Map flags that enable pvp
+//===== Nezumi Script ========================================
+//= Enable Player Vs Player Mode on Specific Map
 //===== By: ==================================================
-//= eAthena Dev Team
+//= Original:	eAthena Developer Team
+//= Updated:	Nezumi Developer Team
 //===== Current Version: =====================================
-//= 1.0
-//===== Description: =========================================
-//= pvp: Turns on PvP mode
-//===== Additional Comments: =================================
-//=
+//= 1.0.0
+//===== Compatible With: =====================================
+//= Nezumi 1.0.0 or newer
 //============================================================
 
 // PvP ====================

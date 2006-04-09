@@ -1,12 +1,12 @@
-//===== Freya Script =========================================
-//= Map flags that disable use of fly wings (not for butterfly wings)
+//===== Nezumi Script ========================================
+//= Disable Fly Wing Item on Specific Map
 //===== By: ==================================================
-//= eAthena Dev Team
-//= 1.2 [Lupus]
-//===== Notes: ===============================================
-//= For disabling Butterfly wings use noreturn
+//= Original:	eAthena Developer Team
+//= Updated:	Nezumi Developer Team
 //===== Current Version: =====================================
-//= 1.1 Added noteleport for the Lighthalzen Quest Room and for the Airhip.
+//= 1.0.0
+//===== Compatible With: =====================================
+//= Nezumi 1.0.0 or newer
 //============================================================
 
 // Cities ========================
@@ -15,6 +15,7 @@ ayo_in02.gat	mapflag	noteleport
 alb_ship.gat	mapflag	noteleport
 alberta_in.gat	mapflag	noteleport
 aldeba_in.gat	mapflag	noteleport
+ama_dun01.gat	mapflag	noteleport
 ama_in01.gat	mapflag	noteleport
 ama_in02.gat	mapflag	noteleport
 cmd_in01.gat	mapflag	noteleport
@@ -46,6 +47,7 @@ prt_in.gat	mapflag	noteleport
 um_in.gat	mapflag	noteleport
 xmas_in.gat	mapflag	noteleport
 yuno_in01.gat	mapflag	noteleport
+yuno_in02.gat	mapflag	noteleport
 yuno_in03.gat	mapflag	noteleport
 yuno_in04.gat	mapflag	noteleport
 yuno_in05.gat	mapflag	noteleport
@@ -53,20 +55,56 @@ que_sign01.gat	mapflag	noteleport
 ein_in01.gat	mapflag	noteleport
 airport.gat	mapflag	noteleport
 airplane.gat	mapflag	noteleport
+airplane_01.gat	mapflag	noteleport
+// New areas
+lighthalzen.gat	mapflag	noteleport
+yuno.gat	mapflag	noteleport
+yuno_pre.gat	mapflag	noteleport
+y_airport.gat	mapflag	noteleport
+lhz_airport.gat	mapflag	noteleport
+einbroch.gat	mapflag noteleport
+einbech.gat	mapflag noteleport
+lhz_que01.gat	mapflag	noteleport
+lhz_cube.gat	mapflag	noteleport
+lhz_in01.gat	mapflag	noteleport
+lhz_in02.gat	mapflag	noteleport
+lhz_in03.gat	mapflag	noteleport
+juperos_01.gat	mapflag	noteleport
+juperos_02.gat	mapflag	noteleport
+jupe_area1.gat	mapflag	noteleport
+jupe_area2.gat	mapflag	noteleport
+jupe_core.gat	mapflag	noteleport
+jupe_ele.gat	mapflag	noteleport
+jupe_ele_r.gat	mapflag	noteleport
+jupe_gate.gat	mapflag	noteleport
+tha_t07.gat	mapflag	noteleport
+tha_t08.gat	mapflag	noteleport
+tha_t09.gat	mapflag	noteleport
+tha_t10.gat	mapflag	noteleport
+tha_t11.gat	mapflag	noteleport
+tha_t12.gat	mapflag	noteleport
+thana_step.gat	mapflag	noteleport
+thana_boss.gat	mapflag	noteleport
+gefenia01.gat	mapflag	noteleport
+gefenia02.gat	mapflag	noteleport
+gefenia03.gat	mapflag	noteleport
+gefenia04.gat	mapflag	noteleport
+hu_in01.gat	mapflag	noteleport
+auction_01.gat	mapflag	noteleport
+auction_02.gat	mapflag	noteleport
 
 // Job Quests ====================
 sword_1-1.gat	mapflag	noteleport
 sword_2-1.gat	mapflag	noteleport
 sword_3-1.gat	mapflag	noteleport
 job_thief1.gat	mapflag	noteleport
-// 2-1 ---------------------------
-job_hunte.gat	mapflag	noteleport
-job_knight.gat	mapflag	noteleport
+// 2-1 -----------------------
 job_prist.gat	mapflag	noteleport
 job_wiz.gat	mapflag	noteleport
+job_hunte.gat	mapflag	noteleport
 in_hunter.gat	mapflag	noteleport
 in_moc_16.gat	mapflag	noteleport
-// 2-2 ---------------------------
+// 2-2 --------------------
 alde_alche.gat	mapflag	noteleport
 job_cru.gat	mapflag	noteleport
 job_duncer.gat	mapflag	noteleport
@@ -75,6 +113,9 @@ monk_test.gat	mapflag	noteleport
 monk_in.gat	mapflag	noteleport
 in_rogue.gat	mapflag	noteleport
 job_sage.gat	mapflag	noteleport
+
+job_star.gat	mapflag	noteleport
+job_soul.gat	mapflag	noteleport
 
 // Special Quests Places =========
 que_god01.gat	mapflag	noteleport
@@ -102,27 +143,19 @@ prtg_cas03.gat	mapflag	noteleport
 prtg_cas04.gat	mapflag	noteleport
 prtg_cas05.gat	mapflag	noteleport
 
-// GvG Arenas ====================
+// GvG Arenas ===================
 guild_vs1.gat	mapflag	noteleport
 guild_vs2.gat	mapflag	noteleport
 guild_vs3.gat	mapflag	noteleport
 guild_vs4.gat	mapflag	noteleport
 guild_vs5.gat	mapflag	noteleport
 
-// Arenas ========================
+// Arenas =====================>\\
 arena_room.gat	mapflag	noteleport
 sec_in01.gat	mapflag	noteleport
 sec_in02.gat	mapflag	noteleport
 
-// Lighthalzen Quest =============
-lhz_cube.gat	mapflag	noteleport
-
-// Airship ========================
-lhz_airport.gat	mapflag	noteleport
-y_airport.gat	mapflag	noteleport
-airplane.gat	mapflag	noteleport
-
-// PvP Arenas ====================
+// PvP Arenas=======================
 pvp_y_room.gat	mapflag	noteleport
 pvp_y_1-1.gat	mapflag	noteleport
 pvp_y_1-2.gat	mapflag	noteleport

@@ -1,7 +1,12 @@
-//===== Freya Script =========================================
-//===== Description: =========================================
-//= nopvp: Disables Player versus Player mode.
-//= To disable PvP mode on a specific map add the mapname here.
+//===== Nezumi Script ========================================
+//= Disable Player Vs Player mode on Specific Map
+//===== By: ==================================================
+//= Original:	eAthena Developer Team
+//= Updated:	Nezumi Developer Team
+//===== Current Version: =====================================
+//= 1.0.0
+//===== Compatible With: =====================================
+//= Nezumi 1.0.0 or newer
 //============================================================
 
 ayo_in01.gat	mapflag	nopvp
@@ -27,7 +32,10 @@ in_moc_16.gat	mapflag	nopvp
 in_orcs01.gat	mapflag	nopvp
 izlude_in.gat	mapflag	nopvp
 izlude.gat	mapflag	nopvp
+lighthalzen.gat	mapflag	nopvp
 louyang.gat	mapflag	nopvp
+lou_in01.gat	mapflag	nopvp
+lou_in02.gat	mapflag	nopvp
 moc_castle.gat	mapflag	nopvp
 monk_in.gat	mapflag	nopvp
 morocc_in.gat	mapflag	nopvp
@@ -58,3 +66,11 @@ yuno_in04.gat	mapflag	nopvp
 yuno_in05.gat	mapflag	nopvp
 yuno.gat	mapflag	nopvp
 gon_test.gat	mapflag	nopvp
+
+// New areas
+yuno_pre.gat	mapflag	nopvp
+y_airport.gat	mapflag	nopvp
+lhz_airport.gat	mapflag	nopvp
+lhz_in01.gat	mapflag	nopvp
+lhz_in02.gat	mapflag	nopvp
+lhz_in03.gat	mapflag	nopvp

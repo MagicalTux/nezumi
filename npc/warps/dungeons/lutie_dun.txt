@@ -4,11 +4,11 @@
 //= Original:	English Athena Developer Team
 //= Updated:	Nezumi Developer Team
 //===== Current Version: =====================================
-//= 1.0.0
+//= 1.0.1
 //===== Compatible With: =====================================
 //= Nezumi 1.0.0 or newer
 //============================================================
 
-xmas_dun01.gat,128,131,0	warp	xmas15	1,1,xmas_dun02.gat,129,133
-xmas_dun01.gat,205,12,0	warp	xmas14-1	1,1,xmas.gat,143,312
-xmas_dun02.gat,129,129,0	warp	xmas15-1	1,1,xmas_dun01.gat,128,129
+xmas_dun01.gat,128,131,0	warp	xmas15	3,3,xmas_dun02.gat,129,133
+xmas_dun01.gat,205,13,0	warp	xmas14-1	3,3,xmas.gat,143,308
+xmas_dun02.gat,129,129,0	warp	xmas15-1	3,3,xmas_dun01.gat,131,131
