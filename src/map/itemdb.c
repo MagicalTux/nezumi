@@ -1,4 +1,5 @@
 // $Id$
+
 #include <config.h>
 
 #include <stdio.h>
@@ -24,9 +25,7 @@
 
 #define MAX_RANDITEM	2000
 
-// ** ITEMDB_OVERRIDE_NAME_VERBOSE **
-//   定義すると、itemdb.txtとgrfで名前が異なる場合、表示します.
-//#define ITEMDB_OVERRIDE_NAME_VERBOSE	1
+// #define ITEMDB_OVERRIDE_NAME_VERBOSE	1
 
 static struct dbt* item_db;
 
@@ -40,11 +39,12 @@ void itemdb_read(void);
 static int itemdb_readdb(void);
 #ifndef TXT_ONLY
 static int itemdb_read_sqldb(void);
-#endif /* not TXT_ONLY */
+#endif /* NOT TXT_ONLY */
 static int itemdb_read_randomitem();
 static int itemdb_read_itemavail(void);
 static int itemdb_read_itemnametable(void);
 static int itemdb_read_noequip(void);
+static void itemdb_read_notrade(void);
 static void itemdb_read_norefine(void);
 static int itemdb_read_itemslottable(void);
 static int itemdb_read_itemslotcounttable(void);
@@ -262,30 +262,30 @@ int itemdb_isdropable(int nameid)
 	return 1;
 }
 
-/*====================================
- * Removed item_value_db, don't re-add
- *------------------------------------
- */
-void itemdb_read(void) {
+// === READ ALL ITEM RELATED DATABASES ===
+// =======================================
+void itemdb_read(void)
+{
 #ifndef TXT_ONLY
-	if (db_use_sqldbs)
+	if(db_use_sqldbs)
 		itemdb_read_sqldb();
 	else
-#endif /* not TXT_ONLY */
+#endif /* NOT TXT_ONLY */
 		itemdb_readdb();
 
 	itemdb_read_randomitem();
 	itemdb_read_itemavail();
 	itemdb_read_noequip();
+	itemdb_read_notrade();
 	itemdb_read_norefine();
 
-	if (battle_config.cardillust_read_grffile)
+	if(battle_config.cardillust_read_grffile)
 		itemdb_read_cardillustnametable();
-	if (battle_config.item_equip_override_grffile)
+	if(battle_config.item_equip_override_grffile)
 		itemdb_read_itemslottable();
-	if (battle_config.item_slots_override_grffile)
+	if(battle_config.item_slots_override_grffile)
 		itemdb_read_itemslotcounttable();
-	if (battle_config.item_name_override_grffile)
+	if(battle_config.item_name_override_grffile)
 		itemdb_read_itemnametable();
 }
 
@@ -847,10 +847,8 @@ static int itemdb_read_itemslotcounttable(void) {
 	return 0;
 }
 
-/*==========================================
- * 装備制限ファイル読み出し
- *------------------------------------------
- */
+// === READ ITEM NOEQUIP DATABASE ===
+// ==================================
 static int itemdb_read_noequip(void)
 {
 	FILE *fp;
@@ -894,54 +892,90 @@ static int itemdb_read_noequip(void)
 	return 0;
 }
 
+// === READ ITEM NOTRADE DATABASE ===
+// ==================================
+static void itemdb_read_notrade(void)
+{
+	struct item_data *id;
+	char line[8];
+	int itemid, itemtype;
+
+	FILE *db = fopen("db/item_notrade.txt", "r");
+
+	if(db == NULL)
+	{
+		printf(CL_WHITE "warning: " CL_RESET "failed to read item notrade database \n");
+		return;
+	}
+
+	while(fgets(line, 8, db))
+	{
+		if(line[0] == '/' && line[1] == '/')
+			continue;
+		if(line[0] == '\0' || line[0] == '\n' || line[0] == '\r')
+			continue;
+
+		sscanf(line, "%d %d", &itemid, &itemtype);
+
+		if(!itemid || !itemtype)
+			continue;
+
+		if(itemid <= 0 || itemid >= 20000 || !(id = itemdb_exists(itemid)))
+			continue;
+
+		if(itemtype < 0)
+			itemtype = 0;
+		if(itemtype > 2)
+			itemtype = 2;
+
+		id->flag.no_trade = itemtype;
+
+		printf(CL_WHITE "debug: " CL_RESET "item id '%d' notrade flag is %d \n", id->nameid, id->flag.no_trade);
+	}
+
+	fclose(db);
+	printf(CL_WHITE "status: " CL_RESET "succesfully loaded item notrade database \n");
+	return;
+}
+
 // === READ ITEM NOREFINE DATABASE ===
 // ===================================
 static void itemdb_read_norefine(void)
 {
 	struct item_data *id;
-	short i, getvalue, nameid, norefinelist[256], counter = -1;
-	char linebuffer[8], idbuffer[8];
-
-	printf(CL_WHITE "status: " CL_RESET "reading item_norefine.txt \n");
+	char line[8];
+	int itemid;
 
 	FILE *db = fopen("db/item_norefine.txt", "r");
 
 	if(db == NULL)
 	{
-		printf(CL_WHITE "warning: " CL_RESET "failed to read item_norefine.txt \n");
+		printf(CL_WHITE "warning: " CL_RESET "failed to read item norefine database \n");
 		return;
 	}
 
-	while(fgets(linebuffer, 8, db))
+	while(fgets(line, 8, db))
 	{
-		if(linebuffer[0] == '/' && linebuffer[1] == '/')
+		if(line[0] == '/' && line[1] == '/')
+			continue;
+		if(line[0] == '\0' || line[0] == '\n' || line[0] == '\r')
 			continue;
 
-		getvalue = sscanf(linebuffer, "%[^\r\n]", idbuffer);
+		sscanf(line, "%d", &itemid);
 
-		if(idbuffer == NULL)
+		if(!itemid)
 			continue;
 
-		if(counter == 256)
-			break;
+		if(itemid <= 0 || itemid >= 20000 || !(id = itemdb_exists(itemid)))
+			continue;
 
-		counter++;
+		id->flag.no_refine = 1;
 
-		norefinelist[counter] = atoi(idbuffer);
+		printf(CL_WHITE "debug: " CL_RESET "item id '%d' norefine flag is %d \n", id->nameid, id->flag.no_refine);
 	}
 
 	fclose(db);
-
-	for(i = 0; i < 256; i++)
-	{
-		nameid = norefinelist[i];
-		if(nameid <= 0 || nameid >= 20000 || !(id = itemdb_exists(nameid)))
-			continue;
-		id->flag.no_refine = 1;
-	}
-
-	printf(CL_WHITE "status: " CL_RESET "succesfully loaded item_norefine.txt \n");
-
+	printf(CL_WHITE "status: " CL_RESET "succesfully loaded item norefine database \n");
 	return;
 }
 

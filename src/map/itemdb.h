@@ -1,10 +1,12 @@
 // $Id$
+
 #ifndef _ITEMDB_H_
 #define _ITEMDB_H_
 
 #include "map.h"
 
-struct item_data {
+struct item_data
+{
 	int nameid;
 	char name[25], jname[25]; // 24 + NULL
 	char cardillustname[64];
@@ -22,16 +24,18 @@ struct item_data {
 	short look; // 0-207
 	short elv; // equip_level 0-95
 	char wlv; // weapon_level 0-4
-	unsigned char *use_script;	// ‰ñ•œ‚Æ‚©‚à‘S•”‚±‚Ì’†‚Å‚â‚ë‚¤‚©‚È‚Æ
-	unsigned char *equip_script;	// UŒ‚,–hŒä‚Ì‘®«İ’è‚à‚±‚Ì’†‚Å‰Â”\‚©‚È?
-	struct {
+	unsigned char *use_script;
+	unsigned char *equip_script;
+	struct
+	{
 		unsigned available : 1;
 		unsigned value_notdc : 1;
 		unsigned value_notoc : 1;
 		unsigned no_equip : 3;
-		unsigned no_drop : 1;
-		unsigned no_use : 1;
-		unsigned no_refine : 1; // [celest]
+		unsigned no_drop : 1;		// Allow Item Dropping	'0: Yes' '1: No'
+		unsigned no_use : 1;		// Allow Item Using		'0: Yes' '1: No'
+		unsigned no_refine : 1;		// Allow Item Refining	'0: Yes' '1: No'
+		unsigned no_trade : 2;		// Allow Item Trading	'0: Yes' '1: No' '2: Only With Partner'
 	} flag;
 	int view_id;
 };

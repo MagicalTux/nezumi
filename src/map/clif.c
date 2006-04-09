@@ -6028,7 +6028,7 @@ int clif_combo_delay(struct block_list *bl, int wait)
  *”’nŽæ‚è
  *------------------------------------------
  */
-int clif_bladestop(struct block_list *src, struct block_list *dst, int bool)
+int clif_bladestop(struct block_list *src, struct block_list *dst, int boolean)
 {
 	nullpo_retr(0, src);
 	nullpo_retr(0, dst);
@@ -6036,7 +6036,7 @@ int clif_bladestop(struct block_list *src, struct block_list *dst, int bool)
 	WPACKETW( 0) = 0x1d1;
 	WPACKETL( 2) = src->id;
 	WPACKETL( 6) = dst->id;
-	WPACKETL(10) = bool;
+	WPACKETL(10) = boolean;
 
 	clif_send(packet_len_table[0x1d1], src, AREA);
 

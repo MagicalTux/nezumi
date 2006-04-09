@@ -1,6 +1,10 @@
 // $Id$
 
 2006-04-09
+	* Improved: rewrote whole item norefine reading function [Harbin]
+	* Added: makefile to make compiling easier and faster [Harbin]
+	* Added: support for sqlite on configure's makefile generator [Harbin]
+	* Added: support for item notrade database [Harbin]
 	* Added: Gravity Field skill (High Wizard) -- eAthena-based -- [akrus]
 
 2006-04-08

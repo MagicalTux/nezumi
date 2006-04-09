@@ -1571,7 +1571,7 @@ echo >>$MAKEFILE
 echo "$GETTEXT_RULES" >>$MAKEFILE
 echo >>$MAKEFILE
 
-# to make Yor happy with his "make sql" and "make txt"
+# generate makefile for faster recompiling
 echo "txt:" >>$MAKEFILE
 echo -e "\t./configure --with-make" >>$MAKEFILE
 echo >>$MAKEFILE
@@ -1580,6 +1580,15 @@ echo -e "\t./configure --with-win32 --with-make" >>$MAKEFILE
 echo >>$MAKEFILE
 echo "sql:" >>$MAKEFILE
 echo -e "\t./configure --with-mysql --with-make" >>$MAKEFILE
+echo >>$MAKEFILE
+echo "sql-win32:" >>$MAKEFILE
+echo -e "\t./configure --with-win32 --with-mysql --with-make" >>$MAKEFILE
+echo >>$MAKEFILE
+echo "sqlite:" >>$MAKEFILE
+echo -e "\t./configure --with-sqlite --with-make" >>$MAKEFILE
+echo >>$MAKEFILE
+echo "sqlite-win32:" >>$MAKEFILE
+echo -e "\t./configure --with-win32 --with-sqlite --with-make" >>$MAKEFILE
 echo >>$MAKEFILE
 
 

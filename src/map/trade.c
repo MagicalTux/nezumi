@@ -1,9 +1,11 @@
 // $Id$
+
 #include <config.h>
 
 #include <stdio.h>
 #include <string.h>
 #include <stdint.h>
+#include <stdbool.h>
 
 #include "../common/socket.h"
 
@@ -22,11 +24,11 @@
 
 unsigned char log_trade_level = 0;
 
-/*===============================================
- * This function logs all trades
- *-----------------------------------------------
- */
-void log_trade(struct map_session_data *sd, struct map_session_data *target_sd) {
+// local functions
+bool trade_restrictions(struct map_session_data *sd);
+
+void log_trade(struct map_session_data *sd, struct map_session_data *target_sd)
+{
 	int flag, trade_i, amount;
 	int j, counter;
 	char tmpstr[8192]; // max lines: trade (1) + players names (2) + 10x2 items + total (2) = 25
@@ -399,6 +401,35 @@ int trade_check(struct map_session_data *sd) {
 	return 1;
 }
 
+// === CHECK FOR SPECIAL TRADE RESTRICTIONS ===
+// ============================================
+// RETURN 0 - TRADE ALLOWED
+// RETURN 1 - TRADE NOT ALLOWED
+bool trade_restrictions(struct map_session_data *sd)
+{
+	struct item_data *id;
+	short counter = 0;
+
+	for(counter = 0; counter == 10; counter++)
+	{
+		if(sd->deal_item_index[counter] == id->nameid)
+		{
+			if(id->flag.no_trade & 0)
+				return 0;
+			else if(id->flag.no_trade & 1)
+				return 1;
+			else if(id->flag.no_trade & 2)
+			{
+				if(sd->trade_partner == sd->status.partner_id)
+					return 0;
+				else
+					return 1;
+			}
+		}
+	}
+	return 0;
+}
+
 /*==========================================
  * アイテム追加
  *------------------------------------------
@@ -505,14 +536,17 @@ void trade_tradeok(struct map_session_data *sd) {
  * 取引キャンセル
  *------------------------------------------
  */
-void trade_tradecancel(struct map_session_data *sd) {
+void trade_tradecancel(struct map_session_data *sd)
+{
 	struct map_session_data *target_sd;
 	int trade_i;
 
-//	nullpo_retv(sd); // checked before to call function
+//	nullpo_retv(sd);
 
-	if ((target_sd = map_id2sd(sd->trade_partner)) != NULL) {
-		for(trade_i = 0; trade_i < 10; trade_i++) { // give items back (only virtual)
+	if ((target_sd = map_id2sd(sd->trade_partner)) != NULL)
+	{
+		for(trade_i = 0; trade_i < 10; trade_i++)
+		{
 			if (sd->deal_item_amount[trade_i] != 0) {
 				clif_additem(sd, sd->deal_item_index[trade_i] - 2, sd->deal_item_amount[trade_i], 0); // 0: you got...
 				sd->deal_item_index[trade_i] = 0;
@@ -543,31 +577,38 @@ void trade_tradecancel(struct map_session_data *sd) {
 	return;
 }
 
-/*==========================================
- * 取引許諾(trade押し)
- *------------------------------------------
- */
-void trade_tradecommit(struct map_session_data *sd) {
+void trade_tradecommit(struct map_session_data *sd)
+{
 	struct map_session_data *target_sd;
 	int trade_i;
 	int flag;
 
-//	nullpo_retv(sd); // checked before to call function
+//	nullpo_retv(sd);
 
 	if ((target_sd = map_id2sd(sd->trade_partner)) != NULL) {
 		if (sd->deal_locked > 0 && target_sd->deal_locked > 0) { // 0: no trade, 1: trade accepted, 2: trade valided (button 'Ok' pressed)
 			sd->deal_locked = 2; // 0: no trade, 1: trade accepted, 2: trade valided (button 'Ok' pressed)
 			if (target_sd->deal_locked == 2) { // the other one pressed 'trade' too
-				// check exploit (trade more items that you have)
-				if (impossible_trade_check(sd)) {
+
+
+				if(impossible_trade_check(sd))
+				{
 					trade_tradecancel(sd);
 					return;
 				}
-				// check exploit (trade more items that you have)
-				if (impossible_trade_check(target_sd)) {
+
+				if(trade_restrictions(sd))
+				{
+					trade_tradecancel(sd);
+					return;
+				}
+
+				if(impossible_trade_check(target_sd))
+				{
 					trade_tradecancel(target_sd);
 					return;
 				}
+
 				// check zenys value against hackers
 				if (sd->deal_zeny >= 0 && sd->deal_zeny <= MAX_ZENY && sd->deal_zeny <= sd->status.zeny && // check amount
 				    (target_sd->status.zeny + sd->deal_zeny) <= MAX_ZENY && // fix positiv overflow
