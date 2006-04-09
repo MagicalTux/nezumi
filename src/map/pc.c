@@ -3135,7 +3135,7 @@ int pc_isUseitem(struct map_session_data *sd, int n)
 }
 
 /*==========================================
- * アイテムを使う
+ * Use Item
  *------------------------------------------
  */
 void pc_useitem(struct map_session_data *sd, short n) {
@@ -3151,6 +3151,7 @@ void pc_useitem(struct map_session_data *sd, short n) {
 			return;
 		if (gettick_cache < sd->canuseitem_tick || // Prevent mass item usage. [Skotlex]
 		    sd->sc_data[SC_BERSERK].timer != -1 ||
+		    sd->sc_data[SC_GRAVITATION].timer != -1 ||
 		    sd->sc_data[SC_MARIONETTE].timer != -1 ||
 		    (pc_issit(sd) && (itemid == 605 || itemid == 606)) || // 605: Anodyne, 606: Aloevera
 		    (map[sd->bl.m].flag.pvp && (sd->inventory_data[n]->flag.no_equip & 1)) || // PVP // no_equip = 1- not in PvP, 2- GvG restriction, 3- PvP and GvG which restriction
@@ -5509,7 +5510,7 @@ int pc_resetskill(struct map_session_data* sd) {
 }
 
 /*==========================================
- * pcにダメージを与える
+ * PC Damage
  *------------------------------------------
  */
 int pc_damage(struct block_list *src, struct map_session_data *sd, int damage)
@@ -5532,6 +5533,15 @@ int pc_damage(struct block_list *src, struct map_session_data *sd, int damage)
 
 	if (sd->sc_data)
 	{
+		if (sd->sc_data[SC_GRAVITATION].timer != -1 && sd->sc_data[SC_GRAVITATION].val3 == BCT_SELF)
+		{
+			struct skill_unit_group *sg = (struct skill_unit_group *)sd->sc_data[SC_GRAVITATION].val4;
+			if (sg)
+			{
+				skill_delunitgroup(sg);
+				status_change_end(&sd->bl, SC_GRAVITATION, -1);
+			}
+		}
 		if(sd->sc_data[SC_BERSERK].timer != -1)
 		{
 			if(sd->sc_data[SC_BERSERK].timer != -1 && map[sd->bl.m].flag.gvg)				// Endure doesn't work on GvG maps

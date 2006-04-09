@@ -201,6 +201,7 @@ const struct skill_name_db skill_names[] = {
  { HT_STEELCROW, "STEELCROW", "Steel_Crow" } ,
  { HT_TALKIEBOX, "TALKIEBOX", "Talkie_Box" } ,
  { HW_GANBANTEIN, "GANBANTEIN", "Ganbantein" } ,
+ { HW_GRAVITATION, "GRAVITATION", "Gravitation_Field" } ,
  { HW_MAGICCRASHER, "MAGICCRASHER", "Magic_Crasher" } ,
  { HW_MAGICPOWER, "MAGICPOWER", "Magic_Power" } ,
  { HW_NAPALMVULCAN, "NAPALMVULCAN", "Napalm_Vulcan" } ,
@@ -4995,6 +4996,16 @@ int skill_castend_pos2(struct block_list *src, int x, int y, int skillid, int sk
 			return 1;
 		}
 		break;
+
+	case HW_GRAVITATION:
+		{
+			struct skill_unit_group *sg;
+			clif_skill_poseffect(src,skillid,skilllv,x,y,tick);
+			sg = skill_unitsetting(src,skillid,skilllv,x,y,0);	
+			status_change_start(src, SkillStatusChangeTable[skillid], skilllv, 0, BCT_SELF, (int)sg, skill_get_time(skillid, skilllv), 0);
+		}
+		break;
+
 	}
 
 	return 0;
@@ -5425,7 +5436,7 @@ int skill_unit_onplace(struct skill_unit *src, struct block_list *bl, unsigned i
 		                    (intptr_t)src, skill_get_time2(sg->skill_id, sg->skill_lv), 0);
 		break;
 
-	case 0xb4:	/* バジリカ */	// Basilica
+	case 0xb4:
 		if (battle_check_target(&src->bl, bl, BCT_NOENEMY) > 0) {
 			if (sc_data && sc_data[type].timer != -1) {
 				struct skill_unit_group *sg2 = (struct skill_unit_group *)sc_data[type].val4;
@@ -5437,7 +5448,7 @@ int skill_unit_onplace(struct skill_unit *src, struct block_list *bl, unsigned i
 			skill_blown(&src->bl, bl, 1);
 		break;
 
-	case 0xb6:				/* フォグウォ?ル */
+	case 0xb6:
 		if (sc_data && sc_data[type].timer != -1) {
 			unit2 = (struct skill_unit *)sc_data[type].val4;
 			if (unit2 && unit2->group &&
@@ -5449,8 +5460,15 @@ int skill_unit_onplace(struct skill_unit *src, struct block_list *bl, unsigned i
 		skill_additional_effect(ss, bl, sg->skill_id, sg->skill_lv, BF_MISC, tick);
 		break;
 
-	case 0xb2:				/* あなたを_?いたいです */
-	case 0xb3:				/* ゴスペル */
+	case 0xb8:
+		sc_data = status_get_sc_data(bl);
+		type = SkillStatusChangeTable[sg->skill_id];
+		if (sc_data && sc_data[type].timer == -1 && (!status_get_mode(bl) & 0x20))
+			status_change_start(bl, type, sg->skill_lv, 5 * sg->skill_lv, BCT_ENEMY, sg->group_id, skill_get_time2(sg->skill_id, sg->skill_lv), 0);
+		break;
+
+	case 0xb2:
+	case 0xb3:
 		break;
 	}
 
@@ -5654,7 +5672,7 @@ int skill_unit_onplace_timer(struct skill_unit *src, struct block_list *bl, unsi
 			status_change_start(bl, type, sg->skill_lv, (intptr_t)src, 0, 0, skill_get_time2(sg->skill_id, sg->skill_lv), 0);
 		break;
 
-	case 0xb7:	/* スパイダーウェッブ */
+	case 0xb7:
 		if(sg->val2==0){
 			int moveblock = ( bl->x/BLOCK_SIZE != src->bl.x/BLOCK_SIZE || bl->y/BLOCK_SIZE != src->bl.y/BLOCK_SIZE);
 			skill_additional_effect(ss,bl,sg->skill_id,sg->skill_lv,BF_MISC,tick);
@@ -5675,6 +5693,11 @@ int skill_unit_onplace_timer(struct skill_unit *src, struct block_list *bl, unsi
 			sg->interval = -1;
 			src->range = 0;
 		}
+		break;
+
+	case 0xb8:
+		if (skill_attack(BF_MAGIC, ss, &src->bl, bl, sg->skill_id, sg->skill_lv, tick, 0))
+			skill_additional_effect(ss, bl, sg->skill_id, sg->skill_lv, BF_MAGIC, tick);
 		break;
 	}
 
@@ -5782,13 +5805,20 @@ int skill_unit_onout(struct skill_unit *src, struct block_list *bl, unsigned int
 	  }
 		break;
 
-	case 0xb7:	/* スパイダーウェッブ */
+	case 0xb7:
 	  {
 		struct block_list *target = map_id2bl(sg->val2);
 		if (target && target == bl)
 			status_change_end(bl, SC_SPIDERWEB, -1);
 		sg->limit = DIFF_TICK(tick, sg->tick) + 1000;
 	  }
+		break;
+
+	case 0xb8:
+		sc_data = status_get_sc_data(bl);
+		type = SkillStatusChangeTable[sg->skill_id];
+		if (sc_data && sc_data[type].timer != -1)
+			status_change_end(bl, type, -1);
 		break;
 	}
 
@@ -6769,6 +6799,7 @@ int skill_use_id(struct map_session_data *sd, int target_id, int skill_num, int 
 			(sc_data[SC_AUTOCOUNTER].timer != -1 && sd->skillid != KN_AUTOCOUNTER) ||
 			sc_data[SC_STEELBODY].timer != -1 ||
 			sc_data[SC_BERSERK].timer != -1 ||
+			(sc_data[SC_GRAVITATION].timer != -1 && sc_data[SC_GRAVITATION].val3 == BCT_SELF) ||
 			(sc_data[SC_MARIONETTE].timer != -1 && sd->skillid != CG_MARIONETTE)){
 			return 0;
 		}
@@ -7107,16 +7138,14 @@ int skill_use_pos(struct map_session_data *sd,
 		    sc_data[SC_STEELBODY].timer != -1 ||
 		    sc_data[SC_DANCING].timer!=-1 ||
 		    sc_data[SC_BERSERK].timer != -1 ||
-		    sc_data[SC_MARIONETTE].timer != -1)
-			return 0; /* 状態異常や沈黙など */
+		    sc_data[SC_MARIONETTE].timer != -1 ||
+		    (sc_data[SC_GRAVITATION].timer != -1 && sc_data[SC_GRAVITATION].val3 == BCT_SELF && skill_num != HW_GRAVITATION))
+			return 0;
 
 		if (sc_data[SC_BASILICA].timer != -1) {
 			struct skill_unit_group *sg = (struct skill_unit_group *)sc_data[SC_BASILICA].val4;
-			// if caster is the owner of basilica
-			if (sg && sg->src_id == sd->bl.id &&
-				skill_num == HP_BASILICA)
+			if (sg && sg->src_id == sd->bl.id && skill_num == HP_BASILICA)
 				;	// do nothing
-			// otherwise...
 			else
 				return 0;
 		}

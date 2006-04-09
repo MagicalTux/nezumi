@@ -268,7 +268,9 @@ int SkillStatusChangeTable[]={
 /* 480- */
 	-1,
 	SC_DOUBLECASTING,
-	-1,-1,-1,
+	-1,
+	SC_GRAVITATION,
+	-1,
 	SC_MAXOVERTHRUST,
 	-1,
 	-1,-1,-1,
@@ -1311,23 +1313,34 @@ int status_calc_pc(struct map_session_data* sd, int first)
 		}
 		if(sd->sc_data[SC_SPEARSQUICKEN].timer != -1 && sd->sc_data[SC_ADRENALINE].timer == -1 && sd->sc_data[SC_TWOHANDQUICKEN].timer == -1 && sd->sc_data[SC_QUAGMIRE].timer == -1 && sd->sc_data[SC_DONTFORGETME].timer == -1)
 			aspd_rate -= sd->sc_data[SC_SPEARSQUICKEN].val2;
+
 		if(sd->sc_data[SC_ASSNCROS].timer!=-1 && sd->sc_data[SC_TWOHANDQUICKEN].timer == -1 && sd->sc_data[SC_ADRENALINE].timer == -1 && sd->sc_data[SC_SPEARSQUICKEN].timer == -1 && sd->sc_data[SC_DONTFORGETME].timer == -1)
 				aspd_rate -= 5+sd->sc_data[SC_ASSNCROS].val1+sd->sc_data[SC_ASSNCROS].val2+sd->sc_data[SC_ASSNCROS].val3;
+
+		if(sd->sc_data[SC_GRAVITATION].timer != -1)
+			aspd_rate += sd->sc_data[SC_GRAVITATION].val2;
+
 		if(sd->sc_data[SC_DONTFORGETME].timer!=-1)
 		{
 			aspd_rate += sd->sc_data[SC_DONTFORGETME].val1 * 3 + sd->sc_data[SC_DONTFORGETME].val2 + (sd->sc_data[SC_DONTFORGETME].val3 >> 16);
 			sd->speed = sd->speed * (100 + sd->sc_data[SC_DONTFORGETME].val1 * 2 + sd->sc_data[SC_DONTFORGETME].val2 + (sd->sc_data[SC_DONTFORGETME].val3 & 0xffff)) / 100;
 		}
+
 		if (sd->sc_data[i=SC_SPEEDPOTION3].timer != -1 || sd->sc_data[i=SC_SPEEDPOTION2].timer != -1 || sd->sc_data[i=SC_SPEEDPOTION1].timer != -1 || sd->sc_data[i=SC_SPEEDPOTION0].timer != -1)
 			aspd_rate -= sd->sc_data[i].val2;
+
 		if(sd->sc_data[SC_BLEEDING].timer != -1)
-			aspd_rate = aspd_rate + 25;
+			aspd_rate += 25;
+
 		if (sd->sc_data[SC_WINDWALK].timer != -1 && sd->sc_data[SC_INCREASEAGI].timer == -1)
 			sd->speed -= sd->speed * (sd->sc_data[SC_WINDWALK].val1 * 2) / 100;
+
 		if (sd->sc_data[SC_CARTBOOST].timer != -1)
 			sd->speed -= (DEFAULT_WALK_SPEED * 20) / 100;
+
 		if (sd->sc_data[SC_BERSERK].timer != -1)
 			sd->speed -= sd->speed * 25 / 100;
+
 		if (sd->sc_data[SC_WEDDING].timer != -1)
 			sd->speed = 2 * DEFAULT_WALK_SPEED;
 
@@ -4003,7 +4016,12 @@ int status_change_start(struct block_list *bl, int type, intptr_t val1, intptr_t
 			break;
 
 		case SC_MEMORIZE:
-			val2 = 5; // Memorize is supposed to reduce the cast time of the next 5 spells by half (thanks to [BLB] from freya's bug report)
+			val2 = 5;
+			break;
+
+		case SC_GRAVITATION:
+			if (val3 != BCT_SELF)
+				calc_flag = 1;
 			break;
 
 		case SC_COMA:
@@ -4296,11 +4314,13 @@ int status_change_end(struct block_list* bl, int type, int tid)
 				if (sc_data[SC_PROVOKE].timer != -1)
 					status_change_end(bl,SC_PROVOKE,-1);
 				break;
-			case SC_BERSERK:			/* バーサーク */
+
+			case SC_BERSERK:
 				calc_flag = 1;
-				clif_status_change(bl,SC_INCREASEAGI,0);	/* アイコン消去 */
+				clif_status_change(bl,SC_INCREASEAGI,0);
 				break;
-			case SC_DEVOTION:		/* ディボーション */
+
+			case SC_DEVOTION:
 				{
 					struct map_session_data *md = map_id2sd(sc_data[type].val1);
 					sc_data[type].val1=sc_data[type].val2=0;
@@ -4308,6 +4328,7 @@ int status_change_end(struct block_list* bl, int type, int tid)
 					calc_flag = 1;
 				}
 				break;
+
 			case SC_BLADESTOP:
 				{
 					struct status_change *t_sc_data = status_get_sc_data((struct block_list *)sc_data[type].val4);
@@ -4317,6 +4338,11 @@ int status_change_end(struct block_list* bl, int type, int tid)
 					if(sc_data[type].val2==2)
 						clif_bladestop((struct block_list *)sc_data[type].val3,(struct block_list *)sc_data[type].val4,0);
 				}
+				break;
+
+			case SC_GRAVITATION:
+				if(sc_data[type].val3 != BCT_SELF) 
+					calc_flag = 1;
 				break;
 
 			case SC_DANCING:

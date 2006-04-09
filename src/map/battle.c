@@ -3076,6 +3076,7 @@ struct Damage battle_calc_magic_attack(
 		case AL_RUWACH:
 			MATK_FIX(145, 100);
 			break;
+
 		case HW_NAPALMVULCAN:
 			MATK_FIX(70 + skill_lv * 10,100);
 			if(flag > 0) {
@@ -3085,6 +3086,7 @@ struct Damage battle_calc_magic_attack(
 					printf("battle_calc_magic_attack(): napalmvulcan enemy count=0 !\n");
 			}
 			break;
+
 		case PF_SOULBURN:
 			if (target->type != BL_PC || skill_lv < 5)
 			{
@@ -3095,9 +3097,17 @@ struct Damage battle_calc_magic_attack(
 				matk_flag = 0;
 			}
 			break;
+
 		case ASC_BREAKER:
 			damage = rand() % 500 + 500 + skill_lv * status_get_int(bl) * 5;
 			matk_flag = 0; // don't consider matk and matk2
+			break;
+
+		case HW_GRAVITATION:
+			damage = 200 + 200 * skill_lv;
+			if(tmd && tmd->class == 1288)
+				damage = 400;
+			normalmagic_flag = 0;
 			break;
 		}
 	}
@@ -3154,7 +3164,7 @@ struct Damage battle_calc_magic_attack(
 			damage += damage * sd->skillatk[1] / 100;
 	}
 
-	if (tsd) {
+	if (tsd && skill_num != HW_GRAVITATION) {
 		int s_class = status_get_class(bl);
 		cardfix = 100;
 		cardfix = cardfix * (100 - tsd->subele[ele]) / 100;
@@ -3199,10 +3209,11 @@ struct Damage battle_calc_magic_attack(
 			if ((map[target->m].flag.pvp || map[target->m].flag.gvg) && target->type==BL_PC)
 				damage = (damage * (100 - battle_config.gtb_pvp_only)) / 100;
 		} else
-			damage=0;
+			damage = 0;
 	}
 
-	damage = battle_calc_damage(bl, target, damage, div_, skill_num, skill_lv, aflag);
+	if(skill_num != HW_GRAVITATION)
+		damage = battle_calc_damage(bl, target, damage, div_, skill_num, skill_lv, aflag);
 
 	// use new battle_calc_rdamage function to calculate reflected magic damage
 	if(damage > 0 && bl != target && (rdamage = battle_calc_rdamage(bl, damage, BF_MAGIC, BF_LONG, skill_num)) > 0)

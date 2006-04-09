@@ -9188,10 +9188,11 @@ void clif_parse_UseItem(int fd, struct map_session_data *sd) { // S 0x00a7 <inde
 		return;
 	}
 	if (sd->npc_id != 0 || sd->vender_id != 0 || (sd->opt1 > 0 && sd->opt1 != 6) ||
-	    sd->sc_data[SC_TRICKDEAD].timer != -1 || //死んだふり
-	    sd->sc_data[SC_BLADESTOP].timer != -1 || //白刃取り
-	    sd->sc_data[SC_BERSERK].timer != -1 || //バーサーク
-	    sd->sc_data[SC_NOCHAT].timer != -1) //会話禁止
+	    sd->sc_data[SC_TRICKDEAD].timer != -1 ||
+	    sd->sc_data[SC_BLADESTOP].timer != -1 ||
+	    sd->sc_data[SC_BERSERK].timer != -1 ||
+	    sd->sc_data[SC_GRAVITATION].timer != -1 ||
+	    sd->sc_data[SC_NOCHAT].timer != -1)
 		return;
 
 	pc_delinvincibletimer(sd);

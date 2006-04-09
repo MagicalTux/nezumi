@@ -1,5 +1,8 @@
 // $Id$
 
+2006-04-09
+	* Added: Gravity Field skill (High Wizard) -- eAthena-based -- [akrus]
+
 2006-04-08
 	* Fixed: compiler error on linux (mmo.h) [Harbin]
 	* Fixed: Arrow Shower formula [akrus]
