@@ -542,7 +542,14 @@ int battle_calc_rdamage(struct block_list *bl, int damage, int damage_type, int 
 	struct status_change *sc;
 	int rdamage = 0;
 
-	// TODO: add a list of skills that are reflectable
+	if(skill_id > 0)
+	{
+		switch(skill_id)
+		{
+			case WS_CARTTERMINATION:
+				return 0;
+		}
+	}
 
 	sc = status_get_sc_data(bl);
 
@@ -3502,7 +3509,12 @@ int battle_weapon_attack(struct block_list *src, struct block_list *target, unsi
 		}
 		else
 			wd=battle_calc_weapon_attack(src,target,0,0,0);
-		if((damage = wd.damage + wd.damage2) > 0 && src != target) {
+
+		if(damage > 0 && src != target && (rdamage = battle_calc_rdamage(target, damage, wd.flag, BF_WEAPON, 0)) > 0)	// calculate reflected damage
+			clif_damage(src, src, tick, dmg.amotion, 0, rdamage, 1, 4, 0);												// send returned damage to player
+
+
+/*		if((damage = wd.damage + wd.damage2) > 0 && src != target) {
 			if (t_sc_data && t_sc_data[SC_REJECTSWORD].val3 != 0) {
 				rdamage += damage;
 				if (rdamage < 1) rdamage = 1;
@@ -3532,7 +3544,7 @@ int battle_weapon_attack(struct block_list *src, struct block_list *target, unsi
 			}
 			if(rdamage > 0)
 				clif_damage(src,src,tick, wd.amotion,0,rdamage,1,4,0);
-		}
+		} */
 
 		if (wd.div_ == 255 && sd) { //éOíiè∂
 			int delay = 1000 - 4 * status_get_agi(src) - 2 *  status_get_dex(src);
