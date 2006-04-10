@@ -3511,7 +3511,7 @@ int battle_weapon_attack(struct block_list *src, struct block_list *target, unsi
 			wd=battle_calc_weapon_attack(src,target,0,0,0);
 
 		if(damage > 0 && src != target && (rdamage = battle_calc_rdamage(target, damage, wd.flag, BF_WEAPON, 0)) > 0)	// calculate reflected damage
-			clif_damage(src, src, tick, dmg.amotion, 0, rdamage, 1, 4, 0);												// send returned damage to player
+			clif_damage(src, src, tick, wd.amotion, 0, rdamage, 1, 4, 0);												// send returned damage to player
 
 
 /*		if((damage = wd.damage + wd.damage2) > 0 && src != target) {

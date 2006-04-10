@@ -1,6 +1,7 @@
 // $Id$
 
 2006-04-10
+	* Fixed: compilation error on battle.c [Harbin]
 	* Fixed: cart termination damage should be non-reflectable [Harbin]
 	* Improved: now all functions use battle_calc_rdamage instead of own reflection code [Harbin]
 	* Added: Phantasmic Arrow Quest [akrus]
