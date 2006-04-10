@@ -1,5 +1,9 @@
 // $Id$
 
+2006-04-10
+	* Added: Phantasmic Arrow Quest [akrus]
+	* Fixed: Cart Termination skill is no longer passive [akrus]
+
 2006-04-09
 	* Added: phantasmic arrow skill for hunters [Harbin]
 	* Updated: all mapflags. by Jetvictor [Harbin]
