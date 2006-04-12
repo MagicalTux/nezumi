@@ -4,6 +4,7 @@
 2006-04-11
 	* Fixed: hopefully fixed weapon rdamage reflecting 32000+ [akrus]
 	* Fixed: Hylozoist card now use dead branch summon tables and probability [zug]
+	* Fixed: order of /memo for warps [Zug]
 
 2006-04-10
 	* Fixed: compilation error on battle.c [Harbin]

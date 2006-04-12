@@ -997,7 +997,7 @@ int mmo_char_fromsql(int char_id)
 		return -1;
 	}
 
-	sql_request("SELECT `map`,`x`,`y` FROM `%s` WHERE `char_id`='%d'", memo_db, char_id);
+	sql_request("SELECT `map`,`x`,`y` FROM `%s` WHERE `char_id`='%d' ORDER BY memo_id", memo_db, char_id);
 	i = 0;
 	while(sql_get_row() && i < MAX_PORTAL_MEMO) {
 		strncpy(p.memo_point[i].map, sql_get_string(0), 16); // 17 - NULL
