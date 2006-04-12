@@ -22,7 +22,7 @@
 
 hu_in01.gat,23,311,4	script	Josh	898,{
 
-	mes [Josh];
+	mes "[Josh]";
 	mes "Hi ho~ I may sell you some awesome Firecrackers, would you like to buy one?";
 	mes "For only 500z you get 5 ^FF0000Firecrackers^000000!";
 	menu "Yes, please",-,"No, thanks",L_no;
@@ -31,17 +31,17 @@ hu_in01.gat,23,311,4	script	Josh	898,{
 
 	set Zeny,Zeny-500;
 	getitem 12018,5;
-	mes [Josh];
+	mes "[Josh]";
 	mes "Good! here you go! Have fun with them!";
 	close;
 
 	L_nozeny:
-		mes [Josh];
+		mes "[Josh]";
 		mes "Err sir, you don't have 500z zeny. I can't sell you anything";
 		close;
 
 	L_no:
-		mes [Josh];
+		mes "[Josh]";
 		mes "Aww~~ you miss it";
 		close;
 }
