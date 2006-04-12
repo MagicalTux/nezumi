@@ -614,8 +614,8 @@ int battle_calc_rdamage(struct block_list *bl, int damage, int damage_type, int 
 			}
 		}
 	}
-	if(rdamage <= 1)
-		return 0;
+	if(rdamage < 1)
+		rdamage = 0;
 	return rdamage;
 }
 
@@ -3241,17 +3241,6 @@ struct Damage battle_calc_magic_attack(
 		battle_damage(target, bl, rdamage, 0);
 	}
 
-/*	// old code to calc reflected magic damage
-if(target->type == BL_PC && tsd && tsd->magic_damage_return > 0)
-{
-		rdamage += damage * tsd->magic_damage_return / 100;
-		if(rdamage < 1)
-			rdamage = 1;
-		clif_damage(target, bl, gettick_cache, 0, 0, rdamage, 0, 0, 0);
-		battle_damage(target, bl, rdamage, 0);
-	}
-*/
-
 	md.damage = damage;
 	md.div_ = div_;
 	md.amotion = status_get_amotion(bl);
@@ -3443,7 +3432,7 @@ struct Damage battle_calc_attack(int attack_type,
 }
 
 /*==========================================
- * ’ÊíUŒ‚ˆ—‚Ü‚Æ‚ß
+ * Weapon Attack
  *------------------------------------------
  */
 int battle_weapon_attack(struct block_list *src, struct block_list *target, unsigned int tick, int flag) {
@@ -3510,7 +3499,11 @@ int battle_weapon_attack(struct block_list *src, struct block_list *target, unsi
 		else
 			wd=battle_calc_weapon_attack(src,target,0,0,0);
 
-		if(damage > 0 && src != target && (rdamage = battle_calc_rdamage(target, damage, wd.flag, BF_WEAPON, 0)) > 0)	// calculate reflected damage
+// Old Reflect Code [akrus]
+//		if((damage = wd.damage + wd.damage2) > 0 && src != target) {
+// Left for debugging, will be removed later
+
+		if((damage = wd.damage + wd.damage2) > 0 && src != target && (rdamage = battle_calc_rdamage(target, damage, wd.flag, BF_WEAPON, 0)) > 0)	// calculate reflected damage
 			clif_damage(src, src, tick, wd.amotion, 0, rdamage, 1, 4, 0);												// send returned damage to player
 
 
