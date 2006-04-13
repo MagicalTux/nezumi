@@ -2631,12 +2631,18 @@ int skill_castend_damage_id(struct block_list* src, struct block_list *bl, int s
 		}
 		break;
 
-	// unknown skills [Celest]
 	case NPC_BIND:
 	case NPC_EXPLOSIONSPIRITS:
 	case NPC_INCAGI:
-		clif_skill_nodamage(src, bl, skillid, skilllv, 1);
-		break;
+        clif_skill_nodamage(src,bl,skillid,skilllv,1);
+        break;
+
+    case NPC_BREAKARMOR:
+    case NPC_BREAKWEAPON:
+    case NPC_BREAKHELM:
+    case NPC_BREAKSHIELD:
+        skill_castend_nodamage_id(src,bl, skillid, skilllv, 0, 0);
+        break;
 
 	case 0:
 		if(sd) {
@@ -4123,32 +4129,31 @@ int skill_castend_nodamage_id(struct block_list *src, struct block_list *bl, int
 		clif_skill_nodamage(src,bl,skillid,skilllv,1);
 		break;
 
-	// Equipment breaking monster skills [Celest]
 	case NPC_BREAKWEAPON:
-		clif_skill_nodamage(src,bl,skillid,skilllv,1);
-		if(bl->type == BL_PC && rand()%100 < skilllv && battle_config.equipment_breaking)
-			pc_breakweapon((struct map_session_data *)bl);
+    case NPC_BREAKARMOR:
+    case NPC_BREAKHELM:
+    case NPC_BREAKSHIELD:
+		if(bl->type == BL_PC && rand()%100 < 1.5*skilllv && battle_config.equipment_breaking)
+		{
+			clif_skill_nodamage(src,bl,skillid,skilllv,1);
+			switch (skillid)
+			{
+				case NPC_BREAKWEAPON:
+					pc_breakweapon((struct map_session_data *)bl);
+					break;
+				case NPC_BREAKARMOR:
+					pc_breakarmor((struct map_session_data *)bl);
+					break;
+				case NPC_BREAKHELM:
+					pc_breakhelm((struct map_session_data *)bl);
+					break;
+				case NPC_BREAKSHIELD:
+					pc_breakshield((struct map_session_data *)bl);
+					break;
+			}
+		}
 		break;
 
-	case NPC_BREAKARMOR:
-		clif_skill_nodamage(src,bl,skillid,skilllv,1);
-		if(bl->type == BL_PC && rand()%100 < skilllv && battle_config.equipment_breaking)
-			pc_breakarmor((struct map_session_data *)bl);
-		break;
-
-	case NPC_BREAKHELM:
-		clif_skill_nodamage(src,bl,skillid,skilllv,1);
-		if(bl->type == BL_PC && rand()%100 < skilllv && battle_config.equipment_breaking)
-			// since we don't have any code for helm breaking yet...
-			pc_breakweapon((struct map_session_data *)bl);
-		break;
-
-	case NPC_BREAKSHIELD:
-		clif_skill_nodamage(src,bl,skillid,skilllv,1);
-		if(bl->type == BL_PC && rand()%100 < skilllv && battle_config.equipment_breaking)
-			// since we don't have any code for helm breaking yet...
-			pc_breakweapon((struct map_session_data *)bl);
-		break;
 
 	case WE_MALE:
 		if(sd && dstsd){
