@@ -1,5 +1,8 @@
 // $Id$
 
+2006-04-16
+	* Improved: pc_setrestartvalue [NPOV]
+
 2006-04-12
 	* Fixed: NPC_BREAKWEAPON NPC_BREAKARMOR NPC_BREAKHELM skills (1.5% per skill level, same as eathena) [Zug]
 	* Added: added Taekwon skills in skill_db.txt [Zug]
