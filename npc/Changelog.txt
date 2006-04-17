@@ -1,6 +1,9 @@
 // $Id: Changelog.txt 4392 2006-01-04 22:38:08Z Yor $
 Date	Added
 
+2006.04.17
+	Fixed: invalid monster spawn on dancer quest. fix by Flop. issue 387 [Harbin]
+
 2006.04.09
 	Fixed: name and items of of some shops. fix by Jetvictor [Harbin]
 	Fixed: lutie warp coordinates. fix by Jetvictor [Harbin]

@@ -1,5 +1,9 @@
 // $Id: Changelog.txt akrus $
 
+04/17/2006
+	* Fixed: drop rate of few dullahan items. fix by Flop. issue 386 [Harbin]
+	* Fixed: heirozoist card's item type. fix by Flop. issue 402 [Harbin]
+
 04/09/2006
 	* Added: item notrade database [Harbin]
 

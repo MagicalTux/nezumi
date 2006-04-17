@@ -849,7 +849,7 @@ OnTimer71000:
 	donpcevent "::OnDE1";
 	mapannounce "job_duncer.gat","Bijou:  Kill the monster using Arrow Shower!",8;
 	set @skillcheck,Sp;
-	monster "job_duncer.gat",69,106,"Poring",1002,1,"jddie";
+	monster "job_duncer.gat",69,111,"Poring",1002,1,"jddie";
 	end;
 
 OnTimer76000:
