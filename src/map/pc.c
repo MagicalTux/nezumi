@@ -337,35 +337,62 @@ int pc_delspiritball(struct map_session_data *sd, int count, int type) {
 }
 
 int pc_setrestartvalue(struct map_session_data *sd,int type) {
-//	struct pc_base_job s_class;
-        unsigned int restartHP = battle_config.restart_hp_rate, restartSP = battle_config.restart_sp_rate; 
-        nullpo_retr(0, sd);
- 
-        // We're checking that the user wants to restore 100% of the user's HP
-        if(type & 1 && (sd->special_state.restart_full_recover || sd->state.snovice_flag))
-        {       
-                if (sd->state.snovice_flag & 1 && sd->state.snovice_flag & 2) 
-                {
-                        sd->state.snovice_flag = 0;
-                        status_change_start(&sd->bl, SkillStatusChangeTable[MO_STEELBODY], 1, 0, 0, 0, skill_get_time(MO_STEELBODY, 1), 0);
-                }
-                        //Easier way - we just let the below function do ALL the work! :-) [Spum]
-                        restartHP = 100;
-                        restartSP =     100;
-        }
-        
-        if(type & 2 && sd->status.class != 0 &&sd->status.class != 4001 && sd->status.class != 4023 && !map[sd->bl.m].flag.nozenypenalty) 
-        {
-                sd->status.zeny -= (battle_config.zeny_penalty_percent > 0) ? (double)battle_config.zeny_penalty + ((double)sd->status.base_level * (double)battle_config.zeny_penalty_by_lvl) : (double)battle_config.zeny_penalty + ((double)sd->status.zeny * (double)battle_config.zeny_penalty_percent / 10000.);
-        clif_updatestatus(sd, SP_ZENY); 
-        
-        }
-                sd->status.hp = (restartHP > 0 && restartHP <= 100) ? sd->status.max_hp / 100 * restartHP : sd->status.max_hp / 100;
-                sd->status.sp = (restartHP > 0 && restartHP <= 100) ? sd->status.max_hp / 100 * restartHP : sd->status.max_hp / 100;
-                clif_updatestatus(sd, SP_HP);
-                clif_updatestatus(sd, SP_SP);
- 
-        return 0;
+	struct pc_base_job s_class;
+
+	nullpo_retr(0, sd);
+
+	s_class = pc_calc_base_job(sd->status.class);
+
+	if (sd->state.snovice_flag == 3) { // [Celest]
+		sd->status.hp = sd->status.max_hp;
+		sd->status.sp = sd->status.max_sp;
+		sd->state.snovice_flag = 0;
+		status_change_start(&sd->bl, SkillStatusChangeTable[MO_STEELBODY], 1, 0, 0, 0, skill_get_time(MO_STEELBODY, 1), 0);
+	} else if (sd->special_state.restart_full_recover) {
+		sd->status.hp = sd->status.max_hp;
+		sd->status.sp = sd->status.max_sp;
+	}
+	else {
+		if (s_class.job == 0 && battle_config.restart_hp_rate < 50) {
+			sd->status.hp = (sd->status.max_hp) / 2;
+		}
+		else {
+			if (battle_config.restart_hp_rate <= 0)
+				sd->status.hp = 1;
+			else {
+				sd->status.hp = sd->status.max_hp * battle_config.restart_hp_rate /100;
+				if(sd->status.hp <= 0)
+					sd->status.hp = 1;
+			}
+		}
+		if (battle_config.restart_sp_rate > 0) {
+			int sp = sd->status.max_sp * battle_config.restart_sp_rate /100;
+			if (sd->status.sp < sp)
+				sd->status.sp = sp;
+		}
+	}
+	if (type & 1)
+		clif_updatestatus(sd, SP_HP);
+	if (type & 1)
+		clif_updatestatus(sd, SP_SP);
+
+	/* removed exp penalty on spawn [Valaris] */
+	if (type & 2 &&
+	    sd->status.class != 0 && sd->status.class != 4001 && sd->status.class != 4023 && // only novices/High novice/Baby novice will recieve no penalty
+	    !map[sd->bl.m].flag.nozenypenalty) {
+		double zeny_penalty;
+		zeny_penalty = (double)battle_config.zeny_penalty + ((double)sd->status.base_level * (double)battle_config.zeny_penalty_by_lvl);
+		if (battle_config.zeny_penalty_percent > 0)
+			zeny_penalty = zeny_penalty + ((double)sd->status.zeny * (double)battle_config.zeny_penalty_percent / 10000.);
+		if (zeny_penalty >= 1) {
+			sd->status.zeny -= zeny_penalty;
+			if (sd->status.zeny < 0)
+				sd->status.zeny = 0;
+			clif_updatestatus(sd, SP_ZENY);
+		}
+	}
+
+	return 0;
 }
 
 /*==========================================
