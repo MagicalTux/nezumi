@@ -1,6 +1,7 @@
 // $Id$
 
 2006-04-17
+	* Updated: some mapflags (mainly added novice castles). by Lycade [Harbin]
 	* Fixed: trade_restriction function. now it should work properly. issue 392 [Harbin]
 	* Fixed: pressure should dehide/cloak target. issue 394 [Harbin]
 	* Fixed: status data is now cleared when player dies. issue 406 [Harbin]

@@ -4,13 +4,12 @@
 //= Original:	eAthena Developer Team
 //= Updated:	Nezumi Developer Team
 //===== Current Version: =====================================
-//= 1.0.0
+//= 1.0.1
 //===== Compatible With: =====================================
 //= Nezumi 1.0.0 or newer
 //============================================================
 
 // Guild Castles ========================
-//alde_gld.gat	mapflag	nowarpto
 aldeg_cas01.gat	mapflag	nowarpto
 aldeg_cas02.gat	mapflag	nowarpto
 aldeg_cas03.gat	mapflag	nowarpto
@@ -21,17 +20,20 @@ gefg_cas02.gat	mapflag	nowarpto
 gefg_cas03.gat	mapflag	nowarpto
 gefg_cas04.gat	mapflag	nowarpto
 gefg_cas05.gat	mapflag	nowarpto
-//pay_gld.gat	mapflag	nowarpto
 payg_cas01.gat	mapflag	nowarpto
 payg_cas02.gat	mapflag	nowarpto
 payg_cas03.gat	mapflag	nowarpto
 payg_cas04.gat	mapflag	nowarpto
 payg_cas05.gat	mapflag	nowarpto
-//prt_gld.gat	mapflag	nowarpto
 prtg_cas01.gat	mapflag	nowarpto
 prtg_cas02.gat	mapflag	nowarpto
 prtg_cas03.gat	mapflag	nowarpto
 prtg_cas04.gat	mapflag	nowarpto
 prtg_cas05.gat	mapflag	nowarpto
-//Lighthalzen Bio-Lab 3F
+
+nguild_alde.gat mapflag nowarpto
+nguild_gef.gat mapflag nowarpto
+nguild_pay.gat mapflag nowarpto
+nguild_prt.gat mapflag nowarpto
+
 lhz_dun03.gat	mapflag	nowarpto

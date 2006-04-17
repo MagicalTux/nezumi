@@ -4,7 +4,7 @@
 //= Original:	eAthena Developer Team
 //= Updated:	Nezumi Developer Team
 //===== Current Version: =====================================
-//= 1.0.0
+//= 1.0.1
 //===== Compatible With: =====================================
 //= Nezumi 1.0.0 or newer
 //============================================================
@@ -142,6 +142,11 @@ prtg_cas02.gat	mapflag	noteleport
 prtg_cas03.gat	mapflag	noteleport
 prtg_cas04.gat	mapflag	noteleport
 prtg_cas05.gat	mapflag	noteleport
+
+nguild_alde.gat mapflag noteleport
+nguild_gef.gat mapflag noteleport
+nguild_pay.gat mapflag noteleport
+nguild_prt.gat mapflag noteleport
 
 // GvG Arenas ===================
 guild_vs1.gat	mapflag	noteleport

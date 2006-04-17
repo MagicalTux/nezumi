@@ -4,7 +4,7 @@
 //= Original:	eAthena Developer Team
 //= Updated:	Nezumi Developer Team
 //===== Current Version: =====================================
-//= 1.0.0
+//= 1.0.1
 //===== Compatible With: =====================================
 //= Nezumi 1.0.0 or newer
 //============================================================
@@ -29,3 +29,8 @@ prtg_cas02.gat	mapflag	nowarp
 prtg_cas03.gat	mapflag	nowarp
 prtg_cas04.gat	mapflag	nowarp
 prtg_cas05.gat	mapflag	nowarp
+
+nguild_alde.gat mapflag nowarp
+nguild_gef.gat mapflag nowarp
+nguild_pay.gat mapflag nowarp
+nguild_prt.gat mapflag nowarp

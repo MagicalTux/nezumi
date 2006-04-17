@@ -4,7 +4,7 @@
 //= Original:	eAthena Developer Team
 //= Updated:	Nezumi Developer Team
 //===== Current Version: =====================================
-//= 1.0.0
+//= 1.0.1
 //===== Compatible With: =====================================
 //= Nezumi 1.0.0 or newer
 //============================================================
@@ -294,7 +294,6 @@ kh_school.gat	mapflag	nomemo
 kh_vila.gat	mapflag	nomemo
 
 // Guild Castles =============
-//alde_gld.gat	mapflag	nomemo
 aldeg_cas01.gat	mapflag	nomemo
 aldeg_cas02.gat	mapflag	nomemo
 aldeg_cas03.gat	mapflag	nomemo
@@ -305,23 +304,21 @@ gefg_cas02.gat	mapflag	nomemo
 gefg_cas03.gat	mapflag	nomemo
 gefg_cas04.gat	mapflag	nomemo
 gefg_cas05.gat	mapflag	nomemo
-//pay_gld.gat	mapflag	nomemo
 payg_cas01.gat	mapflag	nomemo
 payg_cas02.gat	mapflag	nomemo
 payg_cas03.gat	mapflag	nomemo
 payg_cas04.gat	mapflag	nomemo
 payg_cas05.gat	mapflag	nomemo
-//prt_gld.gat	mapflag	nomemo
 prtg_cas01.gat	mapflag	nomemo
 prtg_cas02.gat	mapflag	nomemo
 prtg_cas03.gat	mapflag	nomemo
 prtg_cas04.gat	mapflag	nomemo
 prtg_cas05.gat	mapflag	nomemo
-gefg_cas01.gat	mapflag	nomemo
-gefg_cas02.gat	mapflag	nomemo
-gefg_cas03.gat	mapflag	nomemo
-gefg_cas04.gat	mapflag	nomemo
-gefg_cas05.gat	mapflag	nomemo
+
+nguild_alde.gat mapflag nomemo
+nguild_gef.gat mapflag nomemo
+nguild_pay.gat mapflag nomemo
+nguild_prt.gat mapflag nomemo
 
 // GvG Arenas ================
 guild_vs1.gat	mapflag	nomemo
