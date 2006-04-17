@@ -342,7 +342,7 @@ int pc_setrestartvalue(struct map_session_data *sd,int type) {
         nullpo_retr(0, sd);
  
         // We're checking that the user wants to restore 100% of the user's HP
-        if(type & 1 && sd->special_state.restart_full_recover || sd->state.snovice_flag) 
+        if(type & 1 && (sd->special_state.restart_full_recover || sd->state.snovice_flag))
         {       
                 if (sd->state.snovice_flag & 1 && sd->state.snovice_flag & 2) 
                 {
@@ -356,7 +356,7 @@ int pc_setrestartvalue(struct map_session_data *sd,int type) {
         
         if(type & 2 && sd->status.class != 0 &&sd->status.class != 4001 && sd->status.class != 4023 && !map[sd->bl.m].flag.nozenypenalty) 
         {
-                sd->status.zeny -= (battle_config.zeny_penalty_percent > 0) ? (double)battle_config.zeny_penalty + ((double)sd->status.base_level * (double)battle_config.zeny_penalty_by_lvl) : zeny_penalty + ((double)sd->status.zeny * (double)battle_config.zeny_penalty_percent / 10000.);
+                sd->status.zeny -= (battle_config.zeny_penalty_percent > 0) ? (double)battle_config.zeny_penalty + ((double)sd->status.base_level * (double)battle_config.zeny_penalty_by_lvl) : (double)battle_config.zeny_penalty + ((double)sd->status.zeny * (double)battle_config.zeny_penalty_percent / 10000.);
         clif_updatestatus(sd, SP_ZENY); 
         
         }
