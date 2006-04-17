@@ -1,5 +1,8 @@
 // $Id$
 
+2006-04-17
+	* Fixed: compilation error [akrus]
+
 2006-04-16
 	* Improved: pc_setrestartvalue [NPOV]
 
