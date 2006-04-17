@@ -1277,7 +1277,7 @@ int skill_attack(int attack_type, struct block_list* src, struct block_list *dsr
 		if(sc_data[SC_TRICKDEAD].timer != -1)
 			return 0;
 		// pressure can hit hiding players
-		if(sc_data[SC_HIDING].timer != -1 && skillid != PA_PRESSURE)
+		if((sc_data[SC_HIDING].timer != -1 || sc_data[SC_CLOAKING].timer != -1) && skillid != PA_PRESSURE)
 		{
 			if(skill_get_pl(skillid) != 2)
 				return 0;
@@ -1422,7 +1422,15 @@ int skill_attack(int attack_type, struct block_list* src, struct block_list *dsr
 			break;
 		case PA_PRESSURE:
 			if(sc_data[SC_HIDING].timer != -1)
+			{
+				status_change_end(bl, SC_HIDING, -1);
 				return 0;
+			}
+			if(sc_data[SC_CLOAKING].timer != -1)
+			{
+				status_change_end(bl, SC_CLOAKING, -1);
+				return 0;
+			}
 			clif_skill_damage(dsrc, bl, tick, dmg.amotion, dmg.dmotion, damage, dmg.div_, skillid, (lv != 0) ? lv : skilllv, (skillid == 0) ? 5 : type);
 		case NPC_SELFDESTRUCTION:
 			break;

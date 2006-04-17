@@ -5542,21 +5542,19 @@ int pc_damage(struct block_list *src, struct map_session_data *sd, int damage)
 				status_change_end(&sd->bl, SC_GRAVITATION, -1);
 			}
 		}
+
 		if(sd->sc_data[SC_BERSERK].timer != -1)
 		{
-			if(sd->sc_data[SC_BERSERK].timer != -1 && map[sd->bl.m].flag.gvg)				// Endure doesn't work on GvG maps
+			if(sd->sc_data[SC_BERSERK].timer != -1 && map[sd->bl.m].flag.gvg)
 				pc_stop_walking(sd, 3);
 		}
-
-		if(sd->sc_data[SC_ENDURE].timer != -1 || sd->special_state.infinite_endure)
+		else if(sd->sc_data[SC_ENDURE].timer != -1 || sd->special_state.infinite_endure)
 		{
 			if((--sd->sc_data[SC_ENDURE].val2) < 0)
 				status_change_end(&sd->bl, SC_ENDURE, -1);
 			if(map[sd->bl.m].flag.gvg)
-				pc_stop_walking(sd, 3);														// Endure doesn't work on GvG maps
-		}
-
-		else
+				pc_stop_walking(sd, 3);
+		} else
 			pc_stop_walking(sd, 3);
 	}
 
@@ -5597,30 +5595,58 @@ int pc_damage(struct block_list *src, struct map_session_data *sd, int damage)
 		return 0;
 	}
 
-	// player is killed
+//	player is dead
 	sd->status.hp = 0;
-	//pc_setdead(sd);
-	if (sd->vender_id)
+
+//	close vending
+	if(sd->vender_id)
 		vending_closevending(sd);
 
-	if (sd->status.pet_id > 0 && sd->pd) {
-		if (sd->petDB) {
+//	update pet intimacy
+	if(sd->status.pet_id > 0 && sd->pd)
+	{
+		if(sd->petDB)
+		{
 			sd->pet.intimate -= sd->petDB->die;
-			if (sd->pet.intimate < 0)
+			if(sd->pet.intimate < 0)
 				sd->pet.intimate = 0;
 			clif_send_petdata(sd, 1, sd->pet.intimate);
 		}
 	}
 
+//	clear status data
+	if(sd->sc_data[SC_STONE].timer != -1)
+		status_change_end(&sd->bl, SC_STONE, -1);
+	if(sd->sc_data[SC_FREEZE].timer != -1)
+		status_change_end(&sd->bl, SC_FREEZE, -1);
+	if(sd->sc_data[SC_STAN].timer != -1)
+		status_change_end(&sd->bl, SC_STAN, -1);
+	if(sd->sc_data[SC_SLEEP].timer != -1)
+		status_change_end(&sd->bl, SC_SLEEP, -1);
+	if(sd->sc_data[SC_POISON].timer != -1)
+		status_change_end(&sd->bl, SC_POISON, -1);
+	if(sd->sc_data[SC_CURSE].timer != -1)
+		status_change_end(&sd->bl, SC_CURSE, -1);
+	if(sd->sc_data[SC_SILENCE].timer != -1)
+		status_change_end(&sd->bl, SC_SILENCE, -1);
+	if(sd->sc_data[SC_CONFUSION].timer != -1)
+		status_change_end(&sd->bl, SC_CONFUSION, -1);
+	if(sd->sc_data[SC_BLIND].timer != -1)
+		status_change_end(&sd->bl, SC_BLIND, -1);
+	if(sd->sc_data[SC_BLEEDING].timer != -1)
+		status_change_end(&sd->bl, SC_BLEEDING, -1);
+	if(sd->sc_data[SC_DPOISON].timer != -1)
+		status_change_end(&sd->bl, SC_DPOISON, -1);
+	if(sd->sc_data[SC_BLADESTOP].timer != -1)
+		status_change_end(&sd->bl, SC_BLADESTOP, -1);
+
 	pc_stop_walking(sd, 0);
-	skill_castcancel(&sd->bl, 0); // 詠唱の中止
+	skill_castcancel(&sd->bl, 0);
 	clif_clearchar_area(&sd->bl, 1);
 	pc_setdead(sd);
 	skill_unit_move(&sd->bl, gettick_cache, 0);
-	if (sd->sc_data[SC_BLADESTOP].timer != -1) //白刃は事前に解除
-		status_change_end(&sd->bl, SC_BLADESTOP, -1);
-	pc_setglobalreg(sd, "PC_DIE_COUNTER", ++sd->die_counter); //死にカウンター書き込み
-	status_change_clear(&sd->bl, 0); // ステータス異常を解除する
+	pc_setglobalreg(sd, "PC_DIE_COUNTER", ++sd->die_counter);
+	status_change_clear(&sd->bl, 0);
 	clif_updatestatus(sd, SP_HP);
 	status_calc_pc(sd, 0);
 

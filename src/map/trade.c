@@ -412,19 +412,18 @@ bool trade_restrictions(struct map_session_data *sd)
 
 	for(counter = 0; counter == 10; counter++)
 	{
-		if(sd->deal_item_index[counter] == id->nameid)
+		id = itemdb_search(sd->deal_item_index[counter]);
+
+		if(id->flag.no_trade & 0)
+			return 0;
+		else if(id->flag.no_trade & 1)
+			return 1;
+		else if(id->flag.no_trade & 2)
 		{
-			if(id->flag.no_trade & 0)
+			if(sd->trade_partner == sd->status.partner_id)
 				return 0;
-			else if(id->flag.no_trade & 1)
+			else
 				return 1;
-			else if(id->flag.no_trade & 2)
-			{
-				if(sd->trade_partner == sd->status.partner_id)
-					return 0;
-				else
-					return 1;
-			}
 		}
 	}
 	return 0;
