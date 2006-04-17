@@ -2298,10 +2298,10 @@ int skill_castend_damage_id(struct block_list* src, struct block_list *bl, int s
 			status_change_end(src,SC_BLADESTOP,-1);
 	  }
 		break;
-	case AC_SHOWER:			/* アローシャワー */
-	case AS_GRIMTOOTH:		/* グリムトゥース */
-	case MC_CARTREVOLUTION:	/* カートレヴォリューション */
-	case NPC_SPLASHATTACK:	/* スプラッシュアタック */
+	case AC_SHOWER:
+	case AS_GRIMTOOTH:
+	case MC_CARTREVOLUTION:
+	case NPC_SPLASHATTACK:
 	case AS_SPLASHER:
 		if(flag & 1)
 		{
@@ -2328,11 +2328,11 @@ int skill_castend_damage_id(struct block_list* src, struct block_list *bl, int s
 			skill_area_temp[1] = bl->id;
 			skill_area_temp[2] = x;
 			skill_area_temp[3] = y;
-			skill_attack(BF_WEAPON,src,src,bl,skillid,skilllv,tick,0);
 			map_foreachinarea(skill_area_sub,
 				bl->m,x-ar,y-ar,x+ar,y+ar,0,
 				src,skillid,skilllv,tick, flag|BCT_ENEMY|1,
 				skill_castend_damage_id);
+			skill_attack(BF_WEAPON,src,src,bl,skillid,skilllv,tick,0);
 		}
 		break;
 

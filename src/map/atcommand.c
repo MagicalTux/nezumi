@@ -9697,8 +9697,8 @@ ATCOMMAND_FUNC(questskill) {
 		send_usage(fd, "Archer                 146 = Auto Berserk         151 = Take Stone     155 = Crazy Uproar/Loud Voice");
 		send_usage(fd, "147 = Arrow Creation   Acolyte                    152 = Stone Throw    Magician");
 		send_usage(fd, "148 = Charge Arrows    156 = Holy Light                                157 = Energy Coat");
-		send_usage(fd, "Assassin");
-		send_usage(fd, "1003 = Sonic Acceleration");
+		send_usage(fd, "Assassin                                          Hunter");
+		send_usage(fd, "1003 = Sonic Acceleration                         1009 = Phantasmic Arrow");
 		return -1;
 	}
 
@@ -9743,8 +9743,8 @@ ATCOMMAND_FUNC(charquestskill) {
 		send_usage(fd, "Archer                 146 = Auto Berserk         151 = Take Stone     155 = Crazy Uproar/Loud Voice");
 		send_usage(fd, "147 = Arrow Creation   Acolyte                    152 = Stone Throw    Magician");
 		send_usage(fd, "148 = Charge Arrows    156 = Holy Light                                157 = Energy Coat");
-		send_usage(fd, "Assassin");
-		send_usage(fd, "1003 = Sonic Acceleration");
+		send_usage(fd, "Assassin                                          Hunter");
+		send_usage(fd, "1003 = Sonic Acceleration                         1009 = Phantasmic Arrow");
 		return -1;
 	}
 

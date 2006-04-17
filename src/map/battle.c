@@ -2109,7 +2109,7 @@ static struct Damage battle_calc_pc_weapon_attack(struct block_list *src, struct
 					damage += arr;
 					damage2 += arr;
 				}
-				damageskillmod += 75 + 5 * skill_lv;
+				damageskillmod = 75 + 5 * skill_lv;
 //				flag = (flag&~BF_RANGEMASK)|BF_LONG;
 				sd->state.arrow_atk = 1;
 				break;
