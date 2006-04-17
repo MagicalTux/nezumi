@@ -337,7 +337,7 @@ int pc_delspiritball(struct map_session_data *sd, int count, int type) {
 }
 
 int pc_setrestartvalue(struct map_session_data *sd,int type) {
-        struct pc_base_job s_class;
+//	struct pc_base_job s_class;
         unsigned int restartHP = battle_config.restart_hp_rate, restartSP = battle_config.restart_sp_rate; 
         nullpo_retr(0, sd);
  
@@ -360,8 +360,8 @@ int pc_setrestartvalue(struct map_session_data *sd,int type) {
         clif_updatestatus(sd, SP_ZENY); 
         
         }
-                sd->status.hp = (restartHP > 0 && restart <= 100) ? sd->status.max_hp / 100 * restartHP : sd->status.max_hp / 100;
-                sd->status.sp = (restartHP > 0 && restart <= 100) ? sd->status.max_hp / 100 * restartHP : sd->status.max_hp / 100;
+                sd->status.hp = (restartHP > 0 && restartHP <= 100) ? sd->status.max_hp / 100 * restartHP : sd->status.max_hp / 100;
+                sd->status.sp = (restartHP > 0 && restartHP <= 100) ? sd->status.max_hp / 100 * restartHP : sd->status.max_hp / 100;
                 clif_updatestatus(sd, SP_HP);
                 clif_updatestatus(sd, SP_SP);
  
