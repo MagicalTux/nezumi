@@ -1,5 +1,8 @@
 // $Id$
 
+2006-04-18
+	* Added: longing for freedom skill (still on beta phase but should work) [Harbin]
+
 2006-04-17
 	* Updated: some mapflags (mainly added novice castles). by Lycade [Harbin]
 	* Fixed: trade_restriction function. now it should work properly. issue 392 [Harbin]

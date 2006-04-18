@@ -1695,8 +1695,12 @@ int status_calc_speed(struct map_session_data *sd) {
 			if(sd->sc_data[SC_DEFENDER].val1 <= 4)						// Only level 4 and under defender gains movement reduction
 				sd->speed -= (sd->speed / 3);							// Updated way to set movement speed reduction
 		}
-		if( sd->sc_data[SC_DANCING].timer!=-1 ){
-			sd->speed = (double)sd->speed * (6.- 0.4 * pc_checkskill(sd, ((s_class.job == 19) ? BA_MUSICALLESSON : DC_DANCINGLESSON)));
+		if(sd->sc_data[SC_DANCING].timer != -1)
+		{
+			short speed_mod = 500 - 40 * pc_checkskill(sd, ((s_class.job == 19) ? BA_MUSICALLESSON : DC_DANCINGLESSON));
+			if(sd->sc_data[SC_LONGING].timer != -1)
+				speed_mod -= 20 * sd->sc_data[SC_LONGING].val1;
+			sd->speed += sd->speed * (speed_mod / 100);
 		}
 		if (sd->sc_data[SC_CURSE].timer != -1)
 			sd->speed += 450;
@@ -3644,9 +3648,9 @@ int status_change_start(struct block_list *bl, int type, intptr_t val1, intptr_t
 			calc_flag = 1;
 			val3 = (val1+2)*25;
 			break;
-		case SC_ROKISWEIL:			/* ロキの叫び */
-			break;
-		case SC_INTOABYSS:			/* 深淵の中に */
+		case SC_ROKISWEIL:
+		case SC_INTOABYSS:
+		case SC_LONGING:
 			break;
 		case SC_SIEGFRIED:			/* 不死身のジークフリード */
 			calc_flag = 1;
@@ -4349,13 +4353,15 @@ int status_change_end(struct block_list* bl, int type, int tid)
 				{
 					struct map_session_data *dsd;
 					struct status_change *d_sc_data;
-					if (sc_data[type].val4 && (dsd = map_id2sd(sc_data[type].val4))){
+					if(sc_data[type].val4 && (dsd = map_id2sd(sc_data[type].val4)))
+					{
 						d_sc_data = dsd->sc_data;
-						//合奏で相手がいる場合相手のval4を0にする
-						if (d_sc_data && d_sc_data[type].timer != -1)
+						if(d_sc_data && d_sc_data[type].timer != -1)
 							d_sc_data[type].val4 = 0;
 					}
 				}
+				if(sc_data[SC_LONGING].timer != -1)
+					status_change_end(bl, SC_LONGING, -1);
 				calc_flag = 1;
 				break;
 
@@ -4780,9 +4786,9 @@ TIMER_FUNC(status_change_timer) {
 		sc_data[type].timer = add_timer(1000 * 600 + tick, status_change_timer, bl->id, data);
 		return 0;
 
-	case SC_DANCING: //ダンススキルの時間SP消費
+	case SC_DANCING:
 		{
-			int s=0;
+			int s = 0;
 			if(sd){
 				if(sd->status.sp > 0 && (--sc_data[type].val3)>0){
 					switch(sc_data[type].val1){
@@ -4812,12 +4818,16 @@ TIMER_FUNC(status_change_timer) {
 						s = 6;
 						break;
 					case DC_DONTFORGETME: /* 私を忘れないで… 10秒でSP1 */
-					case CG_MOONLIT: /* 月明りの泉に落ちる花びら 10秒でSP1？ */
+					case CG_MOONLIT:
 						s = 10;
 						break;
 					}
-					if (s && ((sc_data[type].val3 % s) == 0)) {
-						sd->status.sp--;
+					if(s && ((sc_data[type].val3 % s) == 0))
+					{
+						if(sc_data[SC_LONGING].timer != -1)
+							sd->status.sp = s;
+						else
+							sd->status.sp--;
 						clif_updatestatus(sd, SP_SP);
 					}
 					sc_data[type].timer = add_timer(1000 + tick, status_change_timer, bl->id, data); /* タイマー再設定 */

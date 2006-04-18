@@ -930,7 +930,7 @@ static void itemdb_read_notrade(void)
 
 		id->flag.no_trade = itemtype;
 
-		printf(CL_WHITE "debug: " CL_RESET "item id '%d' notrade flag is %d \n", id->nameid, id->flag.no_trade);
+//		printf(CL_WHITE "debug: " CL_RESET "item id '%d' notrade flag is %d \n", id->nameid, id->flag.no_trade);
 	}
 
 	fclose(db);
@@ -971,7 +971,7 @@ static void itemdb_read_norefine(void)
 
 		id->flag.no_refine = 1;
 
-		printf(CL_WHITE "debug: " CL_RESET "item id '%d' norefine flag is %d \n", id->nameid, id->flag.no_refine);
+//		printf(CL_WHITE "debug: " CL_RESET "item id '%d' norefine flag is %d \n", id->nameid, id->flag.no_refine);
 	}
 
 	fclose(db);

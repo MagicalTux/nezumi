@@ -144,6 +144,7 @@ const struct skill_name_db skill_names[] = {
  { BS_WEAPONPERFECT, "WEAPONPERFECT", "Weapon_Perfection" } ,
  { BS_WEAPONRESEARCH, "WEAPONRESEARCH", "Weaponry_Research" } ,
  { CG_ARROWVULCAN, "ARROWVULCAN", "Vulcan_Arrow" } ,
+ { CG_LONGINGFREEDOM, "LONGINGFREEDOM", "Longing_for_Freedom" } ,
  { CG_MARIONETTE, "MARIONETTE", "Marionette_Control" } ,
  { CG_MOONLIT, "MOONLIT", "Moonlight_Petals" } ,
  { CG_TAROTCARD, "TAROTCARD", "Tarot_Card_of_Fate" } ,
@@ -4286,6 +4287,16 @@ int skill_castend_nodamage_id(struct block_list *src, struct block_list *bl, int
 			}
 		}
 	  }
+		break;
+
+	case CG_LONGINGFREEDOM:
+		if(sc_data[SC_LONGING].timer == -1 && sc_data[SC_DANCING].timer != -1 && sc_data[SC_DANCING].val1 != CG_MOONLIT)
+		{
+			clif_skill_nodamage(src, bl, skillid, skilllv, 1);
+			status_change_start(bl, SC_LONGING, 100, 0, 0, 0, skill_get_time(skillid, skilllv), 0);		// TODO: check this out [Harbin]
+		} else {
+			clif_skill_fail(sd, skillid, 0, 0);
+		}
 		break;
 
 	case CG_TAROTCARD:
