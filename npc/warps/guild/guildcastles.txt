@@ -1,22 +1,13 @@
-//===== Athena Script ========================================
-//= Guild Castles Warp Script
+//===== Nezumi Script ========================================
+//= Lighthalzen Field Monsters
 //===== By: ==================================================
-//= Athena (1.0)
+//= Original:	Japanese Athena Developer Team
+//= Updated:	Nezumi Developer Team
 //===== Current Version: =====================================
-//= 2.2
+//= 1.0.0
 //===== Compatible With: =====================================
-//= Any Athena Version
-//===== Description: =========================================
-//= Warp Points for Al de Baran, Payon, Prontera & Geffen
-//= Guild Castles
-//===== Additional Comments: =================================
-//= Split off npc_warp.txt
-//= fixed aldg504-1 warp [Lupus]
-//= 2.0 Added Novice Guilds warps, optimized aldg408r warp [Lupus]
-//= 2.1 Fixed some warps positions [Yor]
-//= 2.2 Changed all breaks to end as per the new script engine. [Skotlex]
+//= Nezumi 1.0.0 or newer
 //============================================================
-
 
 //Al de Baran Guild Castles Map Connection
 aldebaran.gat,35,140,0	warp	aldg001	1,1,alde_gld.gat,280,160

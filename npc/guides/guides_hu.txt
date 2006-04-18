@@ -1,17 +1,13 @@
-//===== eAthena Script =======================================
-//= Guard of Hugel City
+//===== Nezumi Script ========================================
+//= Guides of Hugel
 //===== By: ==================================================
-//= erKURITA
+//= Original:	English Athena Developer Team
+//= Updated:	Nezumi Developer Team
 //===== Current Version: =====================================
-//= 1.0
+//= 1.0.0
 //===== Compatible With: =====================================
-//= eAthena 1.0
-//===== Description: =========================================
-//= Guard/Guide NPC of City of Hugel.
-//===== Additional Comments: =================================
-//= 1.0 Started the script. [erKURITA]
+//= Nezumi 1.0.0 or newer
 //============================================================
-
 
 hugel.gat,98,57,3	script	Old Lady	863,{
 

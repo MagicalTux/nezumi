@@ -1,18 +1,12 @@
 //===== Nezumi Script ========================================
-//= Hugel Field Monster Spawn Script
+//= Hugel Field Monsters
 //===== By: ==================================================
-//= Athena (1.0)
+//= Original:	Japanese Athena Developer Team
+//= Updated:	Nezumi Developer Team
 //===== Current Version: =====================================
-//= 0.4
+//= 1.0.0
 //===== Compatible With: =====================================
-//= Any Nezumi Version
-//===== Additional Comments: =================================
-//= Spawns for hu_fild05 and hu_fild04, numbers may not be correct [MasterOfMuppets]
-//= 0.2 Fixed Petit ID
-//= 0.3 Updated the spawns using kRO's website as info,  [MasterOfMuppets]
-//= 	thanks to battousai90
-//= 0.4 Updated after Episode 10.4 - Hugel [Poki#3]
-//=	Mob quantity is custom.
+//= Nezumi 1.0.0 or newer
 //============================================================
 
 //==================================================

@@ -1,19 +1,12 @@
 //===== Nezumi Script ========================================
-//= Juperos Mystical Dungeon - Monster Spawn Locations
+//= Juperos Dungeon Monsters
 //===== By: ==================================================
-// »» The Prometheus Project ««
-// Copyright (c) 2004,2005
-// Licensed under GPL
-// http://prometheus.fnae.net/
+//= Original:	The Prometheus Project's Developer Team
+//= Updated:	Nezumi Developer Team
 //===== Current Version: =====================================
-//= 1.0
+//= 1.0.0
 //===== Compatible With: =====================================
-//= Any Nezumi Version
-//===== Additional Comments: =================================
-//= 08/24/05 : Added 1st version. [Muad_Dib]
-//= 01/29/05 : Updated the spawns according to current info [MasterOfMuppets]
-//= 04/12/06 : Updated the spawns according to own info from iRO [MasterOfMuppets]
-//= 04/15/06 : More exact numbers thanks to Tharis [Playtester]
+//= Nezumi 1.0.0 or newer
 //============================================================
 
 //========================================================================================

@@ -1,21 +1,13 @@
-//===== eAthena Script ======================================= 
-//= Lighthalzen City
-//===== By: ================================================== 
-//=  erKURITA
-//===== Current Version: ===================================== 
-//= 0.5
-//===== Compatible With: ===================================== 
-//= eAthena 1.0
-//===== Description: ========================================= 
-//= Lighthalzen NPCs (Temporal names for now) [erKURITA]
-//===== Additional Comments: ==================================
-//= 0.1 Placed temporal names, why there weren't on the SVN before? [erKURITA]
-//= 0.2 Implemented some crap NPCs [MasterOfMuppets]
-//= 0.3 Another load of NPCs. Scripted by Kargha [MasterOfMuppets]
-//= 0.4 More Town NPCs. [Musashiden]
-//= 0.5 Added a BIG load of Lighthalzen NPCs. [musashiden]
-//= 0.6 Fixed some typos+Coordinates. [Musashiden]
-//=============================================================
+//===== Nezumi Script ========================================
+//= NPC:s of Lighthalzen
+//===== By: ==================================================
+//= Original:	English Athena Developer Team
+//= Updated:	Nezumi Developer Team
+//===== Current Version: =====================================
+//= 1.0.0
+//===== Compatible With: =====================================
+//= Nezumi 1.0.0 or newer
+//============================================================
 
 lighthalzen.gat,154,100,5	script	Lighthalzen Guard#1	852,{end;}
 lighthalzen.gat,207,310,5	script	Lighthalzen Guard#2	852,{end;}

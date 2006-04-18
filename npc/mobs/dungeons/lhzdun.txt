@@ -1,22 +1,12 @@
 //===== Nezumi Script ========================================
-//= Bio-life Labs - Monster Spawn Locations
+//= Lighthalzen Dungeon Monsters
 //===== By: ==================================================
-// »» The Prometheus Project ««
-// Copyright (c) 2004,2005
-// Licensed under GPL
-// http://prometheus.fnae.net/
+//= Original:	The Prometheus Project's Developer Team
+//= Updated:	Nezumi Developer Team
 //===== Current Version: =====================================
-//= 1.5
+//= 1.0.0
 //===== Compatible With: =====================================
-//= Any Nezumi Version
-//===== Additional Comments: =================================
-//= 08/24/05 : Added 1st version. [Muad_Dib]
-//= 1.1: Some corrections to level 1, 2 as pointed out by
-//=      MasterofMuppets. [Skotlex]
-//= 1.3: Some fixes based on kRO's "RO Map" [Poki#3]
-//=	 I also made the place more Moby ^^
-//= 1.4: Adjusted spawns according to own info from iRO [MasterOfMuppets]
-//= 1.5: More accurate spawn numbers and iRO names thanks to Tharis [Playtester]
+//= Nezumi 1.0.0 or newer
 //============================================================
 
 //==================================================
