@@ -58,4 +58,5 @@
 369,0xb3,    ,  3, 0,10000,all,   0x000,0			// PA_GOSPEL
 404,0xb6,    , -1, 0,  -1,all,   0x000,0			// PF_FOGWALL
 405,0xb7,    ,  0, 1,1000,enemy, 0x000,0			// PF_SPIDERWEB
-484,0xb8,    ,  2, 0,1000,enemy, 0x808				// HW_GRAVITATION
+484,0xb8,    ,  2, 0,1000,enemy, 0x808,0			// HW_GRAVITATION
+488,0xb9,    ,  3, 0,  -1,all,   0x100,0			// CG_HERMODE

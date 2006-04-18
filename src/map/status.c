@@ -1,4 +1,5 @@
 // $Id$
+
 #include <config.h>
 
 #include <string.h>
@@ -3968,6 +3969,7 @@ int status_change_start(struct block_list *bl, int type, intptr_t val1, intptr_t
 			break;
 
 		case SC_BASILICA:
+		case SC_HERMODE:
 			break;
 
 		case SC_GOSPEL:

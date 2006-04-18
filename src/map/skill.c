@@ -144,6 +144,7 @@ const struct skill_name_db skill_names[] = {
  { BS_WEAPONPERFECT, "WEAPONPERFECT", "Weapon_Perfection" } ,
  { BS_WEAPONRESEARCH, "WEAPONRESEARCH", "Weaponry_Research" } ,
  { CG_ARROWVULCAN, "ARROWVULCAN", "Vulcan_Arrow" } ,
+ { CG_HERMODE, "HERMODE", "Wand of Hermode" } ,
  { CG_LONGINGFREEDOM, "LONGINGFREEDOM", "Longing_for_Freedom" } ,
  { CG_MARIONETTE, "MARIONETTE", "Marionette_Control" } ,
  { CG_MOONLIT, "MOONLIT", "Moonlight_Petals" } ,
@@ -3502,14 +3503,18 @@ int skill_castend_nodamage_id(struct block_list *src, struct block_list *bl, int
 		break;
 
 	case HP_BASILICA:
-	  {
-		struct skill_unit_group *sg;
-		battle_stopwalking(src, 1);
-		skill_clear_unitgroup(src);
-		clif_skill_nodamage(src, bl, skillid, skilllv, 1);
-		sg = skill_unitsetting(src, skillid, skilllv, src->x, src->y, 0);
-		status_change_start(src, SkillStatusChangeTable[skillid], skilllv, 0, 0, (intptr_t)sg, skill_get_time(skillid, skilllv), 0);
-	  }
+	case CG_HERMODE:
+		{
+			struct skill_unit_group *sg;
+
+			battle_stopwalking(src, 1);
+			skill_clear_unitgroup(src);
+
+			sg = skill_unitsetting(src, skillid, skilllv, src->x, src->y, 0);
+
+			clif_skill_nodamage(src, bl, skillid, skilllv, 1);
+			status_change_start(src, SkillStatusChangeTable[skillid], skilllv, 0, 0, (intptr_t)sg, skill_get_time(skillid, skilllv), 0);
+		}
 		break;
 
 	case PA_GOSPEL:				/* ゴスペル */
@@ -3519,14 +3524,20 @@ int skill_castend_nodamage_id(struct block_list *src, struct block_list *bl, int
 		status_change_start(src, SkillStatusChangeTable[skillid], skilllv, 0, 0, BCT_SELF, skill_get_time(skillid, skilllv), 0);
 		break;
 
-	case BD_ADAPTATION:			/* アドリブ */
-	  {
-		struct status_change *sc_data = status_get_sc_data(src);
-		if(sc_data && sc_data[SC_DANCING].timer!=-1){
-			clif_skill_nodamage(src,bl,skillid,skilllv,1);
-			skill_stop_dancing(src,0);
+	case BD_ADAPTATION:
+		{
+			struct status_change *sc_data = status_get_sc_data(src);
+			if(sc_data && sc_data[SC_DANCING].timer != -1)
+			{
+				if(sc_data[SC_DANCING].val1 == CG_HERMODE)
+				{
+					clif_skill_fail(sd, skillid, 0, 0);
+				} else {
+					clif_skill_nodamage(src,bl,skillid,skilllv,1);
+					skill_stop_dancing(src,0);
+				}
+			}
 		}
-	  }
 		break;
 
 	case BA_FROSTJOKE:			/* 寒いジョーク */
@@ -5448,16 +5459,16 @@ int skill_unit_onplace(struct skill_unit *src, struct block_list *bl, unsigned i
 	case 0xad:	/* 私を忘れないで… */
 	case 0xae:	/* 幸運のキス */
 	case 0xaf:	/* サ?ビスフォ?ユ? */
-		if (sg->src_id == bl->id)
+	case 0xb9:
+		if(sg->src_id == bl->id)
 			break;
-		if (sc_data && sc_data[type].timer != -1) {
+		if(sc_data && sc_data[type].timer != -1)
+		{
 			unit2 = (struct skill_unit *)sc_data[type].val4;
-			if (unit2 && unit2->group &&
-				(unit2 == src || DIFF_TICK(sg->tick, unit2->group->tick) <= 0))
+			if(unit2 && unit2->group && (unit2 == src || DIFF_TICK(sg->tick, unit2->group->tick) <= 0))
 				break;
 		}
-		status_change_start(bl, type, sg->skill_lv, sg->val1, sg->val2,
-		                    (intptr_t)src, skill_get_time2(sg->skill_id, sg->skill_lv), 0);
+		status_change_start(bl, type, sg->skill_lv, sg->val1, sg->val2, (intptr_t)src, skill_get_time2(sg->skill_id, sg->skill_lv), 0);
 		break;
 
 	case 0xb4:
@@ -5762,90 +5773,85 @@ int skill_unit_onout(struct skill_unit *src, struct block_list *bl, unsigned int
 	    (bl->type == BL_PC && pc_isdead((struct map_session_data *)bl)))
 		return 0;
 
-	switch(sg->unit_id){
-	case 0x7e:	/* セイフティウォール */
-	case 0x85:	/* ニューマ */
-	case 0x8e:	/* クァグマイア */
-	case 0x9a:	/* ボルケーノ */
-	case 0x9b:	/* デリュージ */
-	case 0x9c:	/* バイオレントゲイル */
-		if (type == SC_QUAGMIRE && bl->type == BL_MOB)
+	switch(sg->unit_id)
+	{
+		case 0x7e:
+		case 0x85:
+		case 0x8e:
+		case 0x9a:
+		case 0x9b:
+		case 0x9c:
+			if (type == SC_QUAGMIRE && bl->type == BL_MOB)
+				break;
+			if (sc_data && sc_data[type].timer != -1 && sc_data[type].val2 == (intptr_t)src) {
+				status_change_end(bl, type, -1);
+			}
 			break;
-		if (sc_data && sc_data[type].timer != -1 && sc_data[type].val2 == (intptr_t)src) {
-			status_change_end(bl, type, -1);
-		}
-		break;
+		case 0x91:	/* アンクルスネア */
+			{
+				struct block_list *target = map_id2bl(sg->val2);
+				if (target && target == bl) {
+					status_change_end(bl, SC_ANKLE, -1);
+					sg->limit = DIFF_TICK(tick, sg->tick) + 1000;
+				}
+			}
+			break;
+		case 0x9e:	/* 子守唄 */
+		case 0x9f:	/* ニヨルドの宴 */
+		case 0xa0:	/* 永遠の混沌 */
+		case 0xa1:	/* 戦太鼓の響き */
+		case 0xa2:	/* ニーベルングの指輪 */
+		case 0xa3:	/* ロキの叫び */
+		case 0xa4:	/* 深淵の中に */
+		case 0xa5:	/* 不死身のジークフリード */
+		case 0xad:	/* 私を忘れないで… */
+			if (sc_data[type].timer != -1 && sc_data[type].val4 == (intptr_t)src) {
+				status_change_end(bl, type, -1);
+			}
+			break;
+		case 0xa6:	/* 不協和音 */
+		case 0xa7:	/* 口笛 */
+		case 0xa8:	/* 夕陽のアサシンクロス */
+		case 0xa9:	/* ブラギの詩 */
+		case 0xaa:	/* イドゥンの林檎 */
+		case 0xab:	/* 自分勝手なダンス */
+		case 0xac:	/* ハミング */
+		case 0xae:	/* 幸運のキス */
+		case 0xaf:	/* サービスフォーユー */
+			status_change_start(bl, SkillStatusChangeTable[sg->skill_id], sg->skill_lv, 0, 0, 0, 20000, 0);
+			break;
+		case 0xb4:	// HP_BASILICA
+		case 0xb9:	// CG_HERMODE
+			if(sc_data[type].timer != -1 && sc_data[type].val4 == (intptr_t)sg)
+				status_change_end(bl, type, -1);
+			break;
+		case 0xb6:
+			{
+				struct block_list *target = map_id2bl(sg->val2);
+				if(target && target == bl)
+				{
+					status_change_end(bl, SC_FOGWALL, -1);
+					if(sc_data && sc_data[SC_BLIND].timer != -1)
+						sc_data[SC_BLIND].timer = add_timer(gettick_cache + 30000, status_change_timer, bl->id, 0);
+				}
+			}
+			break;
 
-	case 0x91:	/* アンクルスネア */
-		{
-			struct block_list *target = map_id2bl(sg->val2);
-			if (target && target == bl) {
-				status_change_end(bl, SC_ANKLE, -1);
+		case 0xb7:
+			{
+				struct block_list *target = map_id2bl(sg->val2);
+				if(target && target == bl)
+					status_change_end(bl, SC_SPIDERWEB, -1);
 				sg->limit = DIFF_TICK(tick, sg->tick) + 1000;
 			}
-		}
-		break;
-
-	case 0x9e:	/* 子守唄 */
-	case 0x9f:	/* ニヨルドの宴 */
-	case 0xa0:	/* 永遠の混沌 */
-	case 0xa1:	/* 戦太鼓の響き */
-	case 0xa2:	/* ニーベルングの指輪 */
-	case 0xa3:	/* ロキの叫び */
-	case 0xa4:	/* 深淵の中に */
-	case 0xa5:	/* 不死身のジークフリード */
-	case 0xad:	/* 私を忘れないで… */
-		if (sc_data[type].timer != -1 && sc_data[type].val4 == (intptr_t)src) {
-			status_change_end(bl, type, -1);
-		}
-		break;
-
-	case 0xa6:	/* 不協和音 */
-	case 0xa7:	/* 口笛 */
-	case 0xa8:	/* 夕陽のアサシンクロス */
-	case 0xa9:	/* ブラギの詩 */
-	case 0xaa:	/* イドゥンの林檎 */
-	case 0xab:	/* 自分勝手なダンス */
-	case 0xac:	/* ハミング */
-	case 0xae:	/* 幸運のキス */
-	case 0xaf:	/* サービスフォーユー */
-		status_change_start(bl, SkillStatusChangeTable[sg->skill_id], sg->skill_lv, 0, 0, 0, 20000, 0);
-		break;
-
-	case 0xb4:				/* バジリカ */ // basilica
-		if (sc_data[type].timer != -1 && sc_data[type].val4 == (intptr_t)sg) {
-			status_change_end(bl, type, -1);
-		}
-		break;
-
-	case 0xb6:
-	  {
-		struct block_list *target = map_id2bl(sg->val2);
-		if (target && target == bl) {
-			status_change_end(bl, SC_FOGWALL, -1);
-			if (sc_data && sc_data[SC_BLIND].timer != -1)
-				sc_data[SC_BLIND].timer = add_timer(gettick_cache + 30000, status_change_timer, bl->id, 0);
-		}
-	  }
-		break;
-
-	case 0xb7:
-	  {
-		struct block_list *target = map_id2bl(sg->val2);
-		if (target && target == bl)
-			status_change_end(bl, SC_SPIDERWEB, -1);
-		sg->limit = DIFF_TICK(tick, sg->tick) + 1000;
-	  }
-		break;
-
+			break;
 	case 0xb8:
 		sc_data = status_get_sc_data(bl);
 		type = SkillStatusChangeTable[sg->skill_id];
-		if (sc_data && sc_data[type].timer != -1)
+		if(sc_data && sc_data[type].timer != -1)
 			status_change_end(bl, type, -1);
 		break;
 	}
-
 	return 0;
 }
 

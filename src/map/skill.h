@@ -1,4 +1,5 @@
 // $Id$
+
 #ifndef _SKILL_H_
 #define _SKILL_H_
 
