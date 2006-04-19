@@ -1,7 +1,8 @@
-// $Id$
-//#define DEBUG_FUNCIN
-//#define DEBUG_DISP
-//#define DEBUG_RUN
+//	$Id$
+
+//	#define DEBUG_FUNCIN
+//	#define DEBUG_DISP
+//	#define DEBUG_RUN
 
 #include <config.h>
 
@@ -310,8 +311,10 @@ int buildin_skillusepos(struct script_state *st); // originally by Qamera [celes
 int buildin_logmes(struct script_state *st); // [Lupus]
 int buildin_summon(struct script_state *st); // [celest]
 int buildin_getrefine(struct script_state *st);
-int buildin_isnight(struct script_state *st); // [celest]
-int buildin_isday(struct script_state *st); // [celest]
+int buildin_night(struct script_state *st);				// CHANGE INTO NIGHT MODE
+int buildin_day(struct script_state *st);				// CHANGE INTO DAY MODE
+int buildin_isnight(struct script_state *st);			// CHECK IF IT'S NIGHT
+int buildin_isday(struct script_state *st);				// CHECK IF IT'S DAY
 int buildin_isequipped(struct script_state *st); // [celest]
 int buildin_isequippedcnt(struct script_state *st); // [celest]
 int buildin_getusersname(struct script_state *st);
@@ -550,25 +553,27 @@ struct {
 	{buildin_guildgetexp,"guildgetexp","i"},
 	{buildin_skilluseid,"skilluseid","ii"}, // originally by Qamera [Celest]
 	{buildin_skilluseid,"doskill","ii"}, // since a lot of scripts would already use 'doskill'...
-	{buildin_skillusepos,"skillusepos","iiii"}, // [Celest]
-	{buildin_logmes,"logmes","s"}, // this command acts as MES but prints info into LOG file either SQL/TXT [Lupus]
-	{buildin_summon,"summon","si*"}, // summons a slave monster [Celest]
-	{buildin_getrefine,"getrefine","*"},
-	{buildin_isnight,"isnight",""}, // check whether it is night time [Celest]
-	{buildin_isday,"isday",""}, // check whether it is day time [Celest]
-	{buildin_isequipped,"isequipped","i*"}, // check whether another item/card has been equipped [Celest]
-	{buildin_isequippedcnt,"isequippedcnt","i*"}, // check how many items/cards are being equipped [Celest]
-	{buildin_dispbottom,"dispbottom","s"},
-	{buildin_getusersname,"getusersname","*"},
-	{buildin_recovery,"recovery",""},
-	{buildin_getpetinfo,"getpetinfo","i"},
-	{buildin_checkequipedcard,"checkequipedcard","i"},
-	{buildin_jump_zero,"jump_zero","ii"},
-	{buildin_select,"select","*"},
-	{buildin_globalmes,"globalmes","s*"},
-	{buildin_getmapmobs,"getmapmobs","s"},
-	{buildin_getiteminfo,"getiteminfo","ii"}, // returns Items Buy / sell Price, etc info
-	{NULL,NULL,NULL},
+	{ buildin_skillusepos,		"skillusepos",		"iiii"	},
+	{ buildin_logmes,			"logmes",			"s"		},
+	{ buildin_summon,			"summon",			"si*"	},
+	{ buildin_getrefine,		"getrefine",		"*"		},
+	{ buildin_night,			"night",			""		},
+	{ buildin_day,				"day",				""		},
+	{ buildin_isnight,			"isnight",			""		},
+	{ buildin_isday,			"isday",			""		},
+	{ buildin_isequipped,		"isequipped",		"i*"	},
+	{ buildin_isequippedcnt,	"isequippedcnt",	"i*"	},
+	{ buildin_dispbottom,		"dispbottom",		"s"		},
+	{ buildin_getusersname,		"getusersname",		"*"		},
+	{ buildin_recovery,			"recovery",			""		},
+	{ buildin_getpetinfo,		"getpetinfo",		"i"		},
+	{ buildin_checkequipedcard,	"checkequipedcard",	"i"		},
+	{ buildin_jump_zero,		"jump_zero",		"ii"	},
+	{ buildin_select,			"select",			"*"		},
+	{ buildin_globalmes,		"globalmes",		"s*"	},
+	{ buildin_getmapmobs,		"getmapmobs",		"s"		},
+	{ buildin_getiteminfo,		"getiteminfo",		"ii"	},
+	{ NULL,						NULL,				NULL	},
 };
 
 enum {
@@ -7443,19 +7448,61 @@ int buildin_getrefine(struct script_state *st) {
 	return 0;
 }
 
-/*==========================================
- * Checks whether it is daytime/nighttime
- *------------------------------------------
- */
-int buildin_isnight(struct script_state *st) {
-	push_val(st->stack, C_INT, (night_flag == 1)); // night_flag: 0=day, 1=night [Yor]
+int buildin_night(struct script_state *st)
+{
+	if(night_flag == 0)
+	{
+		struct map_session_data *sd;
+		short temp, msglen;
 
+		msglen = strlen(msg_txt(59));
+
+		for(temp = 0; temp < fd_max; temp++)
+		{
+			if(session[temp] && (sd = session[temp]->session_data))
+			{
+				sd->state.night = 1;
+				clif_wis_message(sd->fd, wisp_server_name, msg_txt(59), msglen + 1);
+				if(sd->state.auth && !sd->state.night && !map[sd->bl.m].flag.indoors)
+					clif_status_change(&sd->bl, 149, 1);
+			}
+		}
+	}
 	return 0;
 }
 
-int buildin_isday(struct script_state *st) {
-	push_val(st->stack, C_INT, (night_flag == 0)); // night_flag: 0=day, 1=night [Yor]
+int buildin_day(struct script_state *st)
+{
+	if(night_flag == 1)
+	{
+		struct map_session_data *sd;
+		short temp, msglen;
 
+		msglen = strlen(msg_txt(60));
+
+		for(temp = 0; temp < fd_max; temp++)
+		{
+			if(session[temp] && (sd = session[temp]->session_data))
+			{
+				sd->state.night = 0;
+				clif_wis_message(sd->fd, wisp_server_name, msg_txt(60), msglen + 1);
+				if(sd->state.auth && sd->state.night && !map[sd->bl.m].flag.indoors)
+					clif_status_change(&sd->bl, 149, 1);
+			}
+		}
+	}
+	return 0;
+}
+
+int buildin_isnight(struct script_state *st)
+{
+	push_val(st->stack, C_INT, (night_flag == 1));
+	return 0;
+}
+
+int buildin_isday(struct script_state *st)
+{
+	push_val(st->stack, C_INT, (night_flag == 0));
 	return 0;
 }
 

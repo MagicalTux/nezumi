@@ -1,6 +1,7 @@
 // $Id$
 
 2006-04-19
+	* Added: script commands 'night' and 'day' [Harbin]
 	* Fixed: pressure should always hit target's sp. issue 403, 414 [Harbin]
 	* Added: character status saving & loading (eA & Project-Freya based) [akrus]
 
