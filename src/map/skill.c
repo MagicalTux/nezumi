@@ -2158,10 +2158,8 @@ int skill_castend_damage_id(struct block_list* src, struct block_list *bl, int s
 		if(bl->type == BL_PC)
 		{
 			struct map_session_data *tsd = (struct map_session_data *)bl;
-			if (tsd->sc_data && tsd->sc_data[SC_HIDING].timer != -1) {
-				tsd->status.sp -= (tsd->status.sp * (15 + 5 * skilllv) / 100);
-				clif_updatestatus(tsd, SP_SP);
-			}
+			tsd->status.sp -= (tsd->status.sp * (15 + 5 * skilllv) / 100);
+			clif_updatestatus(tsd, SP_SP);
 		}
 		break;
 
