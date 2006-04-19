@@ -362,6 +362,20 @@ CREATE TABLE `skill` (
 ) TYPE=MyISAM; 
 
 # Database: Ragnarok
+# Table: 'sc_data'
+# 
+CREATE TABLE `sc_data` (
+  `char_id` int(11) unsigned NOT NULL,
+  `type` smallint(11) unsigned NOT NULL,
+  `tick` int(11) NOT NULL,
+  `val1` int(11) NOT NULL default '0',
+  `val2` int(11) NOT NULL default '0',
+  `val3` int(11) NOT NULL default '0',
+  `val4` int(11) NOT NULL default '0',
+  KEY (`char_id`),
+) TYPE=MyISAM;
+
+# Database: Ragnarok
 # Table: 'storage'
 # 
 CREATE TABLE `storage` (

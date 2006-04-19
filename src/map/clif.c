@@ -4572,6 +4572,28 @@ int clif_skill_produce_mix_list(struct map_session_data *sd, int trigger)
 	return 0;
 }
 
+#ifdef USE_SQL
+/*==========================================
+ * Sends a status change packet to the object only, used for loading status changes. [Skotlex]
+ *------------------------------------------
+ */
+int clif_status_load(struct map_session_data *sd, int type)
+{
+	if(!sd) 
+		return 0;
+		
+	if (type >= SC_SENDMAX) //Status changes above this value are not displayed on the client. [Skotlex]
+		return 0;
+	
+	WPACKETW( 0)=0x0196;
+	WPACKETW( 2)=type;
+	WPACKETL( 4)=sd->status.account_id;
+	WPACKETB( 8)=1; //Status start
+	SENDPACKET(sd->fd, packet_len_table[0x196]);
+	return 0;
+}
+#endif
+
 /*==========================================
  * Applies an icon on a certain character
  *------------------------------------------

@@ -26,6 +26,8 @@ int chrif_reloadGMdb(void);
 void chrif_send_friends(int friend_char_id1, int friend_char_id2); // 0x2b24 <friend_char_id1>.L <friend_char_id2>.L
 void chrif_friend_delete(int friend_list_char_id, int deleted_char_id, unsigned char flag); // owner of friend list, deleted friend (flag: 0: done on map-server, 1: not done for friend)
 
+int chrif_save_scdata(struct map_session_data *sd);
+
 int do_final_chrif(void);
 int do_init_chrif(void);
 

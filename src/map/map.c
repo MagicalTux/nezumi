@@ -1151,27 +1151,30 @@ void map_quit(struct map_session_data *sd) {
 
 	guild_send_memberinfoshort(sd, 0); // ギルドのログアウトメッセージ送信
 
-	pc_cleareventtimer(sd); // イベントタイマを破棄する
+	pc_cleareventtimer(sd);
 
 	if (sd->state.storage_flag)
 		storage_guild_storage_quit(sd);
 	else
-		storage_storage_quit(sd); // 倉庫を開いてるなら保存する
+		storage_storage_quit(sd);
 
-	skill_castcancel(&sd->bl, 0); // 詠唱を中断する
-	skill_stop_dancing(&sd->bl, 1);// ダンス/演奏中断
+	skill_castcancel(&sd->bl, 0);
+	skill_stop_dancing(&sd->bl, 1);
 
-	if (sd->sc_data[SC_BERSERK].timer != -1) //バーサーク中の終了はHPを100に
+	if (sd->sc_data[SC_BERSERK].timer != -1)
 		sd->status.hp = 100;
 
-	// Marionette Control: Remove the effect off your target when logging out - [Aalye]
 	if (sd->sc_data[SC_MARIONETTE].timer != -1) {
 		struct block_list *bl = map_id2bl(sd->sc_data[SC_MARIONETTE].val3);
 		status_change_end(bl, SC_MARIONETTE2, -1);
 	}
 
-	status_change_clear(&sd->bl,1); // ステータス異常を解除する
-	skill_clear_unitgroup(&sd->bl); // スキルユニットグループの削除
+#ifdef USE_SQL
+	chrif_save_scdata(sd);
+#endif
+
+	status_change_clear(&sd->bl,1);
+	skill_clear_unitgroup(&sd->bl);
 	skill_cleartimerskill(&sd->bl);
 	pc_stop_walking(sd, 0);
 	if (sd->followtimer != -1) {

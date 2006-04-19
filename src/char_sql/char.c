@@ -64,6 +64,7 @@ char guild_storage_db[1024] = "guild_storage";
 char party_db[1024] = "party";
 char pet_db[1024] = "pet";
 char friends_db[1024] = "friends";
+char statuschange_db[1024] = "sc_data";
 
 char *SQL_CONF_NAME = "conf/inter_athena.conf";
 #endif /* USE_SQL */
@@ -1341,6 +1342,44 @@ inline void chrif_send_global_reg(int idx, int char_fd) { // 0x2b1a <packet_len>
 		memcpy(WPACKETP(8), reg, size);
 		SENDPACKET(char_fd, 8 + size);
 	}
+	return;
+}
+
+/*====================================
+ * Status Change Data [Skotlex]
+ *----------------=-------------------
+ */
+inline void chrif_send_scdata(int fd, int char_id)
+{
+	struct status_change_data data;
+	int count = 0;
+
+	if(!sql_request("SELECT type, tick, val1, val2, val3, val4 from `%s` WHERE `char_id`='%d'",
+		statuschange_db, char_id)) {
+		printf(CL_WHITE "warning: " CL_RESET "database error while retrieving sc_data of character %d\n", char_id);
+		return;
+	}
+
+	WPACKETW( 0) = 0x2b27;
+	WPACKETL( 4) = char_id;
+	while(sql_get_row()) {
+		data.type = sql_get_integer(0);
+		data.tick = sql_get_integer(1);
+		data.val1 = sql_get_integer(2);
+		data.val2 = sql_get_integer(3);
+		data.val3 = sql_get_integer(4);
+		data.val4 = sql_get_integer(5);
+		memcpy(WPACKETP(14+count*sizeof(struct status_change_data)), &data, sizeof(struct status_change_data));
+		count++;
+	}
+	if (count > 0) {
+		WPACKETW( 2) = 14 + count*sizeof(struct status_change_data);
+		WPACKETW(8) = count;
+		SENDPACKET(fd, WPACKETW( 2));
+
+		sql_request("DELETE FROM `%s` WHERE `char_id`='%d'", statuschange_db, char_id);
+	}
+
 	return;
 }
 
@@ -3820,6 +3859,7 @@ int parse_frommap(int fd) {
 					SENDPACKET(fd, 10);
 					// send friends list
 					chrif_send_friends(idx, fd); // index,server_fd.
+					chrif_send_scdata(fd, RFIFOL(fd,6)); // index, server_fd
 
 					// ---------- here the character is completly sended
 					// send pet if necessary
@@ -4735,6 +4775,32 @@ int parse_frommap(int fd) {
 			RFIFOSKIP(fd, 10);
 			break;
 
+		// Save player's status changes
+		case 0x2b2b:
+			if (RFIFOREST(fd) < 4 || RFIFOREST(fd) < RFIFOW(fd,2) || RFIFOW(fd, 8) == 0)
+				return 0;
+		{
+			int count, charid, i;
+			struct status_change_data data;
+			
+			charid = RFIFOL(fd, 4);
+			count = RFIFOW(fd, 8);
+			
+			sprintf(tmp_sql, "INSERT INTO `%s` (`char_id`, `type`, `tick`, `val1`, `val2`, `val3`, `val4`) VALUES ", statuschange_db);
+			
+			for (i = 0; i < count; i++)	{
+				memcpy (&data, RFIFOP(fd, 14+i*sizeof(struct status_change_data)), sizeof(struct status_change_data));
+				sprintf (tmp_sql, "%s ('%d','%hu','%d','%d','%d','%d','%d'),", tmp_sql, charid,
+					data.type, data.tick, data.val1, data.val2, data.val3, data.val4);
+			}
+			tmp_sql[strlen(tmp_sql)-1] = '\0'; //Remove final comma.
+
+			sql_request(tmp_sql);
+
+			RFIFOSKIP(fd, RFIFOW(fd, 2));
+			break;
+		}
+
 		default:
 			// inter server - packet
 		  {
@@ -5389,6 +5455,7 @@ int parse_char(int fd) {
 						sql_request("DELETE FROM `%s` WHERE `char_id`='%d'", skill_db, char_id);
 						sql_request("DELETE FROM `%s` WHERE `char_id`='%d'", char_db, char_id);
 						sql_request("DELETE FROM `%s` WHERE `char_id`='%d'", global_reg_value, char_id);
+						sql_request("DELETE FROM `%s` WHERE `char_id`='%d'", statuschange_db, char_id);
 						//`friends` (`char_id`, `friend_id`)
 						sql_request("DELETE FROM `%s` WHERE `char_id`='%d' OR `friend_id`='%d'", friends_db, char_id, char_id);
 
@@ -5784,6 +5851,9 @@ void sql_config_read(const char *cfgName) {
 		if (strcasecmp(w1, "char_db") == 0) {
 			memset(char_db, 0, sizeof(char_db));
 			strcpy(char_db, w2);
+		} else if(strcasecmp(w1, "statuschange_db") == 0) {
+			memset(statuschange_db, 0, sizeof(statuschange_db));
+			strcpy(statuschange_db, w2);
 		} else if (strcasecmp(w1, "cart_db") == 0) {
 			memset(cart_db, 0, sizeof(cart_db));
 			strcpy(cart_db, w2);

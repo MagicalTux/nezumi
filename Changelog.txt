@@ -1,5 +1,8 @@
 // $Id$
 
+2006-04-19
+	* Added: character status saving & loading (eA & Project-Freya based) [akrus]
+
 2006-04-18
 	* Added: wand of hermode skill [Harbin]
 	* Added: longing for freedom skill (still on beta phase but should work) [Harbin]

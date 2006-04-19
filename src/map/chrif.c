@@ -29,6 +29,7 @@
 #include "nullpo.h"
 #include "atcommand.h"
 #include "script.h"
+#include "status.h"
 #include "trade.h"
 #include "vending.h"
 #include "log.h"
@@ -44,7 +45,7 @@ static const int packet_len_table[0x30] = {
 	-1,-1,10, 6,11,-1,-1,11,	// 2b10-2b17
 
 	46, 6,-1,-1, 6, 7,11, 0,	// 2b18-2b1f
-	 0, 0,10,10,-1,-1,10, 0,	// 2b20-2b27
+	 0, 0,10,10,-1,-1,10,-1,	// 2b20-2b27
 };
 
 int char_fd = -1;
@@ -1157,6 +1158,83 @@ void chrif_friend_delete(int friend_list_char_id, int deleted_char_id, unsigned 
 	return;
 }
 
+#ifdef USE_SQL
+/*==========================================
+ * Loads the sc_data of a player received from char-server [Proximus]
+ *------------------------------------------
+ */
+int chrif_load_scdata(int fd) {
+	struct map_session_data *sd;
+	struct status_change_data data;
+	int char_id, i, count;
+
+	char_id = RFIFOL(fd,4); // player Char ID
+
+	sd = map_charid2sd(char_id);
+	if (!sd || sd->status.char_id != char_id) {
+		if (battle_config.error_log)
+			printf("chrif_load_scdata: Unable to load sc_data for charID: %d.\n", char_id);
+		return -1;
+	}
+
+	count = RFIFOW(fd,8); //sc_count
+
+	for (i = 0; i < count; i++) {
+		if (data.tick < 1) {
+			if(battle_config.error_log)
+				printf("chrif_load_scdata: Received invalid duration (%d ms) for status change %d (character %s)\n", data.tick, data.type, sd->status.name);
+			continue;
+		}
+		memcpy(&data, RFIFOP(fd,14 + i*sizeof(struct status_change_data)), sizeof(struct status_change_data));
+		status_change_start(&sd->bl, data.type, data.val1, data.val2, data.val3, data.val4, data.tick, 7);
+		//Flag 3 is 1&2, 1: Force status start, 2: Do not modify the tick value sent.
+	}
+	return 0;
+}
+
+/*==========================================
+ * Parses the sc_data of sd and sends it to the char-server for saving [Proximus]
+ *------------------------------------------
+ */
+int chrif_save_scdata(struct map_session_data *sd) {
+	int i, count = 0;
+	unsigned int tick;
+	struct status_change_data data;
+	struct TimerData *timer;
+
+	if(!chrif_isconnect()) 
+		return -1;
+	
+	tick = gettick();
+	
+	WPACKETW( 0) = 0x2b2b;
+	WPACKETL( 4) = sd->status.char_id;
+	for (i = 0; i < MAX_STATUSCHANGE; i++) {
+		if (sd->sc_data[i].timer == -1)
+			continue;
+		timer = get_timer(sd->sc_data[i].timer);
+		if (timer == NULL || timer->func != status_change_timer || DIFF_TICK(timer->tick, tick) < 0)
+			continue;
+		data.tick = DIFF_TICK(timer->tick, tick); //Duration that is left before ending.
+		data.type = i;
+		data.val1 = sd->sc_data[i].val1;
+		data.val2 = sd->sc_data[i].val2;
+		data.val3 = sd->sc_data[i].val3;
+		data.val4 = sd->sc_data[i].val4;
+
+		memcpy(WPACKETP(14 + count * sizeof(struct status_change_data)),
+		       &data, sizeof(struct status_change_data));
+		count++;
+	}
+	if (count == 0)
+		return 0; //Nothing to save.
+	WPACKETW(8) = count;
+	WPACKETW(2) = 14 +count*sizeof(struct status_change_data); //Total packet size
+	SENDPACKET(char_fd, WPACKETW(2));
+	return 0;
+}
+#endif
+
 /*==========================================
  * Receive deletion of a friend from other map-server [Yor]
  *------------------------------------------
@@ -1295,7 +1373,9 @@ int chrif_parse(int fd) {
 		case 0x2b25: chrif_recv_friends_list(fd); break; // 0x2b25 <size>.W <char_id>.L <friend_num>.W {<friend_account_id>.L <friend_char_id>.L <friend_name>.24B}.x
 
 		case 0x2b26: pc_authok_final_step(RFIFOL(fd,2), (time_t)RFIFOL(fd,6)); break; // 0x2b26 <account_id>.L <connect_until_time>.L
-
+#ifdef USE_SQL
+		case 0x2b27: chrif_load_scdata(fd); break;
+#endif
 		default:
 			if (battle_config.error_log)
 				printf("chrif_parse : unknown packet %d %d\n", fd, RFIFOW(fd,0));

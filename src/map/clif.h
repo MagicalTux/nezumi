@@ -177,6 +177,10 @@ int clif_changemapcell(int m,int x,int y,int cell_type,int type);
 
 int clif_status_change(struct block_list *bl,int type,int flag);
 
+#ifdef USE_SQL
+int clif_status_load(struct map_session_data *sd, int type);
+#endif
+
 int clif_wis_message(int fd,char *nick,char *mes,int mes_len);
 int clif_wis_end(int fd,int flag);
 

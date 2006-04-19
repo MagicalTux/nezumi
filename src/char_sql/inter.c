@@ -462,8 +462,9 @@ void inter_save() {
 	return;
 }
 
-// initialize // 初期化
+// initialize
 void inter_init(const char *file) {
+	unsigned short account_reg_db = 0, sc_data = 0;
 #ifdef USE_SQL
 #ifndef USE_SQLITE /* NB: SQLite does not support "SHOW TABLES" */
 	int i;
@@ -483,9 +484,10 @@ void inter_init(const char *file) {
 	i = 0; // flag
 	while (sql_get_row()) {
 		if (strcmp(sql_get_string(0), "account_reg_db") == 0) {
-			i = 1;
-			break;
+			account_reg_db = 1;
 		}
+		else if (strcmp(sql_get_string(0), "sc_data") == 0)
+			sc_data = 1;
 	}
 	// create `account_reg_db` table is not exist
 	if (i == 0) {
@@ -495,10 +497,10 @@ void inter_init(const char *file) {
 		                "  `value` int(11) NOT NULL default '0',"
 		                "  PRIMARY KEY (`account_id`, `str`)"
 		                ")") == 0) {
-			printf(CL_WHITE "error: " CL_RESET "failed to create account register file. closing character-server \n");
+			printf(CL_WHITE "error: " CL_RESET "failed to create account register database table, closing character-server \n");
 			exit(1);
 		}
-		printf(CL_WHITE "status: " CL_RESET "new account register file created \n");
+		printf(CL_WHITE "status: " CL_RESET "account register database table has been created \n");
 		// insert values
 		sql_request("INSERT INTO `account_reg_db` (`account_id`, `str`, `value`) SELECT `account_id`, `str`, `value` FROM `%s` WHERE `type`='2'", global_reg_value);
 		// delete values
@@ -512,6 +514,25 @@ void inter_init(const char *file) {
 		// optimize global_reg_value TABLE
 		sql_request("OPTIMIZE TABLE `global_reg_value`");
 	}
+
+	// create `sc_data` table if it doesn't exist
+	if (!sc_data) {
+		if (sql_request("CREATE TABLE IF NOT EXISTS `sc_data` ("
+						"  `char_id` int(11) unsigned NOT NULL,"
+						"  `type` smallint(11) unsigned NOT NULL,"
+						"  `tick` int(11) NOT NULL,"
+						"  `val1` int(11) NOT NULL default '0',"
+						"  `val2` int(11) NOT NULL default '0',"
+						"  `val3` int(11) NOT NULL default '0',"
+						"  `val4` int(11) NOT NULL default '0',"
+						"  KEY (`char_id`)"
+						") TYPE = MyISAM") == 0) {
+			printf(CL_WHITE "error: " CL_RESET "failed to create status change database table, closing character-server \n");
+			exit(1);
+		}
+		printf(CL_WHITE "status: " CL_RESET "status change table has been created\n");
+	}
+
 #endif /* NOT USE_SQLITE */
 #endif // USE_SQL
 
@@ -535,7 +556,6 @@ void inter_init(const char *file) {
 	return;
 }
 
-// マップサーバー接続
 void inter_mapif_init(int fd) {
 	inter_guild_mapif_init(fd);
 

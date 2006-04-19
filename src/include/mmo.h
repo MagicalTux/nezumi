@@ -84,6 +84,13 @@ struct global_reg {
 	int value;
 };
 
+#ifdef USE_SQL
+struct status_change_data {
+	unsigned short type;
+	int tick, val1, val2, val3, val4;
+};
+#endif
+
 struct s_pet {
 	int account_id;
 	int char_id;
