@@ -1205,7 +1205,7 @@ int chrif_save_scdata(struct map_session_data *sd) {
 	if(!chrif_isconnect()) 
 		return -1;
 	
-	tick = gettick();
+	tick = gettick_cache;
 	
 	WPACKETW( 0) = 0x2b2b;
 	WPACKETL( 4) = sd->status.char_id;
