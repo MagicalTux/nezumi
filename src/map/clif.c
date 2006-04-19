@@ -4582,7 +4582,7 @@ int clif_status_load(struct map_session_data *sd, int type)
 	if(!sd) 
 		return 0;
 		
-	if (type >= SC_SENDMAX) //Status changes above this value are not displayed on the client. [Skotlex]
+	if (type >= SC_MAX) //Status changes above this value are not displayed on the client. [Skotlex]
 		return 0;
 	
 	WPACKETW( 0)=0x0196;
