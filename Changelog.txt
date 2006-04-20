@@ -1,5 +1,8 @@
 // $Id$
 
+2006-04-20
+	* Fixed: src/map/chrif.c: Now copying data *before* checking it [MagicalTux]
+
 2006-04-19
 	* Added: script commands 'night' and 'day' [Harbin]
 	* Fixed: pressure should always hit target's sp. issue 403, 414 [Harbin]

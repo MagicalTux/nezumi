@@ -7,63 +7,58 @@
 SVN = $(shell cat .svn/entries 2>/dev/null | grep revision | head -n 1 | sed -e 's/^[^"]*"//;s/"[^"]*$$//')
 CC = /usr/bin/gcc
 AR = /usr/bin/ar
-CFLAGS = -pipe -Wall --std=c99 -g -ggdb -I/home/nezumidev/src/include -I/home/nezumidev/src/ -I/usr/include/mysql -DSVN_REVISION=$(SVN).0
+CFLAGS = -pipe -Wall --std=c99 -g -ggdb -I/home/magicaltux/projects/nezumi/trunk/src/include -I/home/magicaltux/projects/nezumi/trunk/src/ -DSVN_REVISION=$(SVN).0
 LDFLAGS = 
-LIBS = -L/home/nezumidev/src/lib -L/usr/lib -lcrypt -lnsl -lmysqlclient -ldl -lz -lm
+LIBS = -L/home/magicaltux/projects/nezumi/trunk/src/lib -ldl -lz -lm
 BUILD_TO = POSIX
 
 export MAKE CC AR CFLAGS LIBS SVN LDFLAGS BUILD_TO
 
-all: title  common db_mysql login char_sql login_txt-converter ladmin map addons
+all: title  common login char ladmin tool map addons
 
-.PHONY: common db_mysql login char_sql login_txt-converter ladmin map addons   txt txt-win32 sql title
+.PHONY: common login char ladmin tool map addons   txt txt-win32 sql title
 
 title:
 	@echo "Nezumi Ragnarok Emulator"
 	@echo "#Nezumi @ irc.ooKoo.org"
 	@echo
-	@echo "Compiling Nezumi v1.1.0 (SVN#$(SVN)) (MySQL)"
+	@echo "Compiling Nezumi v1.1.0 (SVN#$(SVN))"
 	@echo
 
 common: 
 	@echo -e " - DIR\tsrc/common"
 	@$(MAKE) --no-print-directory -C src/common/ libcommon.a
 
-db_mysql:  common
-	@echo -e " - DIR\tsrc/db_mysql"
-	@$(MAKE) --no-print-directory -C src/db_mysql/ libdb_mysql.a
-
-login:  common db_mysql
+login:  common
 	@echo -e " - DIR\tsrc/login"
 	@$(MAKE) --no-print-directory -C src/login/ ../../login-server
 
-char_sql:  common db_mysql
-	@echo -e " - DIR\tsrc/char_sql"
-	@$(MAKE) --no-print-directory -C src/char_sql/ ../../char-server
+char:  common
+	@echo -e " - DIR\tsrc/char"
+	@$(MAKE) --no-print-directory -C src/char/ ../../char-server
 
-login_txt-converter:  common db_mysql
-	@echo -e " - DIR\tsrc/login_txt-converter"
-	@$(MAKE) --no-print-directory -C src/login_txt-converter/ ../../login-converter
-
-ladmin:  common db_mysql
+ladmin:  common
 	@echo -e " - DIR\tsrc/ladmin"
 	@$(MAKE) --no-print-directory -C src/ladmin/ ../../ladmin
 
-map:  common db_mysql
+tool:  common
+	@echo -e " - DIR\tsrc/tool"
+	@$(MAKE) --no-print-directory -C src/tool/ 
+
+map:  common
 	@echo -e " - DIR\tsrc/map"
 	@$(MAKE) --no-print-directory -C src/map/ ../../map-server
 
-addons:  common db_mysql
+addons:  common
 	@echo -e " - DIR\tsrc/addons"
 	@$(MAKE) --no-print-directory -C src/addons/ 
 
 clean: 
 	@$(MAKE) -C src/common/ clean
-	@$(MAKE) -C src/db_mysql/ clean
 	@$(MAKE) -C src/login/ clean
-	@$(MAKE) -C src/char_sql/ clean
-	@$(MAKE) -C src/login_txt-converter/ clean
+	@$(MAKE) -C src/char/ clean
 	@$(MAKE) -C src/ladmin/ clean
+	@$(MAKE) -C src/tool/ clean
 	@$(MAKE) -C src/map/ clean
 	@$(MAKE) -C src/addons/ clean
 

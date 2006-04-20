@@ -1180,12 +1180,12 @@ int chrif_load_scdata(int fd) {
 	count = RFIFOW(fd,8); //sc_count
 
 	for (i = 0; i < count; i++) {
+		memcpy(&data, RFIFOP(fd,14 + i*sizeof(struct status_change_data)), sizeof(struct status_change_data));
 		if (data.tick < 1) {
 			if(battle_config.error_log)
 				printf("chrif_load_scdata: Received invalid duration (%d ms) for status change %d (character %s)\n", data.tick, data.type, sd->status.name);
 			continue;
 		}
-		memcpy(&data, RFIFOP(fd,14 + i*sizeof(struct status_change_data)), sizeof(struct status_change_data));
 		status_change_start(&sd->bl, data.type, data.val1, data.val2, data.val3, data.val4, data.tick, 7);
 		//Flag 3 is 1&2, 1: Force status start, 2: Do not modify the tick value sent.
 	}
