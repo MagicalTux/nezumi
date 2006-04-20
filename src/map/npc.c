@@ -1507,12 +1507,14 @@ int npc_parse_warp(char *w1, char *w3, char *w4, int lines) {
 	}
 
 	// check map names (need to check both map name, a GM command can call this function directly)
-	if ((strstr(mapname, ".gat") == NULL && strstr(mapname, ".afm") == NULL) || mapname[0] == '\0' || strlen(mapname) > 16) {
+	if (strstr(mapname, ".gat") == NULL || mapname[0] == '\0' || strlen(mapname) > 16)
+	{
 		if (current_file != NULL) // if not a GM command, but a script
 			printf(CL_RED "Bad source map name" CL_RESET " in warp: %s (file:%s:%d) -> " CL_RED "not loaded" CL_RESET "!\n", w3, current_file, lines);
 		return 1;
 	}
-	if ((strstr(to_mapname, ".gat") == NULL && strstr(to_mapname, ".afm") == NULL) || to_mapname[0] == '\0' || strlen(to_mapname) > 16) {
+	if(strstr(to_mapname, ".gat") == NULL || to_mapname[0] == '\0' || strlen(to_mapname) > 16)
+	{
 		if (current_file != NULL) // if not a GM command, but a script
 			printf(CL_RED "Bad destination map name" CL_RESET " in warp: %s (file:%s:%d) -> " CL_RED "not loaded" CL_RESET "!\n", w3, current_file, lines);
 		return 1;
@@ -2288,7 +2290,8 @@ int npc_parse_mapflag(char *w1, char *w3, char *w4, int lines) {
 	}
 
 	// check map name (a GM command can call this function directly)
-	if ((strstr(mapname, ".gat") == NULL && strstr(mapname, ".afm") == NULL) || mapname[0] == '\0' || strlen(mapname) > 16) {
+	if(strstr(mapname, ".gat") == NULL || mapname[0] == '\0' || strlen(mapname) > 16)
+	{
 		if (current_file != NULL) // if not a GM command, but a script
 			printf(CL_RED "Invalid map name" CL_RESET " in map flag line: %s (file:%s:%d)!\n", w3, current_file, lines);
 		return 1;
@@ -2678,7 +2681,8 @@ int do_init_npc(void) {
 			if (strcasecmp(w2, "script") != 0 || (strcmp(w1,"-") != 0 && strcasecmp(w1, "function") != 0)) {
 				sscanf(w1, "%[^,]", mapname);
 				// check map name
-				if ((strstr(mapname, ".gat") == NULL && strstr(mapname, ".afm") == NULL) || mapname[0] == '\0' || strlen(mapname) > 16) {
+				if(strstr(mapname, ".gat") == NULL || mapname[0] == '\0' || strlen(mapname) > 16)
+				{
 					printf(CL_RED "Bad map name" CL_RESET " at start of a script (file:%s, line %d)!\n", current_file, lines);
 					continue;
 				}

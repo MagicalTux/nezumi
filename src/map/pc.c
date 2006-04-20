@@ -3633,7 +3633,7 @@ int pc_setpos(struct map_session_data *sd, char *mapname_org, int x, int y, int 
 	memset(mapname, 0, 17);
 	strncpy(mapname, mapname_org, 17);
 
-	if(strstr(mapname, ".gat") == NULL && strstr(mapname, ".afm") == NULL && strlen(mapname) < 13)
+	if(strstr(mapname, ".gat") == NULL && strlen(mapname) < 13)
 		strcat(mapname, ".gat");
 
 	m = map_mapname2mapid(mapname);

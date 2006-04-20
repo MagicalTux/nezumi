@@ -1,4 +1,5 @@
-// $Id$
+//	$Id$
+
 #include <config.h>
 
 #include <stdio.h>
@@ -22,6 +23,7 @@
 #include "../common/malloc.h"
 #include "../common/socket.h"
 #include "../common/addons.h"
+#include "../common/utils.h"
 #include "../common/console.h"
 #include "../common/version.h"
 #include "grfio.h"
@@ -89,8 +91,6 @@ static int block_free_count = 0, block_free_lock = 0;
 #define BL_LIST_MAX 1048576
 static struct block_list *bl_list[BL_LIST_MAX];
 static int bl_list_count = 0;
-
-static char afm_dir[1024] = ""; // [Valaris]
 
 //struct map_data map[MAX_MAP_PER_SERVER];
 struct map_data *map = NULL;
@@ -1450,24 +1450,16 @@ void map_removenpc(void) {
  * map名からmap番号へ変換
  *------------------------------------------
  */
-int map_mapname2mapid(const char *name) { // map id on this server (m == -1 if not in actual map-server)
+int map_mapname2mapid(const char *name)
+{
 	struct map_data *md;
 
-	if (name == NULL || name[0] == '\0')
+	if(name == NULL || name[0] == '\0')
 		return -1;
 
 	md = strdb_search(map_db, name);
 
-	// If we can't find the .gat map try .afm instead [celest]
-	if (md == NULL && strstr(name, ".gat") != NULL) {
-		char afm_name[strlen(name) + 1]; // +1 NULL
-		memset(afm_name, 0, strlen(name) + 1); // +1 NULL
-		strncpy(afm_name, name, strlen(name) - 4);
-		strcat(afm_name, ".afm");
-		md = strdb_search(map_db, afm_name);
-	}
-
-	if (md == NULL || md->gat == NULL)
+	if(md == NULL || md->gat == NULL)
 		return -1;
 
 	return md->m;
@@ -2086,88 +2078,11 @@ static int map_cache_write(struct map_data *m) {
 		}
 	}
 
-	// 書き込めなかった
 	return 1;
 }
 
-static int map_readafm(int m, char *fn) {
-	char line[65536];
-	int x, xs = 0;
-	int y, ys = 0;
-	size_t size;
-	int tmp_int[256];
-	char *str;
-	FILE *fp;
-
-	fp = fopen(fn, "r");
-	if (fp == NULL) {
-		printf(CL_RED "Error: can't open file: %s." CL_RESET "\n",fn);
-		return 0;
-	} else {
-
-		printf("Loading Maps [%d/%d]: " CL_WHITE "%-30s  " CL_RESET "\r", m, map_num, fn);
-		fflush(stdout);
-
-		fgets(line, sizeof(line), fp); // fgets reads until maximum one less than size and add '\0' -> so, it's not necessary to add -1
-//		if (strcmp(line,"ADVANCED FUSION MAP") != 0) {
-//			break;
-//		}
-
-		fgets(line, sizeof(line), fp); // fgets reads until maximum one less than size and add '\0' -> so, it's not necessary to add -1
-//		if (strcmp(line,fn) < 0) {
-//			break;
-//		}
-
-		map[m].m = m;
-
-		str = fgets(line, sizeof(line), fp); // fgets reads until maximum one less than size and add '\0' -> so, it's not necessary to add -1
-		sscanf(str , "%d%d", &tmp_int[0], &tmp_int[1]);
-		xs = tmp_int[0];
-		ys = tmp_int[1];
-		if (xs == 0 || ys == 0) // ?? but possible
-			return -1;
-
-		map[m].xs = xs;
-		map[m].ys = ys;
-
-		CALLOC(map[m].gat, char, xs * ys);
-
-		map[m].npc_num = map[m].users = 0;
-
-		memset(&map[m].flag, 0, sizeof(map[m].flag));
-		if (battle_config.pk_mode) // make all maps pvp for pk_mode [Valaris]
-			map[m].flag.pvp = 1;
-		map[m].flag.nogmcmd = 100; // All gm commands can be used
-
-		fgets(line, sizeof(line), fp); // fgets reads until maximum one less than size and add '\0' -> so, it's not necessary to add -1
-
-		for (y = 0; y < ys; y++) {
-			for (x = 0; x < xs; x++) {
-				map[m].gat[x+y] = getc(fp) - 48;
-			}
-		}
-	}
-
-	fclose(fp);
-
-	map[m].bxs = (xs + BLOCK_SIZE - 1) / BLOCK_SIZE;
-	map[m].bys = (ys + BLOCK_SIZE - 1) / BLOCK_SIZE;
-
-	size = map[m].bxs * map[m].bys;
-
-	CALLOC(map[m].block, struct block_list*, size);
-	CALLOC(map[m].block_mob, struct block_list*, size);
-
-	strdb_insert(map_db, map[m].name, &map[m]);
-
-	return 0;
-}
-
-/*==========================================
- * マップ1枚読み込み
- *------------------------------------------
- */
-static int map_readmap(int m, char *fn, char *alias, int *map_cache_count) {
+static int map_readmap(int m, char *fn, char *alias, int *map_cache_count)
+{
 	unsigned char *gat;
 	int x, y, xs, ys, y_xs;
 	struct gat_1cell {float high[4]; int type;} *p;
@@ -2275,55 +2190,49 @@ void map_delmap(char *mapname) {
  * 全てのmapデータを読み込む
  *------------------------------------------
  */
-int map_readallmap(void) {
+int map_readallmap(void)
+{
 	int i, maps_removed = 0;
 	char fn[256];
-	FILE *afm_file;
 	int map_cache_count = 0;
 	char *p;
 
-	// マップキャッシュを開く
-	if (map_read_flag >= READ_FROM_BITMAP)
+	if(map_read_flag >= READ_FROM_BITMAP)
 		map_cache_open(map_cache_file);
 
-	printf("Loading Maps%s...\n",
-	       (map_read_flag == CREATE_BITMAP_COMPRESSED ? " (Generating Map Cache w/ Compression)" :
-	        map_read_flag == CREATE_BITMAP ? " (Generating Map Cache)" :
-	        map_read_flag >= READ_FROM_BITMAP ? " (w/ Map Cache)" :
-	        map_read_flag == READ_FROM_AFM ? " (w/ AFM)" : ""));
+	printf(CL_WHITE "status: " CL_RESET "reading maps");
+	if(map_read_flag == CREATE_BITMAP)
+		printf(" (and generating map-cache) \n");
+	else if(map_read_flag == CREATE_BITMAP_COMPRESSED)
+		printf(" (and generating compressed map-cache) \n");
+	else if(map_read_flag == READ_FROM_BITMAP)
+		printf(" (using map-cache) \n");
+	else if(map_read_flag == READ_FROM_BITMAP_COMPRESSED)
+		printf(" (using compressed map-cache) \n");
+	else
+		printf(" (without map-cache) \n");
 
-	// 先に全部のャbプの存在を確認
-	for(i = 0; i < map_num; i++) {
-		char afm_name[256] = "";
-		if (!strstr(map[i].name, ".afm")) {
-			// check if it's necessary to replace the extension - speeds up loading abit
-			strncpy(afm_name, map[i].name, strlen(map[i].name) - 4);
-			strcat(afm_name, ".afm");
-		}
+	for(i = 0; i < map_num; i++)
+	{
 		map[i].alias = NULL;
 
-		sprintf(fn, "%s\\%s", afm_dir, afm_name);
-		for(p = &fn[0]; *p != 0; p++) // * At the time of Unix
-			if (*p == '\\')
-				*p = '/';
+		if(strstr(map[i].name, ".gat") != NULL)
+		{
+			p = strstr(map[i].name, "<");
 
-		afm_file = fopen(fn, "r");
-		if (afm_file != NULL) {
-			map_readafm(i, fn);
-			fclose(afm_file);
-		} else if (strstr(map[i].name, ".gat") != NULL) {
-			p = strstr(map[i].name, "<"); // [MouseJstr]
-			if (p != NULL) {
+			if(p != NULL)
+			{
 				char buf[64];
 				*p++ = '\0';
 				sprintf(buf, "data\\%s", p);
-				CALLOC(map[i].alias, char, strlen(buf) + 1); // +1 for NULL
+				CALLOC(map[i].alias, char, strlen(buf) + 1);
 				strcpy(map[i].alias, buf);
 			}
 
 			sprintf(fn, "data\\%s", map[i].name);
-			//printf("map to read: %s\n", fn);
-			if (map_readmap(i, fn, p, &map_cache_count) == -1) {
+
+			if(map_readmap(i, fn, p, &map_cache_count) == -1)
+			{
 				map_delmap(map[i].name);
 				maps_removed++;
 				i--;
@@ -2477,7 +2386,7 @@ int parse_console(char *buf) {
 
 			m = 0;
 			if (n > 1) {
-				if (strstr(mapname, ".gat") == NULL && strstr(mapname, ".afm") == NULL && strlen(mapname) < 13) // 16 - 4 (.gat)
+				if (strstr(mapname, ".gat") == NULL && strlen(mapname) < 13)
 					strcat(mapname, ".gat");
 				if ((m = map_mapname2mapid(mapname)) < 0) { // map id on this server (m == -1 if not in actual map-server)
 					printf(CL_DARK_CYAN "Console: " CL_RESET CL_BOLD "Unknown map on this map-server." CL_RESET "\n");
@@ -3029,7 +2938,7 @@ void do_init(const int argc, char *argv[]) {
 	char *SCRIPT_CONF_NAME = "conf/script_athena.conf";
 	char *GRF_PATH_FILENAME = "conf/grf-files.txt";
 	FILE *data_conf;
-	char line[1024], w1[1024], w2[1024];
+	char line[1024], w2[1024];
 
 	printf("The map-server is starting...\n");
 
@@ -3132,17 +3041,14 @@ void do_init(const int argc, char *argv[]) {
 
 	data_conf = fopen(GRF_PATH_FILENAME, "r");
 
-	// It will read, if there is grf-files.txt.
-	if (data_conf) {
-		while(fgets(line, sizeof(line), data_conf)) { // fgets reads until maximum one less than size and add '\0' -> so, it's not necessary to add -1
+	if(data_conf)
+	{
+		while(fgets(line, sizeof(line), data_conf))
+		{
 			memset(w2, 0, sizeof(w2));
-			if (sscanf(line, "%[^:]: %[^\r\n]", w1, w2) == 2) {
-				if (strcmp(w1, "afm_dir") == 0)
-					strcpy(afm_dir, w2);
-			}
 		}
 		fclose(data_conf);
-	} // end of reading grf-files.txt
+	}
 
 	map_readallmap();
 
