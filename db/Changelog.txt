@@ -1,5 +1,9 @@
 // $Id: Changelog.txt akrus $
 
+04/20/2006
+	* Changed: moved custom items into item_db2 [Harbin]
+	* Fixed: tiara should be only wearable by women. issue 413 [Harbin]
+
 04/17/2006
 	* Fixed: drop rate of few dullahan items. fix by Flop. issue 386 [Harbin]
 	* Fixed: heirozoist card's item type. fix by Flop. issue 402 [Harbin]

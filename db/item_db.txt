@@ -929,7 +929,7 @@
 2231,Gemmed_Sallet_,Gemmed Sallet,5,50000,0,500,,4,,1,414946,2,256,,0,0,{},{ bonus bMdef,3; }
 2232,Circlet,Circlet,5,7500,0,300,,3,,0,99092,2,256,,0,18,{},{ bonus bMdef,3; }
 2233,Circlet_,Circlet,5,7500,0,300,,3,,1,99092,2,256,,0,18,{},{ bonus bMdef,3; }
-2234,Tiara,Tiara,5,20,0,400,,4,,0,10477567,0,256,,45,19,{},{ bonus bInt,2; }
+2234,Tiara,Tiara,5,20,0,400,,4,,0,10477566,0,256,,45,19,{},{ bonus bInt,2; }
 2235,Crown,Crown,5,20,0,400,,4,,0,10477567,1,256,,45,45,{},{ bonus bInt,2; }
 2236,Santa's_Hat,Santa's Hat,5,20,0,100,,1,,0,10477567,2,256,,0,20,{},{ bonus bMdef,1; bonus bLuk,1; }
 2237,Bandit_Beard,Bandit Beard,5,2,0,100,,0,,0,10477567,2,1,,0,21,{},{}
@@ -2413,22 +2413,3 @@
 13003,Coward,Coward,4,65000,0,700,80,0,1,1,10444527,2,2,3,55,1,{},{ bonus bDef,5; }
 13004,Coward_,Coward,4,65000,0,700,80,0,1,2,10444527,2,2,3,55,1,{},{ bonus bDef,5; }
 13005,Angel_Wing_Dagger,Angel Wing Dagger,4,20,0,10,,,,,,,,,,,{},{}
-
-//Custom Items
-//5201,Fire_Protector,Country of Fire protector,5,20,0,400,,4,,4,10477567,0,256,,45,19,{},{ bonus bInt,2; }
-//5202,Wind_Protector,Country of Wind protector,5,4500,0,300,,3,,4,10477567,2,256,,0,7,{},{ bonus bVit,2; }
-//5203,Water_Protector,Country of Water protector,5,4500,0,300,,3,,4,10477567,2,256,,0,7,{},{ bonus bDex,2; }
-//5204,Lightning_Protector,Country of Lightning protector,5,4500,0,300,,3,,4,10477567,2,256,,0,7,{},{ bonus bLuk,2; }
-//5205,Earth_Protector,Country of Earth protector,5,4500,0,300,,3,,4,10477567,2,256,,0,7,{},{ bonus bAgi,2; }
-//5206,Sound_Protector,Country of Sound protector,5,4500,0,300,,3,,4,10477567,2,256,,0,7,{},{ bonus bInt,2; }
-//5207,Hokage_Hat,Hokage Hat,6,20,0,10,,,,,,,2,,,,{},{ bonus bInt,2; }
-//5208,Konoha_Headband,Konoha Headband,5,20,0,300,,2,,4,263200,2,513,,50,151,{},{ bonus bAgi,7; }
-//5209,Kakashi_Headgear,Kakashi headgear,5,20,0,300,,2,,4,263200,2,513,,50,151,{},{ bonus bAgi,7; }
-//5210,Angel_Wings,Angel Wings,6,20,0,10,,,,,,,2,,,,{},{ bonus bInt,2; }
-//5211,Valkyrie_Helmet,Valkyrie Helmet,6,20,0,10,,,,,,,2,,,,{},{ bonus bInt,2; }
-//5212,Torn_Angel_Wings,Torn Angel Wings,6,20,0,10,,,,,,,2,,,,{},{ bonus bInt,2; }
-//5213,Gargoyle_Wings,Gargoyle Wings,6,20,0,10,,,,,,,2,,,,{},{ bonus bInt,2; }
-//5214,Black_Butterfly_Wings,Black Butterfly Wings,6,20,0,10,,,,,,,2,,,,{},{ bonus bInt,2; }
-//5215,White_Butterfly_Wings,White Butterfly Wings,6,20,0,10,,,,,,,2,,,,{},{ bonus bInt,2; }
-//5216,Legendary_Big_Wings,Legendary_Big_Wings,6,20,0,10,,,,,,,2,,,,{},{ bonus bInt,2; }
-//5217,Dowry_Helmet,Dowry Helmet,6,20,0,10,,,,,,,2,,,,{},{ bonus bInt,2; }
