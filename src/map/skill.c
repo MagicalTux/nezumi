@@ -5035,7 +5035,7 @@ int skill_castend_pos2(struct block_list *src, int x, int y, int skillid, int sk
 			struct skill_unit_group *sg;
 			clif_skill_poseffect(src,skillid,skilllv,x,y,tick);
 			sg = skill_unitsetting(src,skillid,skilllv,x,y,0);	
-			status_change_start(src, SkillStatusChangeTable[skillid], skilllv, 0, BCT_SELF, (int)sg, skill_get_time(skillid, skilllv), 0);
+			status_change_start(src, SkillStatusChangeTable[skillid], skilllv, 0, BCT_SELF, (intptr_t)sg, skill_get_time(skillid, skilllv), 0);
 		}
 		break;
 

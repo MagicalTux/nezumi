@@ -1,6 +1,7 @@
 // $Id$
 
 2006-04-20
+	* Fixed: src/map/skill.c: Fixed crash when using AMD64 [MagicalTux]
 	* Fixed: src/map/chrif.c: Now copying data *before* checking it [MagicalTux]
 
 2006-04-19
