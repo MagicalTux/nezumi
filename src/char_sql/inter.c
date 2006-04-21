@@ -464,10 +464,10 @@ void inter_save() {
 
 // initialize
 void inter_init(const char *file) {
-	unsigned short account_reg_db = 0, sc_data = 0;
 #ifdef USE_SQL
 #ifndef USE_SQLITE /* NB: SQLite does not support "SHOW TABLES" */
 	int i;
+	unsigned short account_reg_db = 0, sc_data = 0;
 #endif /* NOT USE_SQLITE */
 #endif // USE_SQL
 

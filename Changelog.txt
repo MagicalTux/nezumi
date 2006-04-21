@@ -1,5 +1,8 @@
 // $Id$
 
+2006-04-21
+	* Fixed: Warning in src/char_sql/inter.c when compiling for SQLite [MagicalTux]
+
 2006-04-20
 	* Changed: removed support for Advanced Fusion Maps. They are outdated, bugged and useless since we have map-cache [Harbin]
 	* Fixed: src/map/skill.c: Fixed crash when using AMD64 [MagicalTux]
