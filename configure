@@ -331,7 +331,7 @@ echo -n "Checking for gcc... "
 CCLIST="gcc cc gcc-3.3 gcc-3.2 gcc-3.4 gcc-2.95"
 if [ "$WITH_WIN32" != "no" ]; then
 	if [ "$IS_CYGWIN" = "no" ]; then
-		CCLIST="/usr/bin/*mingw*gcc /usr/bin/*mingw*cc /usr/bin/*mingw*gcc-3.3 /usr/bin/*mingw*gcc-3.2 /usr/bin/*mingw*gcc-3.4 /usr/bin/*mingw*gcc-2.95 $CCLIST"
+		CCLIST="/usr/bin/*mingw*gcc /opt/xmingw/bin/*mingw*gcc /usr/bin/*mingw*cc /usr/bin/*mingw*gcc-3.3 /usr/bin/*mingw*gcc-3.2 /usr/bin/*mingw*gcc-3.4 /usr/bin/*mingw*gcc-2.95 $CCLIST"
 		if [ x$CC != x ]; then
 			# check if $CC is Ming
 			TEST=`$CC -v 2>&1 | grep ^Thread | grep win32`
@@ -352,7 +352,7 @@ if [ x$CC != x ]; then
 fi
 CC=""
 for foo in $CCLIST; do
-	XCC=`which $foo`
+	XCC=`which $foo 2>/dev/null`
 	if [ x$XCC = x ]; then
 		:
 	else
@@ -372,7 +372,7 @@ echo -n "Checking for ar... "
 ARLIST="ar"
 if [ "$WITH_WIN32" != "no" ]; then
 	if [ "$IS_CYGWIN" = "no" ]; then
-		ARLIST="/usr/bin/*mingw*ar $ARLIST"
+		ARLIST="/usr/bin/*mingw*ar /opt/xmingw/bin/*mingw*ar $ARLIST"
 	fi
 fi
 if [ x$AR != x ]; then
@@ -380,7 +380,7 @@ if [ x$AR != x ]; then
 fi
 AR=""
 for foo in $ARLIST; do
-	XAR=`which $foo`
+	XAR=`which $foo 2>/dev/null`
 	if [ x$XAR = x ]; then
 		:
 	else

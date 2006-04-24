@@ -1,5 +1,9 @@
 // $Id$
 
+2006-04-24
+	* Fixed: configure: Now supports Gentoo's way of installing mingw32,
+		allowing to build WIN32 binaries from a Gentoo box [MagicalTux]
+
 2006-04-21
 	* Fixed: Warning in src/char_sql/inter.c when compiling for SQLite [MagicalTux]
 
