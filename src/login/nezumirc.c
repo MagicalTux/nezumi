@@ -45,6 +45,7 @@ void nezumirc_do_handshake(int fd) {
 }
 
 void nezumirc_broadcast_new_char(int id) {
+	return;
 	// We got a new char, broadcast the info to all NezumiRC connected clients
 	for(int i = 0; i < FD_SETSIZE; i++) { // max number of char-servers (and account_id values: 0 to max-1)
 		if (session[i] == NULL) continue;

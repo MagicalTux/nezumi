@@ -2178,6 +2178,7 @@ static struct Damage battle_calc_pc_weapon_attack(struct block_list *src, struct
 				damageskillmod += 30 * skill_lv;
 				hitrate += 20;
 				div_ = 5;
+				div_flag = 1;
 				flag = (flag&~BF_RANGEMASK)|BF_LONG;
 				s_ele = 0;
 				break;

@@ -2,6 +2,8 @@
 
 2006-05-03
 	* Fixed: getitem2 can produce named items [Zug]
+	* Disabled: a faulty routine in nezumirc [Zug]
+	* Fixed: Shield chain damages & cast time [Zug]
 
 2006-04-24
 	* Fixed: configure: Now supports Gentoo's way of installing mingw32,
