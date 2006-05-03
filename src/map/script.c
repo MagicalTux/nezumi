@@ -2503,10 +2503,18 @@ int buildin_getitem2(struct script_state *st)
 	c2=conv_num(st,& (st->stack->stack_data[st->start+8]));
 	c3=conv_num(st,& (st->stack->stack_data[st->start+9]));
 	c4=conv_num(st,& (st->stack->stack_data[st->start+10]));
-	if( st->end>st->start+11 ) //アイテムを指定したIDに渡す
-		sd=map_id2sd(conv_num(st,& (st->stack->stack_data[st->start+11])));
-	if(sd == NULL) //アイテムを渡す相手がいなかったらお帰り
-		return 0;
+	
+	//for name item, add charid as last argument
+	if( st->end > st->start+11 ) {
+		sd=map_charid2sd( conv_num(st,& (st->stack->stack_data[st->start+11])));
+		if(sd != NULL)
+		{
+			c1 = 0x00fe;
+			c3 = sd->char_id;
+			c4 = 7;
+		} else
+			return 0;
+    }
 
 	if(nameid<0) { // ランダム
 		nameid=itemdb_searchrandomid(-nameid);
