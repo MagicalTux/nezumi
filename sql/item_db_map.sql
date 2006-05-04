@@ -1,6 +1,6 @@
 # You can regenerate this file with an option in inter_athena.conf
 
-CREATE TABLE `item_db` (
+CREATE TABLE IF NOT EXISTS `item_db` (
   `id` smallint(5) unsigned NOT NULL default '0',
   `name_english` varchar(32) NOT NULL default '',
   `name_japanese` varchar(32) NOT NULL default '',

@@ -16,7 +16,7 @@
 # Table structure for table `abra_db`
 #
 
-CREATE TABLE `abra_db` (
+CREATE TABLE IF NOT EXISTS `abra_db` (
   `ID` smallint(6) NOT NULL default '0',
   `Dummy` text NOT NULL,
   `Req_Lvl` smallint(6) NOT NULL default '0',
@@ -30,7 +30,7 @@ CREATE TABLE `abra_db` (
 # Table structure for table `attr_fix`
 #
 
-CREATE TABLE `attr_fix` (
+CREATE TABLE IF NOT EXISTS `attr_fix` (
   `Level` tinyint(4) NOT NULL default '0',
   `None` tinyint(4) NOT NULL default '0',
   `Water` tinyint(4) NOT NULL default '0',
@@ -51,7 +51,7 @@ CREATE TABLE `attr_fix` (
 # Table structure for table `cast_db`
 #
 
-CREATE TABLE `cast_db` (
+CREATE TABLE IF NOT EXISTS `cast_db` (
   `ID` smallint(6) NOT NULL default '0',
   `Cast_List` mediumint(9) NOT NULL default '0',
   `Delay_List` text NOT NULL,
@@ -66,7 +66,7 @@ CREATE TABLE `cast_db` (
 # Table structure for table `castle_db`
 #
 
-CREATE TABLE `castle_db` (
+CREATE TABLE IF NOT EXISTS `castle_db` (
   `CastleID` tinyint(4) NOT NULL default '0',
   `map_name` text NOT NULL,
   `castle_name` text NOT NULL,
@@ -80,7 +80,7 @@ CREATE TABLE `castle_db` (
 # Table structure for table `create_arrow_db`
 #
 
-CREATE TABLE `create_arrow_db` (
+CREATE TABLE IF NOT EXISTS `create_arrow_db` (
   `SourceID` mediumint(9) NOT NULL default '0',
   `MakeID1` mediumint(9) NOT NULL default '0',
   `MakeNum1` mediumint(9) NOT NULL default '0',
@@ -101,7 +101,7 @@ CREATE TABLE `create_arrow_db` (
 # Table structure for table `exp`
 #
 
-CREATE TABLE `exp` (
+CREATE TABLE IF NOT EXISTS `exp` (
   `EXP1` bigint(9) NOT NULL default '0',
   `EXP2` bigint(9) NOT NULL default '0',
   `EXP3` bigint(9) NOT NULL default '0',
@@ -125,7 +125,7 @@ CREATE TABLE `exp` (
 # Table structure for table `exp_guild`
 #
 
-CREATE TABLE `exp_guild` (
+CREATE TABLE IF NOT EXISTS `exp_guild` (
   `Level` tinyint(4) NOT NULL default '0',
   `EXP` int(11) NOT NULL default '0',
   `Comment` text NOT NULL
@@ -137,7 +137,7 @@ CREATE TABLE `exp_guild` (
 # Table structure for table `item_bluebox`
 #
 
-CREATE TABLE `item_bluebox` (
+CREATE TABLE IF NOT EXISTS `item_bluebox` (
   `NameID` mediumint(9) NOT NULL default '0',
   `item_name` text NOT NULL,
   `rate` mediumint(9) NOT NULL default '0',
@@ -150,7 +150,7 @@ CREATE TABLE `item_bluebox` (
 # Table structure for table `item_cardalbum`
 #
 
-CREATE TABLE `item_cardalbum` (
+CREATE TABLE IF NOT EXISTS `item_cardalbum` (
   `NameID` mediumint(9) NOT NULL default '0',
   `item_name` text NOT NULL,
   `rate` mediumint(9) NOT NULL default '0',
@@ -163,7 +163,7 @@ CREATE TABLE `item_cardalbum` (
 # Table structure for table `item_db2`
 #
 
-CREATE TABLE `item_db2` (
+CREATE TABLE IF NOT EXISTS `item_db2` (
   `ID` int(11) NOT NULL auto_increment,
   `Name` text NOT NULL,
   `Name2` text NOT NULL,
@@ -193,7 +193,7 @@ CREATE TABLE `item_db2` (
 # Table structure for table `item_giftbox`
 #
 
-CREATE TABLE `item_giftbox` (
+CREATE TABLE IF NOT EXISTS `item_giftbox` (
   `NameID` mediumint(9) NOT NULL default '0',
   `item_name` text NOT NULL,
   `rate` mediumint(9) NOT NULL default '0',
@@ -206,7 +206,7 @@ CREATE TABLE `item_giftbox` (
 # Table structure for table `item_scroll`
 #
 
-CREATE TABLE `item_scroll` (
+CREATE TABLE IF NOT EXISTS `item_scroll` (
   `NameID` mediumint(9) NOT NULL default '0',
   `item_name` text NOT NULL,
   `rate` mediumint(9) NOT NULL default '0',
@@ -219,7 +219,7 @@ CREATE TABLE `item_scroll` (
 # Table structure for table `item_violetbox`
 #
 
-CREATE TABLE `item_violetbox` (
+CREATE TABLE IF NOT EXISTS `item_violetbox` (
   `NameID` mediumint(9) NOT NULL default '0',
   `item_name` text NOT NULL,
   `rate` mediumint(9) NOT NULL default '0',
@@ -232,7 +232,7 @@ CREATE TABLE `item_violetbox` (
 # Table structure for table `job_db1`
 #
 
-CREATE TABLE `job_db1` (
+CREATE TABLE IF NOT EXISTS `job_db1` (
   `Class_ID` tinyint(4) NOT NULL default '0',
   `Weight` mediumint(9) NOT NULL default '0',
   `HP` smallint(6) NOT NULL default '0',
@@ -264,7 +264,7 @@ CREATE TABLE `job_db1` (
 # Table structure for table `mob_boss`
 #
 
-CREATE TABLE `mob_boss` (
+CREATE TABLE IF NOT EXISTS `mob_boss` (
   `MobID` mediumint(9) NOT NULL default '0',
   `MobName` text NOT NULL,
   `Rate` int(11) NOT NULL default '0',
@@ -277,7 +277,7 @@ CREATE TABLE `mob_boss` (
 # Table structure for table `mob_branch`
 #
 
-CREATE TABLE `mob_branch` (
+CREATE TABLE IF NOT EXISTS `mob_branch` (
   `MobID` mediumint(9) NOT NULL default '0',
   `MobName` text NOT NULL,
   `Rate` int(11) NOT NULL default '0',
@@ -290,7 +290,7 @@ CREATE TABLE `mob_branch` (
 # Table structure for table `mob_db2`
 #
 
-CREATE TABLE `mob_db2` (
+CREATE TABLE IF NOT EXISTS `mob_db2` (
   `ID` mediumint(9) NOT NULL default '0',
   `Name` text NOT NULL,
   `Name2` text NOT NULL,
@@ -355,7 +355,7 @@ CREATE TABLE `mob_db2` (
 # Table structure for table `mob_poring`
 #
 
-CREATE TABLE `mob_poring` (
+CREATE TABLE IF NOT EXISTS `mob_poring` (
   `MobID` smallint(6) NOT NULL default '0',
   `MobName` text NOT NULL,
   `Rate` mediumint(9) NOT NULL default '0',
@@ -368,7 +368,7 @@ CREATE TABLE `mob_poring` (
 # Table structure for table `mob_skill_db`
 #
 
-CREATE TABLE `mob_skill_db` (
+CREATE TABLE IF NOT EXISTS `mob_skill_db` (
   `Mob_ID` smallint(6) NOT NULL default '0',
   `Dummy` text NOT NULL,
   `State` text NOT NULL,
@@ -395,7 +395,7 @@ CREATE TABLE `mob_skill_db` (
 # Table structure for table `pet_db`
 #
 
-CREATE TABLE `pet_db` (
+CREATE TABLE IF NOT EXISTS `pet_db` (
   `MobID` smallint(6) NOT NULL default '0',
   `Name` text NOT NULL,
   `JName` text NOT NULL,
@@ -426,7 +426,7 @@ CREATE TABLE `pet_db` (
 # Table structure for table `produce_db`
 #
 
-CREATE TABLE `produce_db` (
+CREATE TABLE IF NOT EXISTS `produce_db` (
   `ID` smallint(6) NOT NULL default '0',
   `ItemLV` tinyint(4) NOT NULL default '0',
   `RequireSkill` smallint(6) NOT NULL default '0',
@@ -449,7 +449,7 @@ CREATE TABLE `produce_db` (
 # Table structure for table `refine_db`
 #
 
-CREATE TABLE `refine_db` (
+CREATE TABLE IF NOT EXISTS `refine_db` (
   `Refine_Bonus` tinyint(4) NOT NULL default '0',
   `Danger_Bonus` tinyint(4) NOT NULL default '0',
   `Safe_Limit` tinyint(4) NOT NULL default '0',
@@ -472,7 +472,7 @@ CREATE TABLE `refine_db` (
 # Table structure for table `size_fix`
 #
 
-CREATE TABLE `size_fix` (
+CREATE TABLE IF NOT EXISTS `size_fix` (
   `Element` tinyint(4) NOT NULL default '0',
   `Dagger` tinyint(4) NOT NULL default '0',
   `Sword` tinyint(4) NOT NULL default '0',
@@ -499,7 +499,7 @@ CREATE TABLE `size_fix` (
 # Table structure for table `skill_db`
 #
 
-CREATE TABLE `skill_db` (
+CREATE TABLE IF NOT EXISTS `skill_db` (
   `ID` smallint(6) NOT NULL default '0',
   `Range` smallint(6) NOT NULL default '0',
   `Hit` smallint(6) NOT NULL default '0',
@@ -522,7 +522,7 @@ CREATE TABLE `skill_db` (
 # Table structure for table `skill_require_db`
 #
 
-CREATE TABLE `skill_require_db` (
+CREATE TABLE IF NOT EXISTS `skill_require_db` (
   `ID` smallint(6) NOT NULL default '0',
   `List_HP` text NOT NULL,
   `List_SP` text NOT NULL,
@@ -561,7 +561,7 @@ CREATE TABLE `skill_require_db` (
 # Table structure for table `skill_tree`
 #
 
-CREATE TABLE `skill_tree` (
+CREATE TABLE IF NOT EXISTS `skill_tree` (
   `Upper` tinyint(4) NOT NULL default '0',
   `JobNo` tinyint(4) NOT NULL default '0',
   `Skill_ID` smallint(6) NOT NULL default '0',

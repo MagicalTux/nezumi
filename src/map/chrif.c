@@ -1186,6 +1186,7 @@ int chrif_load_scdata(int fd) {
 				printf("chrif_load_scdata: Received invalid duration (%d ms) for status change %d (character %s)\n", data.tick, data.type, sd->status.name);
 			continue;
 		}
+		printf("chrif_load_scdata %d (%d,%d,%d,%d)\n",data.type, data.val1, data.val2, data.val3, data.val4);
 		status_change_start(&sd->bl, data.type, data.val1, data.val2, data.val3, data.val4, data.tick, 7);
 		//Flag 3 is 1&2, 1: Force status start, 2: Do not modify the tick value sent.
 	}

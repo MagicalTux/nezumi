@@ -1373,7 +1373,7 @@ inline void chrif_send_scdata(int fd, int char_id)
 		count++;
 	}
 	if (count > 0) {
-		WPACKETW( 2) = 14 + count*sizeof(struct status_change_data);
+		WPACKETW(2) = 14 + count*sizeof(struct status_change_data);
 		WPACKETW(8) = count;
 		SENDPACKET(fd, WPACKETW( 2));
 

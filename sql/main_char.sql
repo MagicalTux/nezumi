@@ -3,7 +3,7 @@
 # Database: Ragnarok
 # Table: 'cart_inventory'
 # 
-CREATE TABLE `cart_inventory` (
+CREATE TABLE IF NOT EXISTS `cart_inventory` (
   `id` int(11) NOT NULL auto_increment,
   `char_id` int(11) NOT NULL default '0',
   `nameid` int(11) NOT NULL default '0',
@@ -24,7 +24,7 @@ CREATE TABLE `cart_inventory` (
 # Database: Ragnarok
 # Table: 'char'
 # 
-CREATE TABLE `char` (
+CREATE TABLE IF NOT EXISTS `char` (
   `char_id` int(11) NOT NULL auto_increment,
   `account_id` int(11) NOT NULL default '0',
   `char_num` tinyint(4) NOT NULL default '0',
@@ -80,7 +80,7 @@ CREATE TABLE `char` (
 # Database: Ragnarok
 # Table: 'charlog'
 # 
-CREATE TABLE `charlog` (
+CREATE TABLE IF NOT EXISTS `charlog` (
   `time` datetime NOT NULL default '0000-00-00 00:00:00',
   `char_msg` varchar(255) NOT NULL default 'char select',
   `account_id` int(11) NOT NULL default '0',
@@ -99,7 +99,7 @@ CREATE TABLE `charlog` (
 # Database: Ragnarok
 # Table: 'global_reg_value'
 # 
-CREATE TABLE `global_reg_value` (
+CREATE TABLE IF NOT EXISTS `global_reg_value` (
   `char_id` int(11) NOT NULL default '0',
   `str` varchar(32) NOT NULL default '',
   `value` int(11) NOT NULL default '0',
@@ -109,7 +109,7 @@ CREATE TABLE `global_reg_value` (
 # Database: Ragnarok
 # Table: 'account_reg_db'
 # 
-CREATE TABLE `account_reg_db` (
+CREATE TABLE IF NOT EXISTS `account_reg_db` (
   `account_id` int(11) NOT NULL default '0',
   `str` varchar(32) NOT NULL default '',
   `value` int(11) NOT NULL default '0',
@@ -119,7 +119,7 @@ CREATE TABLE `account_reg_db` (
 # Database: Ragnarok
 # Table: 'guild'
 # 
-CREATE TABLE `guild` (
+CREATE TABLE IF NOT EXISTS `guild` (
   `guild_id` int(11) NOT NULL default '10000',
   `name` varchar(24) NOT NULL default '',
   `master` varchar(24) NOT NULL default '',
@@ -142,7 +142,7 @@ CREATE TABLE `guild` (
 # Database: Ragnarok
 # Table: 'guild_alliance'
 # 
-CREATE TABLE `guild_alliance` (
+CREATE TABLE IF NOT EXISTS `guild_alliance` (
   `guild_id` int(11) NOT NULL default '0',
   `opposition` int(11) NOT NULL default '0',
   `alliance_id` int(11) NOT NULL default '0',
@@ -153,7 +153,7 @@ CREATE TABLE `guild_alliance` (
 # Database: Ragnarok
 # Table: 'guild_castle'
 # 
-CREATE TABLE `guild_castle` (
+CREATE TABLE IF NOT EXISTS `guild_castle` (
   `castle_id` int(11) NOT NULL default '0',
   `guild_id` int(11) NOT NULL default '0',
   `economy` int(11) NOT NULL default '0',
@@ -187,7 +187,7 @@ CREATE TABLE `guild_castle` (
 # Database: Ragnarok
 # Table: 'guild_expulsion'
 # 
-CREATE TABLE `guild_expulsion` (
+CREATE TABLE IF NOT EXISTS `guild_expulsion` (
   `guild_id` int(11) NOT NULL default '0',
   `name` varchar(24) NOT NULL default '',
   `mes` varchar(40) NOT NULL default '',
@@ -202,7 +202,7 @@ CREATE TABLE `guild_expulsion` (
 # Database: Ragnarok
 # Table: 'guild_member'
 # 
-CREATE TABLE `guild_member` (
+CREATE TABLE IF NOT EXISTS `guild_member` (
   `guild_id` int(11) NOT NULL default '0',
   `account_id` int(11) NOT NULL default '0',
   `char_id` int(11) NOT NULL default '0',
@@ -226,7 +226,7 @@ CREATE TABLE `guild_member` (
 # Database: Ragnarok
 # Table: 'guild_position'
 # 
-CREATE TABLE `guild_position` (
+CREATE TABLE IF NOT EXISTS `guild_position` (
   `guild_id` int(11) NOT NULL default '0',
   `position` smallint(6) NOT NULL default '0',
   `name` varchar(24) NOT NULL default '',
@@ -238,7 +238,7 @@ CREATE TABLE `guild_position` (
 # Database: Ragnarok
 # Table: 'guild_skill'
 # 
-CREATE TABLE `guild_skill` (
+CREATE TABLE IF NOT EXISTS `guild_skill` (
   `guild_id` int(11) NOT NULL default '0',
   `id` int(11) NOT NULL default '0',
   `lv` int(11) NOT NULL default '0',
@@ -248,7 +248,7 @@ CREATE TABLE `guild_skill` (
 # Database: Ragnarok
 # Table: 'guild_storage'
 # 
-CREATE TABLE `guild_storage` (
+CREATE TABLE IF NOT EXISTS `guild_storage` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `guild_id` int(11) NOT NULL default '0',
   `nameid` int(11) NOT NULL default '0',
@@ -269,7 +269,7 @@ CREATE TABLE `guild_storage` (
 # Database: Ragnarok
 # Table: 'interlog'
 # 
-CREATE TABLE `interlog` (
+CREATE TABLE IF NOT EXISTS `interlog` (
   `time` datetime NOT NULL default '0000-00-00 00:00:00',
   `log` varchar(255) NOT NULL default ''
 ) TYPE=MyISAM; 
@@ -277,7 +277,7 @@ CREATE TABLE `interlog` (
 # Database: Ragnarok
 # Table: 'inventory'
 # 
-CREATE TABLE `inventory` (
+CREATE TABLE IF NOT EXISTS `inventory` (
   `id` int(11) NOT NULL auto_increment,
   `char_id` int(11) NOT NULL default '0',
   `nameid` int(11) NOT NULL default '0',
@@ -298,7 +298,7 @@ CREATE TABLE `inventory` (
 # Database: Ragnarok
 # Table: 'memo'
 # 
-CREATE TABLE `memo` (
+CREATE TABLE IF NOT EXISTS `memo` (
   `memo_id` int(11) NOT NULL auto_increment,
   `char_id` int(11) NOT NULL default '0',
   `map` varchar(20) NOT NULL default '',
@@ -311,7 +311,7 @@ CREATE TABLE `memo` (
 # Database: Ragnarok
 # Table: 'party'
 # 
-CREATE TABLE `party` (
+CREATE TABLE IF NOT EXISTS `party` (
   `party_id` int(11) NOT NULL default '100',
   `name` char(100) NOT NULL default '',
   `exp` int(11) NOT NULL default '0',
@@ -323,7 +323,7 @@ CREATE TABLE `party` (
 # Database: Ragnarok
 # Table: 'pet'
 # 
-CREATE TABLE `pet` (
+CREATE TABLE IF NOT EXISTS `pet` (
   `pet_id` int(11) NOT NULL auto_increment,
   `class` mediumint(9) NOT NULL default '0',
   `name` varchar(24) NOT NULL default '',
@@ -342,7 +342,7 @@ CREATE TABLE `pet` (
 # Database: Ragnarok
 # Table: 'ragsrvinfo'
 # 
-CREATE TABLE `ragsrvinfo` (
+CREATE TABLE IF NOT EXISTS `ragsrvinfo` (
   `index` int(11) NOT NULL default '0',
   `name` varchar(40) NOT NULL default '',
   `exp` int(11) NOT NULL default '0',
@@ -354,7 +354,7 @@ CREATE TABLE `ragsrvinfo` (
 # Database: Ragnarok
 # Table: 'skill'
 # 
-CREATE TABLE `skill` (
+CREATE TABLE IF NOT EXISTS `skill` (
   `char_id` int(11) NOT NULL default '0',
   `id` int(11) NOT NULL default '0',
   `lv` tinyint(4) NOT NULL default '0',
@@ -364,7 +364,7 @@ CREATE TABLE `skill` (
 # Database: Ragnarok
 # Table: 'sc_data'
 # 
-CREATE TABLE `sc_data` (
+CREATE TABLE IF NOT EXISTS `sc_data` (
   `char_id` int(11) unsigned NOT NULL,
   `type` smallint(11) unsigned NOT NULL,
   `tick` int(11) NOT NULL,
@@ -378,7 +378,7 @@ CREATE TABLE `sc_data` (
 # Database: Ragnarok
 # Table: 'storage'
 # 
-CREATE TABLE `storage` (
+CREATE TABLE IF NOT EXISTS `storage` (
   `id` int(11) NOT NULL auto_increment,
   `account_id` int(11) NOT NULL default '0',
   `nameid` int(11) NOT NULL default '0',
@@ -399,7 +399,7 @@ CREATE TABLE `storage` (
 # Database: Ragnarok
 # Table: 'friends'
 # 
-CREATE TABLE `friends` (
+CREATE TABLE IF NOT EXISTS `friends` (
   `char_id` int(11) NOT NULL default '0',
   `friend_id` int(11) NOT NULL default '0',
   PRIMARY KEY (`char_id`,`friend_id`)

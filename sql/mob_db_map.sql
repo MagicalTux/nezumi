@@ -1,6 +1,6 @@
 # You can regenerate this file with an option in inter_athena.conf
 
-CREATE TABLE `mob_db` (
+CREATE TABLE IF NOT EXISTS `mob_db` (
   `ID` mediumint(9) NOT NULL default '0',
   `Name` text NOT NULL,
   `Name2` text NOT NULL,

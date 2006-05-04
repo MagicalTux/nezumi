@@ -3,7 +3,7 @@
 # Database: Ragnarok
 # Table: 'login'
 # 
-CREATE TABLE `login` (
+CREATE TABLE IF NOT EXISTS `login` (
   `account_id` int(11) NOT NULL AUTO_INCREMENT,
   `userid` varchar(24) NOT NULL default '',
   `user_pass` varchar(32) NOT NULL default '',
@@ -44,7 +44,7 @@ INSERT INTO `login` (`account_id`, `userid`, `user_pass`, `sex`, `email`) VALUES
 # Database: Ragnarok
 # Table: 'account_reg2_db'
 # 
-CREATE TABLE `account_reg2_db` (
+CREATE TABLE IF NOT EXISTS `account_reg2_db` (
   `account_id` int(11) NOT NULL default '0',
   `str` varchar(32) NOT NULL default '',
   `value` int(11) NOT NULL default '0',
@@ -54,7 +54,7 @@ CREATE TABLE `account_reg2_db` (
 # Database: Ragnarok
 # Table: 'sstatus'
 # 
-CREATE TABLE `sstatus` (
+CREATE TABLE IF NOT EXISTS `sstatus` (
   `index` tinyint(4) NOT NULL default '0',
   `name` varchar(20) NOT NULL default '',
   `user` int(11) NOT NULL default '0'

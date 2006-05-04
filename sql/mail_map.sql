@@ -1,6 +1,6 @@
 # -------------------------------------------------------
 
-CREATE TABLE `mail` (
+CREATE TABLE IF NOT EXISTS `mail` (
   `message_id` int(11) NOT NULL auto_increment,
   `to_account_id` int(11) NOT NULL default '0',
   `to_char_name` varchar(24) NOT NULL default '',
