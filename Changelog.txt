@@ -1,8 +1,9 @@
 // $Id$
 
 2006-05-04
-    * Improved: sql files for tables [Zug]  
+	* Improved: sql files for tables [Zug]  
 	* Fixed: Double Cast professor skill duration [Zug]
+	* Added: Cards for Odin temple, Ligthalzen [Zug]
 
 2006-05-03
 	* Fixed: getitem2 can produce named items [Zug]
