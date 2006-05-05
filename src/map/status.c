@@ -4092,11 +4092,11 @@ int status_change_start(struct block_list *bl, int type, intptr_t val1, intptr_t
 			return 0;
 	}
 
-	if (bl->type==BL_PC && ((type < SC_MAX && (type != SC_HALLUCINATION || battle_config.display_hallucination)) || type == SC_PRESERVE || type == SC_BATTLEORDERS)) {
+	if (bl->type == BL_PC && ((type < SC_MAX && (type != SC_HALLUCINATION || battle_config.display_hallucination)) || type == SC_PRESERVE || type == SC_BATTLEORDERS)) {
 #ifdef USE_SQL
 		/*
 		if (flag&4)
-			clif_status_load(sd, type); //Sending to owner since they aren't in the map yet. [Skotlex]
+			clif_status_load(bl,StatusIconChangeTable[type],1); //Sending to owner since they aren't in the map yet. [Skotlex]
 		*/
 #endif
 		
