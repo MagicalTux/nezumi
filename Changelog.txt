@@ -1,6 +1,7 @@
 // $Id$
 
 2006-05-04
+	* Fixed: status icons are now displayed after login right! [akrus]
 	* Improved: sql files for tables [Zug]  
 	* Fixed: Double Cast professor skill duration [Zug]
 	* Added: Cards for Odin temple, Ligthalzen [Zug]
