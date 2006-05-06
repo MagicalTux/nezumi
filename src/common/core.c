@@ -214,24 +214,21 @@ void display_title(void) {
 	}
 	fprintf(stderr, format2, "", top_bot);
 	printf("\n");	// newline to make it look better
-	if(ATHENA_RELEASE_FLAG == 0)
-	{
-		printf(CL_WHITE "info: " CL_RESET "nezumi version %d.%d.%d %s", ATHENA_MAJOR_VERSION, ATHENA_MINOR_VERSION, ATHENA_REVISION,
+#if ATHENA_RELEASE_FLAG == 0
+	fprintf(stderr, CL_WHITE "info: " CL_RESET "Nezumi version %d.%d.%d %s", ATHENA_MAJOR_VERSION, ATHENA_MINOR_VERSION, ATHENA_REVISION,
 #ifdef USE_SQL
-			"SQL \n");
-#else
-			"TXT \n");
-#endif
-	}
-	if(ATHENA_RELEASE_FLAG == 1)
-	{
-		printf(CL_WHITE "info: " CL_RESET "nezumi revision %d %s", (int)SVN_REVISION,
+		"SQL \n");
+#else /* USE_SQL */
+		"TXT \n");
+#endif /* USE_SQL */
+#else /* ATHENA_RELEASE_FLAG == 0 */
+	fprintf(stderr, CL_WHITE "info: " CL_RESET "Nezumi revision %d %s", (int)SVN_REVISION,
 #ifdef USE_SQL
-			"SQL \n");
-#else
-			"TXT \n");
-#endif
-	}
+		"SQL \n");
+#else /* USE_SQL */
+		"TXT \n");
+#endif /* USE_SQL */
+#endif /* ATHENA_RELEASE_FLAG == 0 */
 }
 
 // This is an implementation of signal() using sigaction() for portability.

@@ -372,7 +372,7 @@ CREATE TABLE IF NOT EXISTS `sc_data` (
   `val2` int(11) NOT NULL default '0',
   `val3` int(11) NOT NULL default '0',
   `val4` int(11) NOT NULL default '0',
-  KEY (`char_id`),
+  KEY (`char_id`)
 ) TYPE=MyISAM;
 
 # Database: Ragnarok

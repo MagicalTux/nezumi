@@ -1,5 +1,9 @@
 // $Id$
 
+2006-05-06
+	* Fixed: Now output from common is sent to stderr [MagicalTux]
+	* Fixed: Error in sql/main_char.sql fixed [MagicalTux]
+
 2006-05-04
 	* Fixed: status icons are now displayed after login right! [akrus]
 	* Improved: sql files for tables [Zug]  
