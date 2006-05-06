@@ -1,5 +1,8 @@
 // $Id: Changelog.txt akrus $
 
+05/06/2006
+	* Added: card effects for new cards [akrus]
+
 04/20/2006
 	* Changed: moved custom items into item_db2 [Harbin]
 	* Fixed: tiara should be only wearable by women. issue 413 [Harbin]
