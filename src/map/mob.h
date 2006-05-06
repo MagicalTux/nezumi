@@ -31,7 +31,7 @@ struct mob_db {
 	short race2;	// celest
 	int speed, adelay, amotion, dmotion;
 	int mexp, mexpper;
-	struct { int nameid; short p; } dropitem[10]; // p: 0-10000(100%)
+	struct { int nameid; short p; } dropitem[MAX_MOB_DROP]; // p: 0-10000(100%)
 	struct { int nameid; short p; } mvpitem[3]; // p: 0-10000(100%)
 	int view_class, sex;
 	short hair, hair_color, weapon, shield, head_top, head_mid, head_buttom, option, clothes_color; // [Valaris]
