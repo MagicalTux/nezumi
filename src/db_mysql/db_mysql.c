@@ -41,8 +41,14 @@ void sql_init() {
 #endif
 	memset(last_request, 0, sizeof(last_request));
 	mysql_init(&mysql_handle);
+#ifdef CLIENT_INTERACTIVE
 	if (!mysql_real_connect(&mysql_handle, db_mysql_server_ip, db_mysql_server_id, db_mysql_server_pw,
-	    db_mysql_server_db, db_mysql_server_port, (char *)NULL, 0)) {
+	    db_mysql_server_db, db_mysql_server_port, (char *)NULL, CLIENT_INTERACTIVE))
+#else
+	if (!mysql_real_connect(&mysql_handle, db_mysql_server_ip, db_mysql_server_id, db_mysql_server_pw,
+	    db_mysql_server_db, db_mysql_server_port, (char *)NULL, 0))
+#endif
+	{
 		/* pointer check */
 		printf("Connect DB server error: %s.\n", mysql_error(&mysql_handle));
 		exit(1);
