@@ -4,6 +4,7 @@
 
 #define MAX_RANDOMMONSTER 3
 #define MAX_MOB_RACE_DB 6
+#define MAX_MOB_DROP 15
 
 struct mob_skill {
 	short state;

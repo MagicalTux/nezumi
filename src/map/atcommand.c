@@ -10123,7 +10123,7 @@ ATCOMMAND_FUNC(whodrops) {
 				continue;
 			mob = &mob_db[mob_id];
 			// search within normal drops
-			for (i = 0; i < 10; i++) {
+			for (i = 0; i < MAX_MOB_DROP; i++) {
 				if (mob->dropitem[i].nameid != item_id)
 					continue;
 				// get value for calculation of drop rate
@@ -11002,7 +11002,7 @@ ATCOMMAND_FUNC(mobinfo) {
 	clif_displaymessage(fd, " Drops:");
 	strcpy(atcmd_output, " ");
 	j = 0;
-	for (i = 0; i < 10; i++) {
+	for (i = 0; i < MAX_MOB_DROP; i++) {
 		if (mob->dropitem[i].nameid <= 0 || (item_data = itemdb_search(mob->dropitem[i].nameid)) == NULL)
 			continue;
 		// get value for calculation of drop rate

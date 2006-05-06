@@ -1,6 +1,7 @@
 // $Id$
 
 2006-05-06
+	* Updated: mob_db structure (up to 16 mob drops) - eAthena-compatible [akrus]
 	* Fixed: Now output from common is sent to stderr [MagicalTux]
 	* Fixed: Error in sql/main_char.sql fixed [MagicalTux]
 
