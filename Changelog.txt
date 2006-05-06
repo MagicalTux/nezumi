@@ -1,6 +1,8 @@
 // $Id$
 
 2006-05-06
+	* Added: scripts/char_converter.php : TXT->MySQL converter written in
+		PHP. Read comments in the file for more details [MagicalTux]
 	* Added: Usage of CLIENT_INTERACTIVE flag with MySQL [MagicalTux]
 	* Updated: SQL databases [akrus]
 	* Updated: mob_db structure (up to 16 mob drops) - eAthena-compatible [akrus]
