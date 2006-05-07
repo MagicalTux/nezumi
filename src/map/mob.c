@@ -4308,6 +4308,7 @@ static int mob_readdb(void)
 			fprintf(mob_db_fp, "DROP TABLE IF EXISTS `mob_db`;", RETCODE);
 			fprintf(mob_db_fp, "CREATE TABLE `%s` (" RETCODE, mob_db_db);
 			fprintf(mob_db_fp, "  `ID` mediumint(9) NOT NULL default '0'," RETCODE);
+			fprintf(mob_db_fp, "  `Sprite` text NOT NULL," RETCODE);
 			fprintf(mob_db_fp, "  `Name` text NOT NULL," RETCODE);
 			fprintf(mob_db_fp, "  `Name2` text NOT NULL," RETCODE);
 			fprintf(mob_db_fp, "  `LV` smallint(6) NOT NULL default '0'," RETCODE);
@@ -4571,7 +4572,7 @@ static int mob_readdb(void)
 //				db_sql_escape_string(mob_jname, actual_mob->jname, strlen(actual_mob->jname));
 				db_sql_escape_string(mob_jname, str[2], strlen(str[2]));
 				// create request
-				fprintf(mob_db_fp, "REPLACE INTO `%s` VALUES (%d, '%s', '%s', %d, %d, %d,"
+				fprintf(mob_db_fp, "REPLACE INTO `%s` VALUES (%d, '%s', '%s', '%s', %d, %d, %d,"
 				                                             " %d, %d,"
 				                                             " %d, %d, %d, %d, %d,"
 				                                             " %d, %d, %d, %d, %d, %d,"
@@ -4588,7 +4589,7 @@ static int mob_readdb(void)
 				                                             " %d, %d, %d, %d,"
 				                                             " %d, %d, %d, %d,"
 				                                             " %d, %d, %d, %d);" RETCODE,
-				                    mob_db_db, class, mob_name, mob_jname, actual_mob->lv, actual_mob->max_hp, actual_mob->max_sp,
+				                    mob_db_db, class, mob_name, mob_jname, mob_jname, actual_mob->lv, actual_mob->max_hp, actual_mob->max_sp,
 				                    atoi(str[7]), atoi(str[8]), // actual_mob->base_exp, actual_mob->job_exp: not modified
 				                    actual_mob->range, actual_mob->atk1, actual_mob->atk2, actual_mob->def, actual_mob->mdef,
 				                    actual_mob->str, actual_mob->agi, actual_mob->vit, actual_mob->int_, actual_mob->dex, actual_mob->luk,
