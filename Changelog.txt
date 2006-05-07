@@ -1,5 +1,8 @@
 // $Id$
 
+2006-05-07
+	* Fixed: critical bug with Pressure & Ice Wall causing server crash [akrus]
+
 2006-05-06
 	* Added: scripts/char_converter.php : TXT->MySQL converter written in
 		PHP. Read comments in the file for more details [MagicalTux]
