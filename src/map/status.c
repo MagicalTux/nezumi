@@ -3529,9 +3529,9 @@ int status_change_start(struct block_list *bl, int type, intptr_t val1, intptr_t
 			break;
 		case SC_QUAGMIRE:
 			calc_flag = 1;
-			if(sc_data[SC_CONCENTRATE].timer!=-1 )	/* 集中力向上解除 */
+			if(sc_data[SC_CONCENTRATE].timer!=-1 )
 				status_change_end(bl,SC_CONCENTRATE,-1);
-			if(sc_data[SC_INCREASEAGI].timer!=-1 )	/* 速度上昇解除 */
+			if(sc_data[SC_INCREASEAGI].timer!=-1 )
 				status_change_end(bl,SC_INCREASEAGI,-1);
 			if(sc_data[SC_TWOHANDQUICKEN].timer!=-1 )
 				status_change_end(bl,SC_TWOHANDQUICKEN,-1);
@@ -4017,18 +4017,18 @@ int status_change_start(struct block_list *bl, int type, intptr_t val1, intptr_t
 			*opt3 |= 1024;
 			break;
 
-		case SC_MELTDOWN:		/* メルトダウン */
-		case SC_CARTBOOST:		/* カートブースト */
-		case SC_TRUESIGHT:		/* トゥルーサイト */
-		case SC_SPIDERWEB:		/* スパイダーウェッブ */
+		case SC_MELTDOWN:
+		case SC_CARTBOOST:
+		case SC_TRUESIGHT:
+		case SC_SPIDERWEB:
 			calc_flag = 1;
 			break;
 
 		case SC_DOUBLECASTING:
 			break;
 
-		case SC_REJECTSWORD:	/* リジェクトソード */
-			val2 = 3; //3回攻撃を跳ね返す
+		case SC_REJECTSWORD:
+			val2 = 3;
 			val3 = 0; // Damage reflect state - [Aalye]
 			break;
 
@@ -4334,6 +4334,8 @@ int status_change_end(struct block_list* bl, int type, int tid)
 			case SC_GUILDAURA:
 				calc_flag = 1;
 				break;
+			case SC_EXTREMITYFIST:
+				calc_flag = 1;
 			case SC_AUTOBERSERK:
 				if (sc_data[SC_PROVOKE].timer != -1)
 					status_change_end(bl,SC_PROVOKE,-1);
@@ -4426,7 +4428,7 @@ int status_change_end(struct block_list* bl, int type, int tid)
 			  }
 				break;
 
-			case SC_MARIONETTE:		/* マリオネットコントロ?ル */
+			case SC_MARIONETTE:
 			case SC_MARIONETTE2:	/// Marionette target
 			  {
 				// check for partner and end their marionette status as well
@@ -4457,11 +4459,11 @@ int status_change_end(struct block_list* bl, int type, int tid)
 			break;
 
 		case SC_POISON:
-			if (sc_data[SC_DPOISON].timer != -1)	//
-				break;						// DPOISON用のオプション
-			*opt2 &= ~1;					// が専用に用意された場合には
-			opt_flag = 1;					// ここは削除する
-			break;							//
+			if (sc_data[SC_DPOISON].timer != -1)
+				break;
+			*opt2 &= ~1;
+			opt_flag = 1;
+			break;
 		case SC_CURSE:
 		case SC_SILENCE:
 		case SC_BLIND:
@@ -4469,9 +4471,9 @@ int status_change_end(struct block_list* bl, int type, int tid)
 			opt_flag = 1;
 			break;
 		case SC_DPOISON:
-			if (sc_data[SC_POISON].timer != -1)	// DPOISON用のオプションが
-				break;							// 用意されたら削除
-			*opt2 &= ~1;	// 毒状態解除
+			if (sc_data[SC_POISON].timer != -1)
+				break;
+			*opt2 &= ~1;
 			opt_flag = 1;
 			break;
 		case SC_SIGNUMCRUCIS:
@@ -4482,7 +4484,7 @@ int status_change_end(struct block_list* bl, int type, int tid)
 		case SC_HIDING:
 		case SC_CLOAKING:
 			*option &= ~((type == SC_HIDING) ? 2 : 4);
-			calc_flag = 1;	// orn
+			calc_flag = 1;
 			opt_flag = 1;
 			break;
 
@@ -4495,7 +4497,7 @@ int status_change_end(struct block_list* bl, int type, int tid)
 			*option &= ~1;
 			opt_flag = 1;
 			break;
-		case SC_WEDDING:	//結婚用(結婚衣裳になって歩くのが遅いとか)
+		case SC_WEDDING:
 			*option &= ~4096;
 			opt_flag = 1;
 			break;
@@ -4505,34 +4507,34 @@ int status_change_end(struct block_list* bl, int type, int tid)
 			break;
 
 		//opt3
-		case SC_TWOHANDQUICKEN:		/* 2HQ */
-		case SC_SPEARSQUICKEN:		/* スピアクイッケン */
-		case SC_CONCENTRATION:		/* コンセントレーション */
+		case SC_TWOHANDQUICKEN:
+		case SC_SPEARSQUICKEN:
+		case SC_CONCENTRATION:
 			*opt3 &= ~1;
 			break;
-		case SC_OVERTHRUST:			/* オーバースラスト */
+		case SC_OVERTHRUST:
 			*opt3 &= ~2;
 			break;
-		case SC_ENERGYCOAT:			/* エナジーコート */
+		case SC_ENERGYCOAT:
 			*opt3 &= ~4;
 			break;
 		case SC_EXPLOSIONSPIRITS:
 			*opt3 &= ~8;
 			break;
-		case SC_STEELBODY:			// 金剛
+		case SC_STEELBODY:
 			*opt3 &= ~16;
 			break;
-		case SC_BLADESTOP:		/* 白刃取り */
+		case SC_BLADESTOP:
 			*opt3 &= ~32;
 			break;
-		case SC_BERSERK:		/* バーサーク */
+		case SC_BERSERK:
 			*opt3 &= ~128;
 			break;
-		case SC_MARIONETTE:		/* マリオネットコントロール */
+		case SC_MARIONETTE:
 		case SC_MARIONETTE2:
 			*opt3 &= ~1024;
 			break;
-		case SC_ASSUMPTIO:		/* アスムプティオ */
+		case SC_ASSUMPTIO:
 			*opt3 &= ~2048;
 			break;
 		}
@@ -4541,7 +4543,7 @@ int status_change_end(struct block_list* bl, int type, int tid)
 			clif_changeoption(bl);
 
 		if (bl->type == BL_PC && calc_flag)
-			status_calc_pc((struct map_session_data *)bl, 0);	/* ステータス再計算 */
+			status_calc_pc((struct map_session_data *)bl, 0);
 	}
 
 	return 0;
@@ -4557,7 +4559,7 @@ TIMER_FUNC(status_change_timer) {
 	struct map_session_data *sd=NULL;
 	struct status_change *sc_data;
 
-	nullpo_retr(0, bl = map_id2bl(id)); //該当IDがすでに消滅しているというのはいかにもありそうなのでスルーしてみる
+	nullpo_retr(0, bl = map_id2bl(id));
 	nullpo_retr(0, sc_data = status_get_sc_data(bl));
 
 	if (bl->type == BL_PC)
@@ -4569,14 +4571,14 @@ TIMER_FUNC(status_change_timer) {
 		return 0;
 	}
 
-	switch(type) { /* 特殊な処理になる場合 */
-	case SC_MAXIMIZEPOWER: /* マキシマイズパワー */
-	case SC_CLOAKING: /* クローキング */
+	switch(type) {
+	case SC_MAXIMIZEPOWER:
+	case SC_CLOAKING:
 		if (sd) {
-			if (sd->status.sp > 0) {	/* SP切れるまで持続 */
+			if (sd->status.sp > 0) {
 				sd->status.sp--;
 				clif_updatestatus(sd, SP_SP);
-				sc_data[type].timer = add_timer(sc_data[type].val2 + tick, status_change_timer, bl->id, data);/* タイマー再設定 */
+				sc_data[type].timer = add_timer(sc_data[type].val2 + tick, status_change_timer, bl->id, data);
 				return 0;
 			}
 		}
@@ -4593,27 +4595,27 @@ TIMER_FUNC(status_change_timer) {
 					status_change_start(bl, SC_INCSTR, 1 << (sc_data[SC_CHASEWALK].val1-1), 0, 0, 0, 30000, 0);
 					status_calc_pc(sd, 0);
 				}
-				sc_data[type].timer = add_timer(sc_data[type].val2 + tick, status_change_timer, bl->id, data); /* タイマー再設定 */
+				sc_data[type].timer = add_timer(sc_data[type].val2 + tick, status_change_timer, bl->id, data);
 				return 0;
 			}
 		}
 		break;
 
-	case SC_HIDING: /* ハイディング */
-		if (sd) { /* SPがあって、時間制限の間は持続 */
+	case SC_HIDING:
+		if (sd) {
 			if (sd->status.sp > 0 && (--sc_data[type].val2) > 0) {
 				if(sc_data[type].val2 % (sc_data[type].val1 + 3) == 0) {
 					sd->status.sp--;
 					clif_updatestatus(sd, SP_SP);
 				}
-				sc_data[type].timer = add_timer(1000 + tick, status_change_timer, bl->id, data); /* タイマー再設定 */
+				sc_data[type].timer = add_timer(1000 + tick, status_change_timer, bl->id, data);
 				return 0;
 			}
 		}
 		break;
 
-	case SC_SIGHT: /* サイト */
-	case SC_RUWACH: /* ルアフ */
+	case SC_SIGHT:
+	case SC_RUWACH:
 	  {
 		int range = battle_config.ruwach_range;
 		if (type == SC_SIGHT)
@@ -4621,13 +4623,13 @@ TIMER_FUNC(status_change_timer) {
 		map_foreachinarea(status_change_timer_sub, bl->m, bl->x - range, bl->y - range, bl->x + range, bl->y + range, 0, bl, type, tick);
 
 		if ((--sc_data[type].val2) > 0) {
-			sc_data[type].timer = add_timer(250 + tick, status_change_timer, bl->id, data); /* タイマー再設定 */
+			sc_data[type].timer = add_timer(250 + tick, status_change_timer, bl->id, data);
 			return 0;
 		}
 	  }
 		break;
 
-	case SC_SIGNUMCRUCIS:		/* シグナムクルシス */
+	case SC_SIGNUMCRUCIS:
 	  {
 		int race = status_get_race(bl);
 		if (race == 6 || battle_check_undead(race, status_get_elem_type(bl))) {
@@ -4637,16 +4639,16 @@ TIMER_FUNC(status_change_timer) {
 	  }
 		break;
 
-	case SC_PROVOKE:	/* プロボック/オートバーサーク */
-		if (sc_data[type].val2 != 0) { /* オートバーサーク（１秒ごとにHPチェック） */
-			if (sd && sd->status.hp > sd->status.max_hp >> 2) /* 停止 */
+	case SC_PROVOKE:
+		if (sc_data[type].val2 != 0) {
+			if (sd && sd->status.hp > sd->status.max_hp >> 2)
 				break;
 			sc_data[type].timer = add_timer(1000 + tick, status_change_timer, bl->id, data);
 			return 0;
 		}
 		break;
 
-	case SC_ENDURE:	/* インデュア */
+	case SC_ENDURE:
 	case SC_AUTOBERSERK:
 		if (sd && sd->special_state.infinite_endure) {
 			sc_data[type].timer = add_timer(1000 * 60 + tick, status_change_timer, bl->id, data);
@@ -4655,7 +4657,7 @@ TIMER_FUNC(status_change_timer) {
 		}
 		break;
 
-	case SC_DISSONANCE:	/* 不協和音 */
+	case SC_DISSONANCE:
 		if ((--sc_data[type].val2) > 0) {
 			struct skill_unit *unit = (struct skill_unit *)sc_data[type].val4;
 			struct block_list *src;
@@ -4672,7 +4674,7 @@ TIMER_FUNC(status_change_timer) {
 		}
 		break;
 
-	case SC_LULLABY:	/* 子守唄 */
+	case SC_LULLABY:
 		if ((--sc_data[type].val2) > 0) {
 			struct skill_unit *unit= (struct skill_unit *)sc_data[type].val4;
 			if (!unit || !unit->group)
@@ -4812,32 +4814,32 @@ TIMER_FUNC(status_change_timer) {
 			if(sd){
 				if(sd->status.sp > 0 && (--sc_data[type].val3)>0){
 					switch(sc_data[type].val1){
-					case BD_RICHMANKIM:				/* ニヨルドの宴 3秒にSP1 */
-					case BD_DRUMBATTLEFIELD:		/* 戦太鼓の響き 3秒にSP1 */
-					case BD_RINGNIBELUNGEN:			/* ニーベルングの指輪 3秒にSP1 */
-					case BD_SIEGFRIED:				/* 不死身のジークフリード 3秒にSP1 */
-					case BA_DISSONANCE:				/* 不協和音 3秒でSP1 */
-					case BA_ASSASSINCROSS:			/* 夕陽のアサシンクロス 3秒でSP1 */
-					case DC_UGLYDANCE:				/* 自分勝手なダンス 3秒でSP1 */
+					case BD_RICHMANKIM:
+					case BD_DRUMBATTLEFIELD:
+					case BD_RINGNIBELUNGEN:
+					case BD_SIEGFRIED:
+					case BA_DISSONANCE:	
+					case BA_ASSASSINCROSS:
+					case DC_UGLYDANCE:
 						s=3;
 						break;
-					case BD_LULLABY:				/* 子守歌 4秒にSP1 */
-					case BD_ETERNALCHAOS:			/* 永遠の混沌 4秒にSP1 */
-					case BD_ROKISWEIL:				/* ロキの叫び 4秒にSP1 */
-					case DC_FORTUNEKISS:			/* 幸運のキス 4秒でSP1 */
+					case BD_LULLABY:
+					case BD_ETERNALCHAOS:
+					case BD_ROKISWEIL:
+					case DC_FORTUNEKISS:
 						s=4;
 						break;
-					case BD_INTOABYSS:				/* 深淵の中に 5秒にSP1 */
-					case BA_WHISTLE:				/* 口笛 5秒でSP1 */
-					case DC_HUMMING:				/* ハミング 5秒でSP1 */
-					case BA_POEMBRAGI:				/* ブラギの詩 5秒でSP1 */
-					case DC_SERVICEFORYOU:			/* サービスフォーユー 5秒でSP1 */
+					case BD_INTOABYSS:
+					case BA_WHISTLE:
+					case DC_HUMMING:
+					case BA_POEMBRAGI:
+					case DC_SERVICEFORYOU:
 						s = 5;
 						break;
-					case BA_APPLEIDUN: /* イドゥンの林檎 6秒でSP1 */
+					case BA_APPLEIDUN:
 						s = 6;
 						break;
-					case DC_DONTFORGETME: /* 私を忘れないで… 10秒でSP1 */
+					case DC_DONTFORGETME: 
 					case CG_MOONLIT:
 						s = 10;
 						break;
@@ -4850,7 +4852,7 @@ TIMER_FUNC(status_change_timer) {
 							sd->status.sp--;
 						clif_updatestatus(sd, SP_SP);
 					}
-					sc_data[type].timer = add_timer(1000 + tick, status_change_timer, bl->id, data); /* タイマー再設定 */
+					sc_data[type].timer = add_timer(1000 + tick, status_change_timer, bl->id, data); 
 					return 0;
 				}
 			}
@@ -4861,7 +4863,7 @@ TIMER_FUNC(status_change_timer) {
 			if ((sd->status.hp - sd->status.max_hp * 5 / 100) > 100 ) { // 5% every 10 seconds [DracoRPG]
 				sd->status.hp -= sd->status.max_hp * 5 / 100; // changed to max hp [celest]
 				clif_updatestatus(sd, SP_HP);
-				sc_data[type].timer = add_timer(10000 + tick, status_change_timer, bl->id, data); /* タイマー再設定 */
+				sc_data[type].timer = add_timer(10000 + tick, status_change_timer, bl->id, data); 
 				return 0;
 			}
 		}
@@ -4869,8 +4871,8 @@ TIMER_FUNC(status_change_timer) {
 	case SC_WEDDING:
 		if (sd) {
 			time_t timer;
-			if (time(&timer) < ((sc_data[type].val2) + 3600)) { //1時間たっていないので継続
-				sc_data[type].timer = add_timer(10000 + tick, status_change_timer, bl->id, data); /* タイマー再設定 */
+			if (time(&timer) < ((sc_data[type].val2) + 3600)) { 
+				sc_data[type].timer = add_timer(10000 + tick, status_change_timer, bl->id, data); 
 				return 0;
 			}
 		}

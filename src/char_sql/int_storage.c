@@ -16,6 +16,7 @@
 
 #include "int_pet.h"
 #include "int_guild.h"
+#include <mmo.h>
 #include "char.h"
 
 #ifdef TXT_ONLY

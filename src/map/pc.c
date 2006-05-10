@@ -780,7 +780,7 @@ void pc_authok_final_step(int id, time_t connect_until_time) { // 0x2b26 <accoun
 	sd->pet_hungry_timer = -1;
 //	memset(&sd->pet, 0, sizeof(struct s_pet));
 
-	// ステータス異常の初期化
+	// 
 	for(i = 0; i < MAX_STATUSCHANGE; i++) {
 		sd->sc_data[i].timer = -1;
 //		sd->sc_data[i].val1 = sd->sc_data[i].val2 = sd->sc_data[i].val3 = sd->sc_data[i].val4 = 0;
@@ -2169,6 +2169,10 @@ int pc_bonus(struct map_session_data *sd, int type, int val) {
 			sd->unequip_damage_sp += val;
 		}
 		break;
+	case SP_INTRAVISION:
+		if(sd->state.lr_flag != 2)
+            sd->special_state.intravision = 1;
+        break;
 	default:
 		if (battle_config.error_log)
 			printf("pc_bonus: unknown type %d %d !\n", type, val);
@@ -2456,7 +2460,8 @@ int pc_bonus2(struct map_session_data *sd, int type, int type2, int val) {
 
 	case SP_ADD_MONSTER_DROP_ITEM:
 		if (sd->state.lr_flag != 2) {
-			for(i = 0; i < sd->monster_drop_item_count; i++) {
+			for(i = 0; i < sd->monster_drop_item_count; i++) 
+			{
 				if(sd->monster_drop_itemid[i] == type2) {
 					sd->monster_drop_race[i] |= (1<<10)|(1<<11);
 					if(sd->monster_drop_itemrate[i] < val)
@@ -2487,16 +2492,21 @@ int pc_bonus3(struct map_session_data *sd, int type, int type2, int type3, int v
 	int i;
 	switch(type) {
 	case SP_ADD_MONSTER_DROP_ITEM:
-		if (sd->state.lr_flag != 2) {
-			for(i = 0; i < sd->monster_drop_item_count; i++) {
-				if (sd->monster_drop_itemid[i] == type2) {
+		if (sd->state.lr_flag != 2)
+		{
+			for(i = 0; i < sd->monster_drop_item_count; i++) 
+			{
+				if (sd->monster_drop_itemid[i] == type2) 
+				{
 					sd->monster_drop_race[i] |= 1 << type3;
 					if (sd->monster_drop_itemrate[i] < val)
 						sd->monster_drop_itemrate[i] = val;
 					break;
+					printf("SP_ADD_MONSTER_DROP_ITEM %d %d %d %d\n", type, type2, type3, val);
 				}
 			}
-			if (i >= sd->monster_drop_item_count && sd->monster_drop_item_count < MAX_PC_BONUS) {
+			if (i >= sd->monster_drop_item_count && sd->monster_drop_item_count < MAX_PC_BONUS)
+			{
 				sd->monster_drop_itemid[sd->monster_drop_item_count] = type2;
 				sd->monster_drop_race[sd->monster_drop_item_count] |= 1 << type3;
 				sd->monster_drop_itemrate[sd->monster_drop_item_count] = val;
@@ -6473,7 +6483,7 @@ int pc_changelook(struct map_session_data *sd,int type,int val)
 }
 
 /*==========================================
- * 付属品(鷹,ペコ,カート)設定
+ * 
  *------------------------------------------
  */
 void pc_setoption(struct map_session_data *sd, short type)
@@ -6488,7 +6498,7 @@ void pc_setoption(struct map_session_data *sd, short type)
 }
 
 /*==========================================
- * カート設定
+ * 
  *------------------------------------------
  */
 void pc_setcart(struct map_session_data *sd, unsigned short type) {

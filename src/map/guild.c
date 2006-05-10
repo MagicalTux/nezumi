@@ -386,7 +386,6 @@ int guild_request_info(int guild_id)
 	return intif_guild_request_info(guild_id);
 }
 
-// イベント付き情報要求
 int guild_npc_request_info(int guild_id,const char *event)
 {
 	struct eventlist *ev;
@@ -419,7 +418,7 @@ int guild_check_member(const struct guild *g)
 		if (session[i] && (sd = session[i]->session_data) && sd->state.auth) {
 			if (sd->status.guild_id == g->guild_id) {
 				int j;
-				for(j = 0; j < MAX_GUILD; j++) { // データがあるか
+				for(j = 0; j < MAX_GUILD; j++) {
 					// just check char_id (char_id is unique)
 					if (g->member[j].char_id == sd->status.char_id)
 						break;

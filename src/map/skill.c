@@ -967,8 +967,7 @@ int skill_additional_effect(struct block_list* src, struct block_list *bl, int s
 	case CH_TIGERFIST:
 		if(rand()%100 < (10 + skilllv*10) * sc_def_vit / 100)
 		{
-			int sec = skill_get_time2(skillid,skilllv) - status_get_agi(bl) / 10;
-			status_change_start(bl,SC_ANKLE,skilllv,0,0,0,sec,0);
+			status_change_start(bl,SC_STAN,skilllv,0,0,0,skill_get_time2(skillid,skilllv),0);
 		}
 		break;
 
@@ -1061,13 +1060,13 @@ int skill_additional_effect(struct block_list* src, struct block_list *bl, int s
 				if (!sd->state.arrow_atk) {
 					if (rand() % 10000 < (sd->addeff[i - SC_STONE]) * sc_def_card / 100) {
 						if (battle_config.battle_log)
-							printf("PC %d skill_addeff: %d %d\n", sd->bl.id, i, sd->addeff[i - SC_STONE]);
+							printf("PC %d skill_addeff: card, effect %d %d\n", sd->bl.id, i, sd->addeff[i - SC_STONE]);
 						status_change_start(bl, i, 7, 0, 0, 0, (i == SC_CONFUSION) ? 10000 + 7000 : skill_get_time2(sc2[i - SC_STONE], 7), 0);
 					}
 				} else {
 					if (rand() % 10000 < (sd->addeff[i - SC_STONE] + sd->arrow_addeff[i - SC_STONE]) * sc_def_card / 100) {
 						if (battle_config.battle_log)
-							printf("PC %d skill_addeff: %d %d\n", sd->bl.id, i, sd->addeff[i - SC_STONE]);
+							printf("PC %d skill_addeff: card,effect %d %d\n", sd->bl.id, i, sd->addeff[i - SC_STONE]);
 						status_change_start(bl, i, 7, 0, 0, 0, (i == SC_CONFUSION) ? 10000 + 7000 : skill_get_time2(sc2[i - SC_STONE], 7), 0);
 					}
 				}
@@ -1258,6 +1257,8 @@ int skill_attack(int attack_type, struct block_list* src, struct block_list *dsr
 
 	rdamage = 0;
 
+	sc_data = status_get_sc_data(bl);
+
 	if(dsrc->m != bl->m)
 		return 0;
 	if(src->prev == NULL || dsrc->prev == NULL || bl->prev == NULL)
@@ -1270,8 +1271,6 @@ int skill_attack(int attack_type, struct block_list* src, struct block_list *dsr
 		return 0;
 	if(src->type == BL_PC && skillnotok(skillid, (struct map_session_data *)src))
 		return 0;
-
-	sc_data = status_get_sc_data(bl);	// get target's status data
 
 	if(sc_data)
 	{

@@ -5,12 +5,10 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdint.h>
+#include <mmo.h>
 
 #include "char.h"
 #include "int_storage.h"
-
-#include <mmo.h>
-
 #include "int_pet.h"
 #include "int_guild.h"
 #include "../common/socket.h"
@@ -18,7 +16,7 @@
 #include "../common/malloc.h"
 #include "../common/utils.h"
 
-// ファイル名のデフォルト
+
 #ifdef TXT_ONLY
 char storage_txt[1024] = "save/storage.txt";
 #endif /* TXT_ONLY */

@@ -270,11 +270,7 @@ int mapif_parse_DeletePet(int fd) {
 	return 0;
 }
 
-// map server からの通信
-// ・１パケットのみ解析すること
-// ・パケット長データはinter.cにセットしておくこと
-// ・パケット長チェックや、RFIFOSKIPは呼び出し元で行われるので行ってはならない
-// ・エラーなら0(false)、そうでないなら1(true)をかえさなければならない
+// map server
 int inter_pet_parse_frommap(int fd) {
 	switch(RFIFOW(fd,0)) {
 	case 0x3080: mapif_parse_CreatePet(fd); return 1;

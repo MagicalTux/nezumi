@@ -246,10 +246,11 @@ void party_invite(struct map_session_data *sd, int account_id)
 		clif_party_inviteack(sd, tsd->status.name, 0);
 		return;
 	}
-
-	for(i = 0; i < MAX_PARTY; i++) {
-		if (p->member[i].account_id == account_id && strncmp(p->member[i].name, tsd->status.name, 24) == 0) {
-			clif_party_inviteack(sd, tsd->status.name, 0); // 0: the player is already in other party, 1: invitation was denied, 2: success to invite
+	for(i = 0; i < MAX_PARTY; i++)
+	{
+		if(p->member[i].account_id == account_id && strncmp(p->member[i].name, tsd->status.name, 24) == 0)
+		{
+			clif_party_inviteack(sd, tsd->status.name, 0);
 			return;
 		}
 	}
@@ -284,8 +285,10 @@ int party_member_added(int party_id, int account_id, int flag)
 {
 	struct map_session_data *sd = map_id2sd(account_id), *sd2;
 
-	if (sd == NULL) {
-		if (flag == 0) {
+	if(sd == NULL)
+	{
+		if(flag == 0)
+		{
 			if (battle_config.error_log)
 				printf("party: member added error %d is not online\n", account_id);
 			intif_party_leave(party_id, account_id);
@@ -324,14 +327,14 @@ void party_removemember(struct map_session_data *sd, int account_id, char *name)
 	if ((p = party_search(sd->status.party_id)) == NULL)
 		return;
 
-	for(i = 0; i < MAX_PARTY; i++) {
+	for(i = 0; i < MAX_PARTY; i++) { // リーダーかどうかチェック
 		if (p->member[i].account_id == sd->status.account_id &&
 		    strncmp(p->member[i].name, sd->status.name, 24) == 0)
 			if (p->member[i].leader == 0)
 				return;
 	}
 
-	for(i = 0; i < MAX_PARTY; i++) {
+	for(i = 0; i < MAX_PARTY; i++) { // 所属しているか調べる
 		if (p->member[i].account_id == account_id &&
 		    strncmp(p->member[i].name, name, 24) == 0){
 			intif_party_leave(p->party_id, account_id);
@@ -351,7 +354,7 @@ void party_leave(struct map_session_data *sd) {
 	if ((p = party_search(sd->status.party_id)) == NULL )
 		return;
 
-	for(i = 0; i < MAX_PARTY; i++) {
+	for(i = 0; i < MAX_PARTY; i++) { // 所属しているか
 		if (p->member[i].account_id == sd->status.account_id &&
 		    strncmp(p->member[i].name, sd->status.name, 24) == 0) {
 			intif_party_leave(p->party_id, sd->status.account_id);

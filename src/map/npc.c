@@ -906,9 +906,7 @@ void npc_click(struct map_session_data *sd, int id)
 {
 	struct npc_data *nd;
 
-	// nullpo_retr(1, sd);
-
-	if(sd->trade_partner != 0)		// player can't use npc:s while trading
+	if (sd->trade_partner != 0) // if player in trade, he can not click on a NPC
 		return;
 
 	// todo: maybe add chat check here ? [Harbin]

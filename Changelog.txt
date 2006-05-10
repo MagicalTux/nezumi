@@ -1,5 +1,9 @@
 // $Id$
 
+2006-05-10
+    * Added: bIntravision for [zug]
+	* cleaned: some japanese comments [zug]
+	
 2006-05-07
 	* Fixed: critical bug with Pressure & Ice Wall causing server crash [akrus]
 
