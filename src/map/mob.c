@@ -4305,7 +4305,7 @@ static int mob_readdb(void)
 			printf("Generating the '" CL_WHITE MOB_DB_SQL_NAME CL_RESET "' file.\n");
 			fprintf(mob_db_fp, "# You can regenerate this file with an option in inter_athena.conf" RETCODE);
 			fprintf(mob_db_fp, RETCODE);
-			fprintf(mob_db_fp, "DROP TABLE IF EXISTS `mob_db`;", RETCODE);
+			fprintf(mob_db_fp, "DROP TABLE IF EXISTS `mob_db`;" RETCODE);
 			fprintf(mob_db_fp, "CREATE TABLE `%s` (" RETCODE, mob_db_db);
 			fprintf(mob_db_fp, "  `ID` mediumint(9) NOT NULL default '0'," RETCODE);
 			fprintf(mob_db_fp, "  `Sprite` text NOT NULL," RETCODE);
@@ -4363,16 +4363,6 @@ static int mob_readdb(void)
 			fprintf(mob_db_fp, "  `Drop8per` mediumint(9) NOT NULL default '0'," RETCODE);
 			fprintf(mob_db_fp, "  `Drop9id` mediumint(9) NOT NULL default '0'," RETCODE);
 			fprintf(mob_db_fp, "  `Drop9per` mediumint(9) NOT NULL default '0'," RETCODE);
-			fprintf(mob_db_fp, "  `Drop10id` smallint(9) unsigned NOT NULL default '0'," RETCODE);
-			fprintf(mob_db_fp, "  `Drop10per` smallint(9) unsigned NOT NULL default '0'," RETCODE);
-			fprintf(mob_db_fp, "  `Drop11id` smallint(9) unsigned NOT NULL default '0'," RETCODE);
-			fprintf(mob_db_fp, "  `Drop11per` smallint(9) unsigned NOT NULL default '0'," RETCODE);
-			fprintf(mob_db_fp, "  `Drop12id` smallint(9) unsigned NOT NULL default '0'," RETCODE);
-			fprintf(mob_db_fp, "  `Drop12per` smallint(9) unsigned NOT NULL default '0'," RETCODE);
-			fprintf(mob_db_fp, "  `Drop13id` smallint(9) unsigned NOT NULL default '0'," RETCODE);
-			fprintf(mob_db_fp, "  `Drop13per` smallint(9) unsigned NOT NULL default '0'," RETCODE);
-			fprintf(mob_db_fp, "  `Drop14id` smallint(9) unsigned NOT NULL default '0'," RETCODE);
-			fprintf(mob_db_fp, "  `Drop14per` smallint(9) unsigned NOT NULL default '0'," RETCODE);
 			fprintf(mob_db_fp, "  `DropCardid` mediumint(9) NOT NULL default '0'," RETCODE);
 			fprintf(mob_db_fp, "  `DropCardper` mediumint(9) NOT NULL default '0'," RETCODE);
 			fprintf(mob_db_fp, ") TYPE = MyISAM;" RETCODE);
@@ -4429,17 +4419,17 @@ static int mob_readdb(void)
 			while(line[0] != '\0' && (line[(j = strlen(line) - 1)] == '\n' || line[j] == '\r'))
 				line[j] = '\0';
 
-			for(j = 0, p = line; j < 38+2*MAX_MOB_DROP; j++) {
+			for(j = 0, p = line; j < 39+2*MAX_MOB_DROP; j++) {
 				if ((np = strchr(p, ',')) != NULL) {
 					str[j] = p;
 					*np = 0;
 					p = np + 1;
-					if (j == 38+2*MAX_MOB_DROP) {
+					if (j == 39+2*MAX_MOB_DROP) {
 						printf(CL_YELLOW "WARNING: Invalid monster line (more datas than necessary)" CL_RESET ": %s\n", line);
 					}
 				} else {
 					str[j] = p;
-					if (j < 38+2*MAX_MOB_DROP) {
+					if (j < 39+2*MAX_MOB_DROP) {
 						printf(CL_YELLOW "WARNING: Invalid monster line (less datas than necessary: %d instead of 56)" CL_RESET ": %s\n", j, line);
 					}
 				}
@@ -4585,9 +4575,6 @@ static int mob_readdb(void)
 				                                             " %d, %d, %d, %d,"
 				                                             " %d, %d, %d, %d,"
 				                                             " %d, %d, %d, %d,"
-				                                             " %d, %d, %d, %d,"
-				                                             " %d, %d, %d, %d,"
-				                                             " %d, %d, %d, %d,"
 				                                             " %d, %d, %d, %d);" RETCODE,
 				                    mob_db_db, class, mob_name, mob_jname, mob_jname, actual_mob->lv, actual_mob->max_hp, actual_mob->max_sp,
 				                    atoi(str[7]), atoi(str[8]), // actual_mob->base_exp, actual_mob->job_exp: not modified
@@ -4602,10 +4589,7 @@ static int mob_readdb(void)
 				                    actual_mob->dropitem[2].nameid, actual_mob->dropitem[2].p, actual_mob->dropitem[3].nameid, actual_mob->dropitem[3].p,
 				                    actual_mob->dropitem[4].nameid, actual_mob->dropitem[4].p, actual_mob->dropitem[5].nameid, actual_mob->dropitem[5].p,
 				                    actual_mob->dropitem[6].nameid, actual_mob->dropitem[6].p, actual_mob->dropitem[7].nameid, actual_mob->dropitem[7].p,
-				                    actual_mob->dropitem[8].nameid, actual_mob->dropitem[8].p, actual_mob->dropitem[9].nameid, actual_mob->dropitem[9].p,
-				                    actual_mob->dropitem[10].nameid, actual_mob->dropitem[10].p, actual_mob->dropitem[11].nameid, actual_mob->dropitem[11].p,
-				                    actual_mob->dropitem[12].nameid, actual_mob->dropitem[12].p, actual_mob->dropitem[13].nameid, actual_mob->dropitem[13].p,
-				                    actual_mob->dropitem[14].nameid, actual_mob->dropitem[14].p, actual_mob->dropitem[15].nameid, actual_mob->dropitem[15].p );
+				                    actual_mob->dropitem[8].nameid, actual_mob->dropitem[8].p, actual_mob->dropitem[9].nameid, actual_mob->dropitem[9].p );
 			}
 #endif /* USE_SQL */
 
@@ -5026,7 +5010,7 @@ static int mob_read_sqldb(void)
 
 	sql_request("SELECT * FROM `%s`", mob_db_db);
 	while(sql_get_row()) {
-		sprintf(line, "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s",
+		sprintf(line, "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s",
 		             sql_get_string( 0), sql_get_string( 1), sql_get_string( 2), sql_get_string( 3), sql_get_string( 4),
 		             sql_get_string( 5), sql_get_string( 6), sql_get_string( 7), sql_get_string( 8), sql_get_string( 9),
 		             sql_get_string(10), sql_get_string(11), sql_get_string(12), sql_get_string(13), sql_get_string(14),
@@ -5038,9 +5022,9 @@ static int mob_read_sqldb(void)
 		             sql_get_string(40), sql_get_string(41), sql_get_string(42), sql_get_string(43), sql_get_string(44),
 		             sql_get_string(45), sql_get_string(46), sql_get_string(47), sql_get_string(48), sql_get_string(49),
 		             sql_get_string(50), sql_get_string(51), sql_get_string(52), sql_get_string(53), sql_get_string(54),
-		             sql_get_string(55), sql_get_string(56));
+		             sql_get_string(55), sql_get_string(56), sql_get_string(57), sql_get_string(58));
 
-		for(i = 0, p = line; i < 57; i++) {
+		for(i = 0, p = line; i < 59; i++) {
 			if ((np = strchr(p, ',')) != NULL) {
 				str[i] = p;
 				*np = 0;
@@ -5062,11 +5046,11 @@ static int mob_read_sqldb(void)
 		mob_db[class].view_class = class;
 		strncpy(mob_db[class].name, str[1], 24);
 		strncpy(mob_db[class].jname, str[2], 24);
-		mob_db[class].lv = atoi(str[3]);
-		mob_db[class].max_hp = atoi(str[4]);
-		mob_db[class].max_sp = atoi(str[5]);
+		mob_db[class].lv = atoi(str[4]);
+		mob_db[class].max_hp = atoi(str[5]);
+		mob_db[class].max_sp = atoi(str[6]);
 
-		mob_db[class].base_exp = atoi(str[6]);
+		mob_db[class].base_exp = atoi(str[7]);
 		if (mob_db[class].base_exp <= 0)
 			mob_db[class].base_exp = 0;
 		else {
@@ -5080,7 +5064,7 @@ static int mob_read_sqldb(void)
 			}
 		}
 
-		mob_db[class].job_exp = atoi(str[7]);
+		mob_db[class].job_exp = atoi(str[8]);
 		if (mob_db[class].job_exp <= 0)
 			mob_db[class].job_exp = 0;
 		else {
@@ -5094,62 +5078,41 @@ static int mob_read_sqldb(void)
 			}
 		}
 
-		mob_db[class].range = atoi(str[8]);
-		mob_db[class].atk1 = atoi(str[9]);
-		mob_db[class].atk2 = atoi(str[10]);
-		mob_db[class].def = atoi(str[11]);
-		mob_db[class].mdef = atoi(str[12]);
-		mob_db[class].str = atoi(str[13]);
-		mob_db[class].agi = atoi(str[14]);
-		mob_db[class].vit = atoi(str[15]);
-		mob_db[class].int_ = atoi(str[16]);
-		mob_db[class].dex = atoi(str[17]);
-		mob_db[class].luk = atoi(str[18]);
-		mob_db[class].range2 = atoi(str[19]);
-		mob_db[class].range3 = atoi(str[20]);
-		mob_db[class].size = atoi(str[21]);
-		mob_db[class].race = atoi(str[22]);
-		mob_db[class].element = atoi(str[23]);
-		mob_db[class].mode = atoi(str[24]);
-		mob_db[class].speed = atoi(str[25]);
-		mob_db[class].adelay = atoi(str[26]);
-		mob_db[class].amotion = atoi(str[27]);
-		mob_db[class].dmotion = atoi(str[28]);
+		mob_db[class].range = atoi(str[9]);
+		mob_db[class].atk1 = atoi(str[10]);
+		mob_db[class].atk2 = atoi(str[11]);
+		mob_db[class].def = atoi(str[12]);
+		mob_db[class].mdef = atoi(str[13]);
+		mob_db[class].str = atoi(str[14]);
+		mob_db[class].agi = atoi(str[15]);
+		mob_db[class].vit = atoi(str[16]);
+		mob_db[class].int_ = atoi(str[17]);
+		mob_db[class].dex = atoi(str[18]);
+		mob_db[class].luk = atoi(str[19]);
+		mob_db[class].range2 = atoi(str[20]);
+		mob_db[class].range3 = atoi(str[21]);
+		mob_db[class].size = atoi(str[22]);
+		mob_db[class].race = atoi(str[23]);
+		mob_db[class].element = atoi(str[24]);
+		mob_db[class].mode = atoi(str[25]);
+		mob_db[class].speed = atoi(str[26]);
+		mob_db[class].adelay = atoi(str[27]);
+		mob_db[class].amotion = atoi(str[28]);
+		mob_db[class].dmotion = atoi(str[29]);
 
-		for(i = 0; i < 10; i++) {
-			int nameid, percent;
-			nameid = atoi(str[29+i*2]);
-			if (nameid == 0) // nameid = 0, it's for no item
-				continue;
-			else if (nameid < 0 || itemdb_search(nameid) == NULL)
-				printf("drop item error: unknown item id %d (%d: %s).\n", nameid, class, mob_db[class].name);
-			else if (atoi(str[30+i*2]) > 0) { // nameid > 0 &&
-				mob_db[class].dropitem[i].nameid = nameid;
-				percent = atoi(str[30+i*2]);
-				if (percent < 0) {
-					printf("drop item error: item id %d, invalid percent: %d -> 0 (%d: %s).\n", nameid, percent, class, mob_db[class].name);
-					percent = 0;
-				} else if (percent > 10000) { // 100%
-					printf("drop item warning: item id %d, too big percent: %d -> 10000 (%d: %s).\n", nameid, percent, class, mob_db[class].name);
-					percent = 10000;
-				}
-				mob_db[class].dropitem[i].p = percent;
-			}
-		}
-
-		mob_db[class].mexp = atoi(str[49]) * battle_config.mvp_exp_rate / 100;
-		mob_db[class].mexpper = atoi(str[50]);
+		mob_db[class].mexp = atoi(str[30]) * battle_config.mvp_exp_rate / 100;
+		mob_db[class].mexpper = atoi(str[31]);
 
 		for(i = 0; i < 3; i++) {
 			int nameid, percent;
-			nameid = atoi(str[51+i*2]);
+			nameid = atoi(str[32+i*2]);
 			if (nameid == 0) // nameid = 0, it's for no item
 				continue;
 			else if (nameid < 0 || itemdb_search(nameid) == NULL)
 				printf("mvp item error: unknown item id %d (%d: %s).\n", nameid, class, mob_db[class].name);
-			else if (atoi(str[52+i*2]) > 0) { // nameid > 0 &&
+			else if (atoi(str[33+i*2]) > 0) { // nameid > 0 &&
 				mob_db[class].mvpitem[i].nameid = nameid;
-				percent = atoi(str[52+i*2]);
+				percent = atoi(str[33+i*2]);
 				if (percent < 0) {
 					printf("mvp item error: item id %d, invalid percent: %d -> 0 (%d: %s).\n", nameid, percent, class, mob_db[class].name);
 					percent = 0;
@@ -5158,6 +5121,28 @@ static int mob_read_sqldb(void)
 					percent = 10000;
 				}
 				mob_db[class].mvpitem[i].p = percent;
+			}
+		}
+
+
+		for(i = 0; i < MAX_MOB_DROP; i++) {
+			int nameid, percent;
+			nameid = atoi(str[38+i*2]);
+			if (nameid == 0) // nameid = 0, it's for no item
+				continue;
+			else if (nameid < 0 || itemdb_search(nameid) == NULL)
+				printf("drop item error: unknown item id %d (%d: %s).\n", nameid, class, mob_db[class].name);
+			else if (atoi(str[39+i*2]) > 0) { // nameid > 0 &&
+				mob_db[class].dropitem[i].nameid = nameid;
+				percent = atoi(str[39+i*2]);
+				if (percent < 0) {
+					printf("drop item error: item id %d, invalid percent: %d -> 0 (%d: %s).\n", nameid, percent, class, mob_db[class].name);
+					percent = 0;
+				} else if (percent > 10000) { // 100%
+					printf("drop item warning: item id %d, too big percent: %d -> 10000 (%d: %s).\n", nameid, percent, class, mob_db[class].name);
+					percent = 10000;
+				}
+				mob_db[class].dropitem[i].p = percent;
 			}
 		}
 
