@@ -3373,41 +3373,52 @@ void pc_item_identify(struct map_session_data *sd, short idx) { // S 0178 <index
 }
 
 /*==========================================
- * Weapon Repair [Celest]
+ * Weapon Repair [Celest/Zug]
  *------------------------------------------
  */
-void pc_item_repair(struct map_session_data *sd, short idx) {
+void pc_item_repair(struct map_session_data *sd, int idx) {
 	int material;
 	int materials[5] = { 0, 1002, 998, 999, 756 };
 	struct item *item;
+	struct map_session_data *tsd;
 
-//	nullpo_retv(sd); // checked before to call function
+	//nullpo_retv(sd); // checked before to call function
 
-//	if (idx >= 0 && idx < MAX_INVENTORY) { // checked before to call function
-		item = &sd->status.inventory[idx];
-		if (item->nameid > 0 && item->attribute == 1) {
-			if (itemdb_type(item->nameid) == 4)
-				material = materials[(int)itemdb_wlv(item->nameid)];
-			else
-				material = materials[3];
+	tsd = map_id2sd(sd->skilltarget);
+	
+	if (!tsd) //no target, or cancelled
+		return;
+	if (idx==0xFFFF) 
+		return;
+	if (idx < 0 || idx >= MAX_INVENTORY) // invalid range
+		return;
 
-			if (pc_search_inventory(sd, material) < 0) { // fixed by Lupus (item pos can be = 0!)
-				clif_skill_fail(sd, sd->skillid, 0, 0);
-				return;
-			}
-			item->attribute = 0;
-			//Temporary Weapon Repair code [DracoRPG]
-			pc_delitem(sd, pc_search_inventory(sd, material), 1, 0);
-			clif_equiplist(sd);
-			clif_produceeffect(sd, 0, item->nameid);
-			clif_misceffect(&sd->bl, 3);
-			clif_displaymessage(sd->fd, msg_txt(530)); // Item has been repaired.
+	item = &tsd->status.inventory[idx];
+
+	if(item->nameid <= 0 || item->attribute == 0)
+		return;
+	//need to check range too
+	
+	if (itemdb_type(item->nameid) == 4)
+			material = materials[(int)itemdb_wlv(item->nameid)];
+		else
+			material = materials[3];
+
+	if (pc_search_inventory(sd, material) < 0) { // fixed by Lupus (item pos can be = 0!)
+			clif_skill_fail(sd, sd->skillid, 0, 0);
+			return;
 		}
-//	}
+
+	item->attribute = 0;
+	//Temporary Weapon Repair code [DracoRPG]
+	pc_delitem(sd, pc_search_inventory(sd, material), 1, 0);
+	clif_equiplist(tsd);
+	clif_produceeffect(sd, 0, item->nameid);
+	clif_misceffect(&sd->bl, 3);
+	clif_displaymessage(tsd->fd, msg_txt(530)); // Item has been repaired.
 
 	return;
 }
-
 /*==========================================
  * Weapon Refining [Celest]
  *------------------------------------------

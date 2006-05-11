@@ -199,7 +199,7 @@ int clif_cart_equiplist(struct map_session_data *sd);
 
 int clif_item_identify_list(struct map_session_data *sd);
 void clif_item_identified(struct map_session_data *sd, short idx, unsigned char flag);
-int clif_item_repair_list(struct map_session_data *sd);
+int clif_item_repair_list(struct map_session_data *sd, struct map_session_data *tsd);
 int clif_item_refine_list(struct map_session_data *sd);
 
 int clif_item_skill(struct map_session_data *sd,int skillid,int skilllv,const char *name);

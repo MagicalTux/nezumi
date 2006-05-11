@@ -5016,27 +5016,30 @@ void clif_item_identified(struct map_session_data *sd, short idx, unsigned char 
  * ※実際のパケットがわからないので動作しません
  *------------------------------------------
  */
-int clif_item_repair_list(struct map_session_data *sd)
+int clif_item_repair_list(struct map_session_data *sd, struct map_session_data *tsd)
 {
+
 	int i,c;
 	struct item * item;
-
+	
 	nullpo_retr(0, sd);
+	nullpo_retr(0, tsd);
 
 	c = 0;
-    for(i=c=0;i<MAX_INVENTORY;i++){
-    		item = &sd->status.inventory[i];
-        if(item && item->nameid > 0 && item->attribute!=0 && itemdb_type(item->nameid)==4){
-            WPACKETW(c*13+4) = i;
-            WPACKETW(c*13+6) = item->nameid ;//sd->status.inventory[i].nameid;
-            WPACKETW(c*13+8) = sd->status.char_id;
-            WPACKETW(c*13+12)= 0;
-            WPACKETW(c*13+16)= c;
-            c++;
-        }
-    }
+	for(i=c=0;i<MAX_INVENTORY;i++){
+		item = &tsd->status.inventory[i];
+    if(item && item->nameid > 0 && item->attribute!=0 && (itemdb_type(item->nameid)==4 || itemdb_type(item->nameid)==5)){
+			WPACKETW(c*13+4) = i;
+      WPACKETW(c*13+6) = item->nameid;
+      WPACKETW(c*13+8) = sd->status.char_id;
+      WPACKETW(c*13+12)= tsd->status.char_id;
+      WPACKETW(c*13+16)= c;
+      c++;
+		}
+	}
 
 	if (c > 0) {
+		sd->skilltarget = tsd->bl.id;
 		WPACKETW(0) = 0x1fc; // temporarily use same packet as clif_item_identify
 		WPACKETW(2) = c * 13 + 4;
 		SENDPACKET(sd->fd, WPACKETW(2));
