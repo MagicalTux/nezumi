@@ -1419,7 +1419,7 @@
 4235,Cookie_Xmas_Card,Cookie Xmas Card,6,20,0,10,,,,,,,136,,,,{},{ bonus2 bSubRace,8,-20; bonus2 bExpAddRace,8,10; }
 4236,Amon_Ra_Card,Amon Ra Card,6,20,0,10,,,,,,,64,,,,{},{ bonus bAllStats,1; bonus4 bAutoSpellWhenHit,73,10,(10+10*(readparam(bInt)>=99)),0; }
 4237,Owl_Duke_Card,Owl Duke Card,6,20,0,10,,,,,,,136,,,,{},{ bonus4 bAutoSpell,66,3,10,0; if(isequipped(4238)) bonus3 bAutoSpell,20,5,10; }
-4238,Owl_Baron_Card,Owl Baron Card,6,20,0,10,,,,,,,136,,,,{},{ bonus3 bAutoSpell,78,1,1; }
+4238,Owl_Baron_Card,Owl Baron Card,6,20,0,10,,,,,,,136,,,,{},{ bonus3 bAutoSpell,78,1,10; }
 4239,Iron_Fist_Card,Iron Fist Card,6,20,0,10,,,,,,,64,,,,{},{ bonus2 bSubRace,0,-20; bonus2 bExpAddRace,0,10; }
 4240,Arclouze_Card,Arclouze Card,6,20,0,10,,,,,,,32,,,,{},{ if (getrefine()>=6) end; bonus bDef,2; bonus bMdef,3; }
 4241,Archangeling_Card,Archangeling Card,6,20,0,10,,,,,,,769,,,,{},{ bonus bMaxHP,300; if(readparam(bLuk)<=77) end; bonus bHPrecovRate,100; bonus bSPrecovRate,100; }
