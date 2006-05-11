@@ -1,5 +1,8 @@
 // $Id$
 
+2006-05-11
+	* Fixed: blackmith repair weapon skill [zug]
+
 2006-05-10
 	* Fixed: SQL monsters database, db creation script, changed drop to 10 [akrus]
 	* Added: bIntravision for [zug]

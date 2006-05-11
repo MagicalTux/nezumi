@@ -5019,24 +5019,47 @@ void clif_item_identified(struct map_session_data *sd, short idx, unsigned char 
 int clif_item_repair_list(struct map_session_data *sd)
 {
 	int i,c;
+	struct item * item;
 
 	nullpo_retr(0, sd);
 
 	c = 0;
-	for(i = 0; i < MAX_INVENTORY; i++) {
-		if (sd->status.inventory[i].nameid > 0 && sd->status.inventory[i].attribute == 1) {
-			WPACKETW(c * 2 + 4) = i + 2;
-			c++;
-		}
-	}
+    for(i=c=0;i<MAX_INVENTORY;i++){
+    		item = &sd->status.inventory[i];
+        if(item && item->nameid > 0 && item->attribute!=0 && itemdb_type(item->nameid)==4){
+            WPACKETW(c*13+4) = i;
+            WPACKETW(c*13+6) = item->nameid ;//sd->status.inventory[i].nameid;
+            WPACKETW(c*13+8) = sd->status.char_id;
+            WPACKETW(c*13+12)= 0;
+            WPACKETW(c*13+16)= c;
+            c++;
+        }
+    }
+
 	if (c > 0) {
-		//WPACKETW(0) = 0x177; // temporarily use same packet as clif_item_identify
-		WPACKETW(0) = 0x1fc;
-		WPACKETW(2) = c * 2 + 4;
+		WPACKETW(0) = 0x1fc; // temporarily use same packet as clif_item_identify
+		WPACKETW(2) = c * 13 + 4;
 		SENDPACKET(sd->fd, WPACKETW(2));
-	}
+	} else
+		clif_skill_fail(sd,BS_REPAIRWEAPON,0,0);
 
 	return 0;
+}
+
+/*==========================================
+ * Repair broken item
+ *------------------------------------------
+ */
+void clif_parse_repairitem(int fd, struct map_session_data *sd)
+{
+
+	if (pc_isdead(sd) || sd->chatID>0 || sd->vender_id>0)	
+		return;
+
+	if (pc_checkskill(sd,BS_REPAIRWEAPON)<=0)
+		return;
+
+	pc_item_repair(sd, RFIFOW(fd,2));
 }
 
 /*==========================================
@@ -12156,7 +12179,7 @@ static void (*clif_parse_func_table[13][MAX_PACKET_DB])() = {
 	clif_parse_CreateParty2, NULL, NULL, NULL, NULL, clif_parse_sn_explosionspirits, NULL, NULL,
 	// 1f0
 	NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
-	NULL, clif_parse_ReqAdopt, NULL, NULL, NULL, NULL, NULL, NULL,
+	NULL, clif_parse_ReqAdopt, NULL, NULL, NULL, clif_parse_repairitem, NULL, NULL,
 
 	// 200
 	NULL, NULL, clif_parse_FriendAddRequest, clif_parse_FriendDeleteRequest, NULL, NULL, NULL, NULL,
