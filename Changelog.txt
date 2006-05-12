@@ -1,6 +1,8 @@
 // $Id$
 
 2006-05-12
+	* Updated: Add size definition of 2006-04-04aSakexe packet (just definition, not read of the packet) [DarkRaven]
+	           note: packet fonctions are same of previous packet.
 	* Improved: Add a #define to set number of packet versions [DarkRaven]
 	* Updated: packet_db.txt [DarkRaven]
 

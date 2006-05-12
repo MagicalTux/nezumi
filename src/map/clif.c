@@ -13079,6 +13079,23 @@ int do_init_clif(void) {
 
 	// size of packet version 13
 	memcpy(&packet_size_table[13], &packet_size_table[12], sizeof(packet_len_table));
+	packet_size_table[13][0x072] = 26;
+	packet_size_table[13][0x07e] = 120;
+	packet_size_table[13][0x085] = 12;
+//	packet_size_table[13][0x089] = 13;
+	packet_size_table[13][0x08c] = 12;
+	packet_size_table[13][0x094] = 23;
+	packet_size_table[13][0x09b] = 37;
+	packet_size_table[13][0x09f] = 24;
+	packet_size_table[13][0x0a2] = 11;
+	packet_size_table[13][0x0a7] = 15;
+//	packet_size_table[13][0x0f3] = -1;
+//	packet_size_table[13][0x0f5] = 13;
+	packet_size_table[13][0x0f7] = 26;
+	packet_size_table[13][0x113] = 40;
+	packet_size_table[13][0x116] = 17;
+	packet_size_table[13][0x190] = 18;
+//	packet_size_table[13][0x193] = 2;
 
 	set_defaultparse(clif_parse);
 
