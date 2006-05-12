@@ -4572,7 +4572,7 @@ void battle_set_defaults() {
 	battle_config.hack_info_GM_level = 20; // added by [Yor] (default: 20, GM team member)
 	battle_config.speed_hack_info_GM_level = 99; // added by [Yor] (default: 99, experimental code)
 	battle_config.any_warp_GM_min_level = 20; // added by [Yor]
-	battle_config.packet_ver_flag = 6655; // added by [Yor]
+	battle_config.packet_ver_flag = 14847; // added by [Yor]
 	battle_config.muting_players = 0;
 	battle_config.min_hair_style = 0;
 	battle_config.max_hair_style = 24;
@@ -4848,8 +4848,8 @@ void battle_validate_conf() {
 		battle_config.any_warp_GM_min_level = 100;
 
 	// at least 1 client must be accepted
-	if ((battle_config.packet_ver_flag & 8191) == 0) // added by [Yor] (we must avoid to set 256 and 512 together)
-		battle_config.packet_ver_flag = 6655; // accept all clients (except 2004-12-06aSakexe client (-512) and 2005-01-10bSakexe client (-1024), similar to 2004-10-25aSakexe client and 2005-06-28aSakexe client)
+	if ((battle_config.packet_ver_flag & 16383) == 0) // added by [Yor] (we must avoid to set 256 and 512 together)
+		battle_config.packet_ver_flag = 14847; // accept all clients (except 2004-12-06aSakexe client (-512) and 2005-01-10bSakexe client (-1024), similar to 2004-10-25aSakexe client and 2005-06-28aSakexe client)
 	else {
 		if ((battle_config.packet_ver_flag & (256 + 512)) == (256 + 512)) {
 			printf("WARNING: Avoid to accept both clients 2004-12-06aSakexe AND 2004-10-25aSakexe.\n");

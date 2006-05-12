@@ -1,6 +1,7 @@
 // $Id$
 
 2006-05-12
+	* Updated: Add battle configuration of 2006-04-04aSakexe packet [DarkRaven]
 	* Updated: Add auto-detection of 2006-04-04aSakexe packet [DarkRaven]
 	           to do now: battle configuration.
 	* Updated: Add parse of 2006-04-04aSakexe packet [DarkRaven]
