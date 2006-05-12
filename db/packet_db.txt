@@ -1,7 +1,7 @@
 //packet_db.txt 同じ番号のパケットは後ので上書きされるので変更のあったパケットは一番下に追加すればよいです
 //古いパケットで使いたい場合は新しい定義を削除するかコメントアウトすればよいです
 
-// packet_ver: 5->0 (old packets are not more used)
+// packet_ver: 0
 0x0064,55
 0x0065,17
 0x0066,3
@@ -433,7 +433,7 @@
 //jROはここまで
 
 //2004-07-06kRO
-// packet_ver: 6->1
+// packet_ver: 1
 0x0072,22,wanttoconnection,5:9:13:17:21
 0x0085,8,walktoxy,5
 0x00a7,13,useitem,5:9
@@ -442,7 +442,7 @@
 0x0190,95,useskilltopos,4:9:11:13:15
 
 //2004-07-13kRO
-// packet_ver: 7->2
+// packet_ver: 2
 0x0072,39,wanttoconnection,12:22:30:34:38
 0x0085,9,walktoxy,6
 0x009b,13,changedir,5:12
@@ -453,7 +453,7 @@
 0x0190,99,useskilltopos,7:9:15:17:19
 
 //2004-07-26kRO
-// packet_ver: 8->3
+// packet_ver: 3
 0x0072,14,dropitem,5:12
 0x007e,33,wanttoconnection,12:18:24:28:32
 0x0085,20,useskilltoid,7:12:16
@@ -473,7 +473,7 @@
 0x0193,9,actionrequest,3:8
 
 //2004-08-09kRO
-// packet_ver: 9->4
+// packet_ver: 4
 0x0072,17,dropitem,8:15
 0x007e,37,wanttoconnection,9:21:28:32:36
 0x0085,26,useskilltoid,11:18:22
@@ -505,7 +505,7 @@
 0x0210,22
 
 //2004-09-06aSakexe
-// packet_ver: 10->5
+// packet_ver: 5
 0x0072,20,useitem,7:16
 0x007e,19,movetokafra,3:15
 0x0085,23,actionrequest,9:22
@@ -531,7 +531,7 @@
 //0x0214,42
 
 //2004-09-21aSakexe
-// packet_ver: 11->6
+// packet_ver: 6
 0x0072,18,useitem,10,14
 0x007e,25,movetokafra,6,21
 0x0085,9,actionrequest,3,8
@@ -557,7 +557,7 @@
 //0x0214,42
 
 //2004-10-18bSakexe
-// packet_ver: 12->7
+// packet_ver: 7
 0x0072,17,useitem,6:13
 0x007e,16,movetokafra,5:12
 //0x0085,9,actionrequest,3:8
@@ -583,7 +583,7 @@
 //0x0214,42
 
 //2004-10-25aSakexe
-// packet_ver: 13->8
+// packet_ver: 8
 0x0072,13,useitem,5:9
 0x007e,13,movetokafra,6:9
 0x0085,15,actionrequest,4:14
@@ -641,7 +641,7 @@
 0x021c,10
 
 //2004-12-06aSakexe
-// packet_ver: 14->9
+// packet_ver: 9
 0x0072,22,useskilltoid,8:12:18
 0x007e,30,useskilltopos,4:9:22:28
 0x0085,-1,globalmessage,2:4
@@ -680,7 +680,7 @@
 0x0223,8
 
 //2005-01-10bSakexe
-// packet_ver: 15->10
+// packet_ver: 10
 0x0072,26,useskilltoid,8:16:22
 0x007e,114,useskilltopos,10:18:22:32:34
 0x0085,23,changedir,12:22
@@ -721,9 +721,9 @@
 //0x0223,8
 
 //2005-05-09aSakexe by Sara
-packet_ver: 16->11
+packet_ver: 11
 0x0072,25,useskilltoid,6:10:21
-0x007e,102,useskilltoposinfo,5:9:12:20:22
+0x007e,102,useskilltopos,5:9:12:20:22
 0x0085,11,changedir,7:10
 0x0089,8,ticksend,4
 0x008c,11,getcharnamerequest,7
@@ -754,9 +754,9 @@ packet_ver: 16->11
 0x0234,-1
 
 //2005-06-28aSakexe by Sara
-packet_ver: 17->12
+packet_ver: 12
 0x0072,34,useskilltoid,6:17:30
-0x007e,113,useskilltoposinfo,12:15:18:31:33
+0x007e,113,useskilltopos,12:15:18:31:33
 0x0085,17,changedir,8:16
 0x0089,13,ticksend,9
 0x008c,8,getcharnamerequest,4
@@ -773,26 +773,18 @@ packet_ver: 17->12
 0x0190,24,actionrequest,11:23
 0x0193,2,closekafra,0
 
+//2005-11-29aSakexe
+0x023f,2,refleshmailbox,0
+0x0241,6,readmail,2
+0x0243,6,deletemail,2
+0x0244,6,mailgetappend,2
+0x0246,4,mailwinopen,2
+0x0247,8,sendmailsetappend,2,4
+0x0248,-1,sendmail,2:4:28:69
+
 //2006-04-04aSakexe by blackhole89
-packet_ver: 19
-0x0072,26,useskilltoid,11:18:22
-0x007e,120,useskilltopos,5:15:29:38:40
-//0x007e,120,useskilltoposinfo,5:15:29:38:40
-0x0085,12,changedir,7:11
-0x0089,13,ticksend,7
-0x008c,12,getcharnamerequest,8
-0x0094,23,movetokafra,5:19
-0x009b,37,wanttoconnection,9:21:28:32:36
-0x009f,24,useitem,9:20
-0x00a2,11,solvecharname,7
-0x00a7,15,walktoxy,12
-0x00f3,-1,globalmessage,2:4
-0x00f5,13,takeitem,9
-0x00f7,26,movefromkafra,11:22
-0x0116,17,dropitem,8:15
-0x0113,40,useskilltopos,5:15:29:38
-0x0190,18,actionrequest,7:17
-0x0193,2,closekafra,0
+//fix&add: lkm and thanks free report some error
+packet_ver: 13
 0x0072,26,useskilltoid,11:18:22
 0x007e,120,useskilltopos,5:15:29:38:40
 0x0085,12,changedir,7:11
@@ -806,7 +798,7 @@ packet_ver: 19
 0x00f3,-1,globalmessage,2:4
 0x00f5,13,takeitem,9
 0x00f7,26,movefromkafra,11:22
-0x0116,17,dropitem,8:15
 0x0113,40,useskilltopos,5:15:29:38
+0x0116,17,dropitem,8:15
 0x0190,18,actionrequest,7:17
 0x0193,2,closekafra,0

@@ -1,5 +1,8 @@
 // $Id$
 
+2006-05-12
+	* Updated: packet_db.txt [DarkRaven]
+
 2006-05-11
 	* Fixed: blackmith repair weapon skill [zug]
 
