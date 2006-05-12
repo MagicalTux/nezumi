@@ -1,6 +1,7 @@
 // $Id$
 
 2006-05-12
+	* Improved: Add a #define to set number of packet versions [DarkRaven]
 	* Updated: packet_db.txt [DarkRaven]
 
 2006-05-11

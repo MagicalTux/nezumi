@@ -65,6 +65,7 @@ int fake_mob_list[] = { // set here mobs that do not sound when they don't move
 };
 
 #define MAX_PACKET_DB 0x260
+#define MAX_PACKET_VERSION 14
 
 static const int packet_len_table[MAX_PACKET_DB] = {
    10,  0,  0,  0,  0,  0,  0,  0,   0,  0,  0,  0,  0,  0,  0,  0,
@@ -118,7 +119,7 @@ static const int packet_len_table[MAX_PACKET_DB] = {
 };
 
 // size list for each packet version after packet version 4.
-static int packet_size_table[13][MAX_PACKET_DB];
+static int packet_size_table[MAX_PACKET_VERSION][MAX_PACKET_DB];
 
 // local define
 enum {
@@ -12089,7 +12090,7 @@ void clif_parse_Unknown(int fd, struct map_session_data *sd) {
 }
 
 // functions list
-static void (*clif_parse_func_table[13][MAX_PACKET_DB])() = {
+static void (*clif_parse_func_table[MAX_PACKET_VERSION][MAX_PACKET_DB])() = {
 	{
 	NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
 	NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,  NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL,
@@ -12498,7 +12499,7 @@ static int clif_parse(int fd) {
 		packet_ver = sd->packet_ver;
 
 		// ゲーム用以外パケットか、認証を終える前に0072以外が来たら、切断する
-		if (packet_ver > 12) { // if packet is not inside these values: session is incorrect?? or auth packet is unknown
+		if (packet_ver >= MAX_PACKET_VERSION) { // if packet is not inside these values: session is incorrect?? or auth packet is unknown
 			session[fd]->eof = 1;
 			printf("clif_parse: session #%d, packet 0x%x (%d bytes received) unknown version -> disconnected.\n", fd, RFIFOW(fd,0), RFIFOREST(fd));
 			return 0;
@@ -12760,10 +12761,13 @@ int do_init_clif(void) {
 	clif_parse_func_table[11][0x233] = clif_parse_Unknown; // just to avoid disconnection of the player
 	clif_parse_func_table[11][0x234] = clif_parse_Unknown; // just to avoid disconnection of the player
 
-	// init packet function calls for packet ver 12 (same function of packet version 12, but size are different)
+	// init packet function calls for packet ver 12 (same function of packet version 11, but size are different)
 	memcpy(&clif_parse_func_table[12], &clif_parse_func_table[11], sizeof(clif_parse_func_table[0]));
 	// newest packet
 	clif_parse_func_table[12][0x237] = clif_parse_RankingPk;
+
+	// init packet function calls for packet ver 13 (same function of packet version 12, but size are different)
+	memcpy(&clif_parse_func_table[13], &clif_parse_func_table[12], sizeof(clif_parse_func_table[0]));
 
 	// size of packet version 0
 	memcpy(&packet_size_table[0], &packet_len_table, sizeof(packet_len_table));
@@ -13072,6 +13076,9 @@ int do_init_clif(void) {
 	packet_size_table[12][0x25c] = 4;
 	packet_size_table[12][0x25d] = -1;
 	packet_size_table[12][0x25e] = 4;
+
+	// size of packet version 13
+	memcpy(&packet_size_table[13], &packet_size_table[12], sizeof(packet_len_table));
 
 	set_defaultparse(clif_parse);
 
