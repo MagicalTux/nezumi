@@ -3154,13 +3154,16 @@ int mob_heal(struct mob_data *md, int heal)
 int mob_warpslave_sub(struct block_list *bl, va_list ap)
 {
 	struct mob_data *md = (struct mob_data *)bl;
+	struct block_list *tbl;
 	int id, x, y;
 
 	id = va_arg(ap, int);
 	x = va_arg(ap, int);
 	y = va_arg(ap, int);
 	if (md->master_id == id) {
-		mob_warp(md, -1, x, y, 2);
+		tbl = map_id2bl(md->master_id);
+		if (distance(md->bl.x, md->bl.y, tbl->x, tbl->y) >10)
+			mob_warp(md, -1, x, y, 2);
 	}
 
 	return 0;

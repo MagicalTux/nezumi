@@ -1,4 +1,6 @@
 // $Id$
+2006-05-13
+	* Added: NPC_CALLSLAVE skill [disabuzug]
 
 2006-05-12
 	* Updated: Add size definition of 2006-04-04aSakexe packet (just definition, not read of the packet) [DarkRaven]

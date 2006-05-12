@@ -30,6 +30,7 @@
 #include "atcommand.h"
 #include "grfio.h"
 #include "status.h"
+#include "mob.h"
 
 #ifdef MEMWATCH
 #include "memwatch.h"
@@ -303,6 +304,7 @@ const struct skill_name_db skill_names[] = {
  { NPC_METAMORPHOSIS, "METAMORPHOSIS", "NPC_METAMORPHOSIS" } ,
  { NPC_PETRIFYATTACK, "PETRIFYATTACK", "NPC_PETRIFYATTACK" } ,
  { NPC_PIERCINGATT, "PIERCINGATT", "NPC_PIERCINGATT" } ,
+ { NPC_CALLSLAVE, "CALLSLAVE", "NPC_CALLSLAVE" },
  { NPC_POISON, "POISON", "NPC_POISON" } ,
  { NPC_POISONATTACK, "POISONATTACK", "NPC_POISONATTACK" } ,
  { NPC_PROVOCATION, "PROVOCATION", "NPC_PROVOCATION" } ,
@@ -4120,6 +4122,9 @@ int skill_castend_nodamage_id(struct block_list *src, struct block_list *bl, int
 		if (md) {
 			mob_summonslave(md, mob_db[md->class].skill[md->skillidx].val, skilllv, (skillid == NPC_SUMMONSLAVE) ? 1 : 0);
 		}
+		break;
+	case NPC_CALLSLAVE:
+		mob_warpslave((struct mob_data *) src, src->x, src->y);
 		break;
 
 	case NPC_TRANSFORMATION:
