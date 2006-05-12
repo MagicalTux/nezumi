@@ -7498,7 +7498,10 @@ void clif_parse_WantToConnection(int fd, struct map_session_data *sd) { // S 0x0
 	//case 0x9B:
 	default: // 0x9B
 		//printf("Received bytes %d with packet 0x9B.\n", RFIFOREST(fd));
-		if (RFIFOREST(fd) >= 32 && (RFIFOB(fd,31) == 0 || RFIFOB(fd,31) == 1)) { // 00 = Female, 01 = Male
+		if (RFIFOREST(fd) >= 37 && (RFIFOB(fd,36) == 0 || RFIFOB(fd,36) == 1)) { // 00 = Female, 01 = Male
+			account_id = RFIFOL(fd,9);
+			packet_ver = 13;
+		} else if (RFIFOREST(fd) >= 32 && (RFIFOB(fd,31) == 0 || RFIFOB(fd,31) == 1)) { // 00 = Female, 01 = Male
 			// 2 possibilities
 			if ((battle_config.packet_ver_flag & 1024) != 0 && (battle_config.packet_ver_flag & 4096) == 0) {
 				account_id = RFIFOL(fd,3);
@@ -12502,8 +12505,15 @@ static int clif_parse(int fd) {
 			}
 			break;
 		case 0x9B:
+			// packet_ver = 13
+			if (RFIFOREST(fd) >= 37 && (RFIFOB(fd,36) == 0 || RFIFOB(fd,36) == 1)) { // 00 = Female, 01 = Male
+				if ((battle_config.packet_ver_flag & 8192) != 0) {
+					clif_parse_WantToConnection(fd, sd);
+					RFIFOSKIP(fd, 37); // packet_size_table[13][0x9B]
+					return 0;
+				}
 			// packet_ver = 10 or packet_ver = 12
-			if (RFIFOREST(fd) >= 32 && (RFIFOB(fd,31) == 0 || RFIFOB(fd,31) == 1)) { // 00 = Female, 01 = Male
+			} else if (RFIFOREST(fd) >= 32 && (RFIFOB(fd,31) == 0 || RFIFOB(fd,31) == 1)) { // 00 = Female, 01 = Male
 				if (((battle_config.packet_ver_flag & 1024) != 0 && (battle_config.packet_ver_flag & 4096) == 0) || // only version 10
 				    ((battle_config.packet_ver_flag & 1024) == 0 && (battle_config.packet_ver_flag & 4096) != 0) || // only version 12
 					// if account id and char id of packet_ver 12
@@ -12529,7 +12539,7 @@ static int clif_parse(int fd) {
 			} else if (RFIFOREST(fd) < 26) // lesser packet
 				return 0;
 			// else invalid
-			else if (RFIFOREST(fd) >= 32) { // bigest packet (and not correct/valid)
+			else if (RFIFOREST(fd) >= 37) { // bigest packet (and not correct/valid)
 				session[fd]->eof = 1;
 				return 0;
 			}

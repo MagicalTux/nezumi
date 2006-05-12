@@ -1,6 +1,8 @@
 // $Id$
 
 2006-05-12
+	* Updated: Add auto-detection of 2006-04-04aSakexe packet [DarkRaven]
+	           to do now: battle configuration.
 	* Updated: Add parse of 2006-04-04aSakexe packet [DarkRaven]
 	           to do now: auto-recognising and battle configuration.
 	* Added: NPC_CALLSLAVE skill [disabuzug]
