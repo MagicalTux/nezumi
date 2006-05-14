@@ -1,4 +1,3 @@
-
 // $Id$
 
 #include <config.h>
@@ -216,6 +215,7 @@ const struct skill_name_db skill_names[] = {
  { KN_BOWLINGBASH, "BOWLINGBASH", "Bowling_Bash" } ,
  { KN_BRANDISHSPEAR, "BRANDISHSPEAR", "Brandish_Spear" } ,
  { KN_CAVALIERMASTERY, "CAVALIERMASTERY", "Cavalier_Mastery" } ,
+ { KN_CHARGEATK, "CHARGEATK", "Charge_Attack" } ,
  { KN_PIERCE, "PIERCE", "Pierce" } ,
  { KN_RIDING, "RIDING", "Peco_Peco_Ride" } ,
  { KN_SPEARBOOMERANG, "SPEARBOOMERANG", "Spear_Boomerang" } ,
@@ -349,6 +349,7 @@ const struct skill_name_db skill_names[] = {
  { PR_MACEMASTERY, "MACEMASTERY", "Mace_Mastery" } ,
  { PR_MAGNIFICAT, "MAGNIFICAT", "Magnificat" } ,
  { PR_MAGNUS, "MAGNUS", "Magnus_Exorcismus" } ,
+ { PR_REDEMPTIO, "REDEMPTIO", "Redemptio" } ,
  { PR_SANCTUARY, "SANCTUARY", "Santuary" } ,
  { PR_SLOWPOISON, "SLOWPOISON", "Slow_Poison" } ,
  { PR_STRECOVERY, "STRECOVERY", "Status_Recovery" } ,
@@ -553,11 +554,11 @@ struct skill_abra_db skill_abra_db[MAX_SKILL_ABRA_DB];
 
 // Skill DB
 int skill_get_hit(int id) { skill_get2(skill_db[id].hit, id); }
-int skill_get_inf(int id) { skill_chk2(id); return (id < 500) ? skill_db[id].inf : guild_skill_get_inf(id); }
+int skill_get_inf(int id) { skill_chk2(id); return (id < MAX_SKILL) ? skill_db[id].inf : guild_skill_get_inf(id); }
 int skill_get_pl(int id) { skill_get2(skill_db[id].pl, id); }
 int skill_get_nk(int id) { skill_get2(skill_db[id].nk, id); }
-int skill_get_max(int id) { skill_chk2(id); return (id < 500) ? skill_db[id].max : guild_skill_get_max(id); }
-int skill_get_range(int id, int lv) { skill_chk(id, lv); return (id < 500) ? skill_db[id].range[lv-1] : guild_skill_get_range(id); }
+int skill_get_max(int id) { skill_chk2(id); return (id < MAX_SKILL) ? skill_db[id].max : guild_skill_get_max(id); }
+int skill_get_range(int id, int lv) { skill_chk(id, lv); return (id < MAX_SKILL) ? skill_db[id].range[lv-1] : guild_skill_get_range(id); }
 int skill_get_hp(int id, int lv) { skill_get(skill_db[id].hp[lv-1], id, lv); }
 int skill_get_sp(int id, int lv) { skill_get(skill_db[id].sp[lv-1], id, lv); }
 int skill_get_zeny(int id, int lv) { skill_get(skill_db[id].zeny[lv-1], id, lv); }
@@ -2245,13 +2246,14 @@ int skill_castend_damage_id(struct block_list* src, struct block_list *bl, int s
 			status_change_end(src,SC_BLADESTOP,-1);
 	  }
 		break;
-	case MO_COMBOFINISH:	/* 猛龍拳 */
-	case CH_TIGERFIST:		/* 伏虎拳 */
-	case CH_CHAINCRUSH:		/* 連柱崩撃 */
-	case CH_PALMSTRIKE:		/* 猛虎硬派山 */
+	case MO_COMBOFINISH:
+	case CH_TIGERFIST:
+	case CH_CHAINCRUSH:
+	case CH_PALMSTRIKE:
 		skill_attack(BF_WEAPON,src,src,bl,skillid,skilllv,tick,flag);
 		break;
-	case MO_EXTREMITYFIST:	/* 阿修羅覇鳳拳 */
+	case KN_CHARGEATK:
+	case MO_EXTREMITYFIST:
 	  {
 		struct status_change *sc_data = status_get_sc_data(src);
 
@@ -2275,11 +2277,18 @@ int skill_castend_damage_id(struct block_list* src, struct block_list *bl, int s
 					break;
 				}
 			}
+			if (skillid == KN_CHARGEATK)
+				flag = wpd.path_len;
+			if (skillid != MO_EXTREMITYFIST || battle_check_target(src, bl, BCT_ENEMY) > 0)
+				skill_attack(BF_WEAPON, src, src, bl, skillid, skilllv, tick, flag);
+			else
+				clif_skill_fail(sd, skillid, 0, 0);
 			sd->to_x = sd->bl.x + dx;
 			sd->to_y = sd->bl.y + dy;
 			skill_attack(BF_WEAPON,src,src,bl,skillid,skilllv,tick,flag);
 			int speed = sd->speed;
 			sd->speed = 20;
+			clif_updatestatus(sd, SP_SPEED);
 			clif_walkok(sd);
 			clif_movechar(sd);
 			if(dx < 0) dx = -dx;
@@ -2288,14 +2297,19 @@ int skill_castend_damage_id(struct block_list* src, struct block_list *bl, int s
 			if(sd->canact_tick < sd->canmove_tick)
 				sd->canact_tick = sd->canmove_tick;
 			sd->speed = speed;
+			clif_updatestatus(sd, SP_SPEED);
 			pc_movepos(sd,sd->to_x,sd->to_y);
 			status_change_end(&sd->bl,SC_COMBO,-1);
 		}
 		else
-			skill_attack(BF_WEAPON,src,src,bl,skillid,skilllv,tick,flag);
-		status_change_end(src, SC_EXPLOSIONSPIRITS, -1);
-		if(sc_data && sc_data[SC_BLADESTOP].timer != -1)
-			status_change_end(src,SC_BLADESTOP,-1);
+			skill_attack(BF_WEAPON, src, src, bl, skillid, skilllv, tick, skillid == KN_CHARGEATK?1:flag);
+			if (skillid == MO_EXTREMITYFIST && sc_data && sd->sc_count) {
+				status_change_end(src, SC_EXPLOSIONSPIRITS, -1);
+				if (sc_data[SC_BLADESTOP].timer != -1)
+					status_change_end(src,SC_BLADESTOP,-1);
+				if (sc_data[SC_COMBO].timer != -1)
+					status_change_end(src,SC_COMBO,-1);
+			}
 	  }
 		break;
 	case AC_SHOWER:
@@ -2716,7 +2730,7 @@ int skill_castend_nodamage_id(struct block_list *src, struct block_list *bl, int
 		return 1;
 	if (sd && pc_isdead(sd))
 		return 1;
-	if (dstsd && pc_isdead(dstsd) && skillid != ALL_RESURRECTION)
+	if (dstsd && pc_isdead(dstsd) && skillid != ALL_RESURRECTION && skillid != PR_REDEMPTIO)
 		return 1;
 	if (status_get_class(bl) == 1288)
 		return 1;
@@ -2755,7 +2769,37 @@ int skill_castend_nodamage_id(struct block_list *src, struct block_list *bl, int
 	  }
 		break;
 
-	case ALL_RESURRECTION:		/* リザレクション */
+
+	case PR_REDEMPTIO:
+		if (sd && !(flag&1)) {
+			if (sd->status.party_id == 0) {
+				clif_skill_fail(sd, skillid, 0, 0);
+				break;
+			}
+			skill_area_temp[0] = 0;
+			party_foreachsamemap(skill_area_sub, sd, skill_get_range(skillid, skilllv), src, skillid, skilllv,
+				tick, flag|BCT_PARTY|1,	skill_castend_nodamage_id);
+
+			if (skill_area_temp[0] == 0) {
+				clif_skill_fail(sd, skillid, 0, 0);
+				break;
+			}
+			skill_area_temp[0] = 5 - skill_area_temp[0];
+			if (skill_area_temp[0] > 0 && !map[src->m].flag.nopenalty) {
+				sd->status.base_exp -= pc_nextbaseexp(sd) * skill_area_temp[0] * 2/1000;
+				sd->status.job_exp -= pc_nextjobexp(sd) * skill_area_temp[0] * 2/1000;
+				clif_updatestatus(sd, SP_BASEEXP);
+				clif_updatestatus(sd, SP_JOBEXP);
+			}
+			pc_heal(sd, 1-sd->status.hp, 1-sd->status.sp);
+			break;
+		} else if (dstsd && pc_isdead(dstsd) && flag&1) {
+			skill_area_temp[0]++;
+			skilllv = 3;
+		} else
+			break;
+
+	case ALL_RESURRECTION:
 		if (bl->type == BL_PC) {
 			int per = 0;
 			struct map_session_data *tsd = (struct map_session_data*)bl;
@@ -6414,6 +6458,7 @@ int skill_check_condition(struct map_session_data *sd, int type) {
 			return 0;
 		}
 		break;
+
 	case AM_CANNIBALIZE: /* バイオプラント */
 	case AM_SPHEREMINE: /* スフィアーマイン */
 		if (type & 1) {
@@ -6511,6 +6556,17 @@ int skill_check_condition(struct map_session_data *sd, int type) {
 				return 0;
 			}
 			arrow_flag = 1;
+		}
+		break;
+
+
+	case PR_REDEMPTIO:
+		{
+			int exp;
+			if(((exp = pc_nextbaseexp(sd)) > 0 && sd->status.base_exp * 100 / exp < 1) ||
+				((exp = pc_nextjobexp(sd)) > 0 && sd->status.job_exp*100/exp < 1)) {
+				clif_skill_fail(sd, skill, 0, 0);
+				return 0;
 		}
 		break;
 	}
@@ -6970,13 +7026,12 @@ int skill_use_id(struct map_session_data *sd, int target_id, int skill_num, int 
 		if (target_sd && skill_num == ALL_RESURRECTION && !pc_isdead(target_sd))
 			return 0;
 	}
-	if ((skill_num != MO_CHAINCOMBO &&
-	     skill_num != MO_COMBOFINISH &&
-	     skill_num != MO_EXTREMITYFIST &&
-	     skill_num != CH_TIGERFIST &&
-	     skill_num != CH_CHAINCRUSH) ||
-	    (skill_num == CH_CHAINCRUSH && sd->state.skill_flag) ||
-	    (skill_num == MO_EXTREMITYFIST && sd->state.skill_flag))
+	if ((skill_num != MO_CHAINCOMBO && skill_num != MO_COMBOFINISH &&
+		skill_num != MO_EXTREMITYFIST && skill_num != CH_TIGERFIST &&
+		skill_num != CH_CHAINCRUSH) ||
+		(skill_num == CH_CHAINCRUSH && sd->state.skill_flag) ||
+		(skill_num == MO_EXTREMITYFIST && sd->state.skill_flag) ||
+		(skill_num == KN_CHARGEATK && sd->state.skill_flag))
 		pc_stopattack(sd);
 
 	casttime=skill_castfix(&sd->bl, skill_get_cast( skill_num,skill_lv) );
@@ -7021,6 +7076,9 @@ int skill_use_id(struct map_session_data *sd, int target_id, int skill_num, int 
 	case SA_MAGICROD:
 	case SA_SPELLBREAKER:
 		forcecast=1;
+		break;
+	case KN_CHARGEATK:
+		casttime *= distance(sd->bl.x, sd->bl.y, bl->x, bl->y);
 		break;
 	case WE_MALE:
 	case WE_FEMALE:

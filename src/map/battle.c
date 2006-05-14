@@ -2136,6 +2136,10 @@ static struct Damage battle_calc_pc_weapon_attack(struct block_list *src, struct
 				damageskillmod = 100+ 50*skill_lv;
 				flag=(flag&~BF_RANGEMASK)|BF_LONG;
 				break;
+			case KN_CHARGEATK:
+				damageskillmod += wflag * 15;
+				blewcount = wflag > 1? wflag : 0;
+				break;
 			case KN_BRANDISHSPEAR:
 			  {
 				int damage3 = 0;

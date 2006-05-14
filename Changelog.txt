@@ -1,5 +1,8 @@
 // $Id$
 
+2006-05-14
+	* Added: Knight - Charge Attack and Priest - Redemptio quest skills [akrus]
+
 2006-05-12
 	* Updated: Add battle configuration of 2006-04-04aSakexe packet [DarkRaven]
 	* Updated: Add auto-detection of 2006-04-04aSakexe packet [DarkRaven]
