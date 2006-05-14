@@ -6458,7 +6458,6 @@ int skill_check_condition(struct map_session_data *sd, int type) {
 			return 0;
 		}
 		break;
-
 	case AM_CANNIBALIZE: /* バイオプラント */
 	case AM_SPHEREMINE: /* スフィアーマイン */
 		if (type & 1) {
@@ -6532,27 +6531,26 @@ int skill_check_condition(struct map_session_data *sd, int type) {
 		}
 		break;
 
+
 	case PR_REDEMPTIO:
 		{
 			int exp;
 			if(((exp = pc_nextbaseexp(sd)) > 0 && sd->status.base_exp * 100 / exp < 1) ||
 				((exp = pc_nextjobexp(sd)) > 0 && sd->status.job_exp*100/exp < 1)) {
-				clif_skill_fail(sd, skill, 0, 0);
+				clif_skill_fail(sd, skill, 0, 0); //Not enough exp.
 				return 0;
+			}
+			break;
 		}
-		break;
 
-	// skill's which consume arrow(s)
 	case AC_DOUBLE:
 	case AC_SHOWER:
 	case AC_CHARGEARROW:
-	case HT_PHANTASMIC:
 	case BA_MUSICALSTRIKE:
 	case DC_THROWARROW:
 	case SN_SHARPSHOOTING:
 	case CG_ARROWVULCAN:
-		if(sd->equip_index[10] < 0)
-		{
+		if (sd->equip_index[10] < 0) {
 			clif_arrow_fail(sd, 0);
 			return 0;
 		}
