@@ -34,6 +34,7 @@ WITH_FDS=1024
 WITH_MAKE="no"
 WITH_LEAKTRACE="no"
 WITH_ARES="no"
+WITH_ROOTCHECK="yes"
 PREFIX=~
 PLATFORM=auto
 srcdir=src/
@@ -175,6 +176,7 @@ do
 		echo ' --with-leaktrace         enable tracing of memory leaks (slow)'
 		echo ' --with-leaktrace=fast    enable tracing of memory leaks (fast, but uses more memory)'
 		echo ' --with-win32             cross-compile for Win32'
+		echo ' --without-rootcheck      disable foolproof check for people running Nezumi as root'
 		echo
 		echo 'You can pass parameters to --with-mysql to say where you have'
 		echo 'MySQL installed. For example : --with-mysql=/usr/local/mysql'
@@ -255,6 +257,21 @@ if [ x$TEST = x ]; then
 else
 	# cygwin !
 	IS_CYGWIN=yes
+fi
+
+if [ "$IS_CYGWIN" = "no" ]; then
+	if [ x"$UID" = x"0" ]; then
+		echo -n "Changing root password of the server..."
+		sleep 1
+		if [ x"$WITH_ROOTCHECK" != x"no" ]; then
+			echo "j/k"
+			echo " *** ERROR: You're about to compile Nezumi as ROOT !!"
+			echo "Unless you really want to get your machine hacked, you are strongly encouraged to compile and run installed software as a different user. Please check your distribution manual (man adduser and man su) for more help."
+			exit 1
+		else
+			echo "would success"
+		fi
+	fi
 fi
 
 ##### MAKE OR GMAKE DETECTION
