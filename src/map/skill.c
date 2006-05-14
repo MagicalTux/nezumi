@@ -6532,6 +6532,16 @@ int skill_check_condition(struct map_session_data *sd, int type) {
 		}
 		break;
 
+	case PR_REDEMPTIO:
+		{
+			int exp;
+			if(((exp = pc_nextbaseexp(sd)) > 0 && sd->status.base_exp * 100 / exp < 1) ||
+				((exp = pc_nextjobexp(sd)) > 0 && sd->status.job_exp*100/exp < 1)) {
+				clif_skill_fail(sd, skill, 0, 0);
+				return 0;
+		}
+		break;
+
 	// skill's which consume arrow(s)
 	case AC_DOUBLE:
 	case AC_SHOWER:
@@ -6556,17 +6566,6 @@ int skill_check_condition(struct map_session_data *sd, int type) {
 				return 0;
 			}
 			arrow_flag = 1;
-		}
-		break;
-
-
-	case PR_REDEMPTIO:
-		{
-			int exp;
-			if(((exp = pc_nextbaseexp(sd)) > 0 && sd->status.base_exp * 100 / exp < 1) ||
-				((exp = pc_nextjobexp(sd)) > 0 && sd->status.job_exp*100/exp < 1)) {
-				clif_skill_fail(sd, skill, 0, 0);
-				return 0;
 		}
 		break;
 	}
