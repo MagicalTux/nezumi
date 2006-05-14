@@ -25,7 +25,7 @@ WITH_PGSQL="no"
 WITH_PGSQL_PATH="/usr/local/pgsql:/usr/local:/usr:/"
 WITH_LIBM="/usr/local"
 WITH_ZLIB="yes"
-WITH_GETTEXT="no"
+WITH_GETTEXT="auto"
 WITH_DEBUG="yes"
 WITH_OPTIMIZE="std"
 WITH_WIN32="no"
@@ -986,6 +986,7 @@ if [ "$WITH_GETTEXT" != no ]; then
 	which msgfmt >/dev/null 2>&1
 	if [ $? != 0 ]; then
 		echo "not found"
+		WITH_GETTEXT=no
 	else
 		echo "#include <stdlib.h>" >.config.tmp.c
 		echo "#include <libintl.h>" >>.config.tmp.c
