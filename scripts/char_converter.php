@@ -5,6 +5,8 @@
 // DO NOT TRY TO RUN THAT FROM A WEBHOST
 // This is intented to be started from command line
 // php char_converter.php | mysql -u ragnarok -pragnarok ragnarok
+// If you get a "Fatal error: Allowed memory size of ..." error, try like this :
+// php -d memory_limit=512M char_converter.php | mysql -u ragnarok -pragnarok ragnarok
 //
 // Known problems:
 // - TODO: Code party convert
@@ -17,6 +19,8 @@ if (!function_exists('mysql_escape_string')) {
 		return addslashes($str);
 	}
 }
+
+if ((is_dir('../conf')) && (!is_dir('conf'))) chdir('..');
 
 $char_config = parse_config('conf/char_athena.conf');
 $inter_config = parse_config('conf/inter_athena.conf');
