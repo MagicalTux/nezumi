@@ -12,6 +12,12 @@
 
 $stderr = fopen('php://stderr', 'w');
 
+if (!function_exists('mysql_escape_string')) {
+	function mysql_escape_string($str) {
+		return addslashes($str);
+	}
+}
+
 $char_config = parse_config('conf/char_athena.conf');
 $inter_config = parse_config('conf/inter_athena.conf');
 
