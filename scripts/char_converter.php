@@ -565,7 +565,7 @@ fclose($fil);
 
 fputs($stderr, "Building inserts...\n");
 
-foreach($chars_data as &$tl) {
+foreach($chars_data as $tl) {
 	foreach($tl as $t=>$j) {
 		foreach($j as $i) {
 			$req='';
