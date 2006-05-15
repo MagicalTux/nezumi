@@ -526,7 +526,8 @@ while(!feof($fil)) {
 fclose($fil);
 fputs($stderr, "Found ".count($chars_data)." characters, validating...\n");
 $fix = 0;
-foreach($chars_data as $id=>&$data) {
+foreach($chars_data as $id=>$foo) {
+	$data=&$chars_data[$id]; // fix for PHP4 compatibility
 	if($data['char'][0]['partner_id']) {
 		if (!isset($chars_data[$data['char'][0]['partner_id']])) {
 			$data['char'][0]['partner_id'] = 0;
