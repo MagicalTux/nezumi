@@ -1,5 +1,8 @@
 // $Id: Changelog.txt akrus $
 
+05/17/2006
+	* Updated: mob_db and mob_skill_db [akrus]
+
 05/06/2006
 	* Added: card effects for new cards [akrus]
 
