@@ -1,6 +1,7 @@
 // $Id$
 
 2006-05-18
+	* Added: 'IF NOT EXISTS' when we create tables in main_login.sqlite and main_char.sqlite files [DarkRaven]
 	* Added: comments in main_login.sqlite file [DarkRaven]
 
 2006-05-14

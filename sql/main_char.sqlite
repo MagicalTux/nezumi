@@ -3,7 +3,7 @@
 -- Database: Ragnarok
 -- Table: 'cart_inventory'
 -- 
-CREATE TABLE `cart_inventory` (
+CREATE TABLE IF NOT EXISTS `cart_inventory` (
   `id` INTEGER AUTO_INCREMENT PRIMARY KEY,
   `char_id` int(11) NOT NULL default '0',
   `nameid` int(11) NOT NULL default '0',
@@ -23,7 +23,7 @@ CREATE INDEX `cart_inventory-char_id` ON `cart_inventory` (`char_id`);
 -- Database: Ragnarok
 -- Table: 'char'
 -- 
-CREATE TABLE `char` (
+CREATE TABLE IF NOT EXISTS `char` (
   `char_id` INTEGER AUTO_INCREMENT PRIMARY KEY,
   `account_id` int(11) NOT NULL default '0',
   `char_num` tinyint(4) NOT NULL default '0',
@@ -79,7 +79,7 @@ INSERT INTO `char` (`char_id`, `account_id`) VALUES (500000, 0);
 -- Database: Ragnarok
 -- Table: 'charlog'
 -- 
-CREATE TABLE `charlog` (
+CREATE TABLE IF NOT EXISTS `charlog` (
   `time` datetime NOT NULL default '0000-00-00 00:00:00',
   `char_msg` varchar(255) NOT NULL default 'char select',
   `account_id` int(11) NOT NULL default '0',
@@ -98,7 +98,7 @@ CREATE TABLE `charlog` (
 -- Database: Ragnarok
 -- Table: 'global_reg_value'
 -- 
-CREATE TABLE `global_reg_value` (
+CREATE TABLE IF NOT EXISTS `global_reg_value` (
   `char_id` int(11) NOT NULL default '0',
   `str` varchar(32) NOT NULL default '',
   `value` int(11) NOT NULL default '0'
@@ -108,7 +108,7 @@ CREATE UNIQUE INDEX `charid-and-str` ON `global_reg_value` (`char_id`, `str`);
 -- Database: Ragnarok
 -- Table: 'account_reg_db'
 -- 
-CREATE TABLE `account_reg_db` (
+CREATE TABLE IF NOT EXISTS `account_reg_db` (
   `account_id` int(11) NOT NULL default '0',
   `str` varchar(32) NOT NULL default '',
   `value` int(11) NOT NULL default '0'
@@ -118,7 +118,7 @@ CREATE UNIQUE INDEX `accountid_str` ON `account_reg_db` (`account_id`, `str`);
 -- Database: Ragnarok
 -- Table: 'guild'
 -- 
-CREATE TABLE `guild` (
+CREATE TABLE IF NOT EXISTS `guild` (
   `guild_id` int(11) NOT NULL default '10000',
   `name` varchar(24) NOT NULL default '',
   `master` varchar(24) NOT NULL default '',
@@ -141,7 +141,7 @@ CREATE UNIQUE INDEX `guild_id` ON `guild` (`guild_id`);
 -- Database: Ragnarok
 -- Table: 'guild_alliance'
 -- 
-CREATE TABLE `guild_alliance` (
+CREATE TABLE IF NOT EXISTS `guild_alliance` (
   `guild_id` int(11) NOT NULL default '0',
   `opposition` int(11) NOT NULL default '0',
   `alliance_id` int(11) NOT NULL default '0',
@@ -152,7 +152,7 @@ CREATE INDEX `guild_alliance-guild_id` ON `guild_alliance` (`guild_id`);
 -- Database: Ragnarok
 -- Table: 'guild_castle'
 -- 
-CREATE TABLE `guild_castle` (
+CREATE TABLE IF NOT EXISTS `guild_castle` (
   `castle_id` int(11) NOT NULL default '0',
   `guild_id` int(11) NOT NULL default '0',
   `economy` int(11) NOT NULL default '0',
@@ -186,7 +186,7 @@ CREATE INDEX `guild_castle-guild_id` ON `guild_castle` (`guild_id`);
 -- Database: Ragnarok
 -- Table: 'guild_expulsion'
 -- 
-CREATE TABLE `guild_expulsion` (
+CREATE TABLE IF NOT EXISTS `guild_expulsion` (
   `guild_id` int(11) NOT NULL default '0',
   `name` varchar(24) NOT NULL default '',
   `mes` varchar(40) NOT NULL default '',
@@ -201,7 +201,7 @@ CREATE INDEX `guild_expulsion-guild_id` ON `guild_expulsion` (`guild_id`);
 -- Database: Ragnarok
 -- Table: 'guild_member'
 -- 
-CREATE TABLE `guild_member` (
+CREATE TABLE IF NOT EXISTS `guild_member` (
   `guild_id` int(11) NOT NULL default '0',
   `account_id` int(11) NOT NULL default '0',
   `char_id` int(11) NOT NULL default '0',
@@ -225,7 +225,7 @@ CREATE INDEX `guild_member-char_id` ON `guild_member` (`char_id`);
 -- Database: Ragnarok
 -- Table: 'guild_position'
 -- 
-CREATE TABLE `guild_position` (
+CREATE TABLE IF NOT EXISTS `guild_position` (
   `guild_id` int(11) NOT NULL default '0',
   `position` smallint(6) NOT NULL default '0',
   `name` varchar(24) NOT NULL default '',
@@ -237,7 +237,7 @@ CREATE INDEX `guild_position-guild_id` ON `guild_position` (`guild_id`);
 -- Database: Ragnarok
 -- Table: 'guild_skill'
 -- 
-CREATE TABLE `guild_skill` (
+CREATE TABLE IF NOT EXISTS `guild_skill` (
   `guild_id` int(11) NOT NULL default '0',
   `id` int(11) NOT NULL default '0',
   `lv` int(11) NOT NULL default '0'
@@ -247,7 +247,7 @@ CREATE INDEX `guild_skill-guild_id` ON `guild_skill` (`guild_id`);
 -- Database: Ragnarok
 -- Table: 'guild_storage'
 -- 
-CREATE TABLE `guild_storage` (
+CREATE TABLE IF NOT EXISTS `guild_storage` (
   `id` INTEGER AUTO_INCREMENT PRIMARY KEY,
   `guild_id` int(11) NOT NULL default '0',
   `nameid` int(11) NOT NULL default '0',
@@ -267,7 +267,7 @@ CREATE INDEX `guild_storage-guild_id` ON `guild_storage` (`guild_id`);
 -- Database: Ragnarok
 -- Table: 'interlog'
 -- 
-CREATE TABLE `interlog` (
+CREATE TABLE IF NOT EXISTS `interlog` (
   `time` datetime NOT NULL default '0000-00-00 00:00:00',
   `log` varchar(255) NOT NULL default ''
 ); 
@@ -275,7 +275,7 @@ CREATE TABLE `interlog` (
 -- Database: Ragnarok
 -- Table: 'inventory'
 -- 
-CREATE TABLE `inventory` (
+CREATE TABLE IF NOT EXISTS `inventory` (
   `id` INTEGER AUTO_INCREMENT PRIMARY KEY,
   `char_id` int(11) NOT NULL default '0',
   `nameid` int(11) NOT NULL default '0',
@@ -295,7 +295,7 @@ CREATE INDEX `inventory-char_id` ON `inventory` (`char_id`);
 -- Database: Ragnarok
 -- Table: 'memo'
 -- 
-CREATE TABLE `memo` (
+CREATE TABLE IF NOT EXISTS `memo` (
   `memo_id` INTEGER AUTO_INCREMENT PRIMARY KEY,
   `char_id` int(11) NOT NULL default '0',
   `map` varchar(20) NOT NULL default '',
@@ -307,7 +307,7 @@ CREATE INDEX `memo-char_id` ON `memo` (`char_id`);
 -- Database: Ragnarok
 -- Table: 'party'
 -- 
-CREATE TABLE `party` (
+CREATE TABLE IF NOT EXISTS `party` (
   `party_id` int(11) NOT NULL default '100',
   `name` char(100) NOT NULL default '',
   `exp` int(11) NOT NULL default '0',
@@ -319,7 +319,7 @@ CREATE UNIQUE INDEX `party_id` ON `party` (`party_id`);
 -- Database: Ragnarok
 -- Table: 'pet'
 -- 
-CREATE TABLE `pet` (
+CREATE TABLE IF NOT EXISTS `pet` (
   `pet_id` INTEGER AUTO_INCREMENT PRIMARY KEY,
   `class` mediumint(9) NOT NULL default '0',
   `name` varchar(24) NOT NULL default '',
@@ -337,7 +337,7 @@ CREATE TABLE `pet` (
 -- Database: Ragnarok
 -- Table: 'ragsrvinfo'
 -- 
-CREATE TABLE `ragsrvinfo` (
+CREATE TABLE IF NOT EXISTS `ragsrvinfo` (
   `index` int(11) NOT NULL default '0',
   `name` varchar(30) NOT NULL default '',
   `exp` int(11) NOT NULL default '0',
@@ -349,7 +349,7 @@ CREATE TABLE `ragsrvinfo` (
 -- Database: Ragnarok
 -- Table: 'skill'
 -- 
-CREATE TABLE `skill` (
+CREATE TABLE IF NOT EXISTS `skill` (
   `char_id` int(11) NOT NULL default '0',
   `id` int(11) NOT NULL default '0',
   `lv` tinyint(4) NOT NULL default '0'
@@ -359,7 +359,7 @@ CREATE UNIQUE INDEX `charid_skillid` ON `skill` (`char_id`,`id`);
 -- Database: Ragnarok
 -- Table: 'storage'
 -- 
-CREATE TABLE `storage` (
+CREATE TABLE IF NOT EXISTS `storage` (
   `id` INTEGER AUTO_INCREMENT PRIMARY KEY,
   `account_id` int(11) NOT NULL default '0',
   `nameid` int(11) NOT NULL default '0',
@@ -379,7 +379,7 @@ CREATE INDEX `storage-account_id` ON `storage` (`account_id`);
 -- Database: Ragnarok
 -- Table: 'friends'
 -- 
-CREATE TABLE `friends` (
+CREATE TABLE IF NOT EXISTS `friends` (
   `char_id` int(11) NOT NULL default '0',
   `friend_id` int(11) NOT NULL default '0'
 );
