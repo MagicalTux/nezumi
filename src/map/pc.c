@@ -232,11 +232,11 @@ TIMER_FUNC(pc_jail_timer) {
 	clif_displaymessage(sd->fd, msg_txt(624)); // You have been discharged.
 	// send general message to all players
 	if (battle_config.jail_discharge_message & 1) { // Do we send message to ALL players when a player is discharged?
-		char *message;
-		CALLOC(message, char, 16 + strlen(msg_txt(631)) + 1); // name (16) + message (%s has been discharged from jail.) + NULL (1)
+		char message[256]; // max char name length -> 24 so 256 is enough~
+//		CALLOC(message, char, 16 + strlen(msg_txt(631)) + 1); // name (16) + message (%s has been discharged from jail.) + NULL (1)
 		sprintf(message, msg_txt(631), sd->status.name); // %s has been discharged from jail.
 		intif_GMmessage(message, 0);
-		FREE(message);
+//		FREE(message);
 	}
 
 	if (strcmp(sd->status.last_point.map, "sec_pri.gat") == 0) {

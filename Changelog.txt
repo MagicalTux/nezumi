@@ -1,6 +1,9 @@
 // $Id$
 
 2006-05-18
+	* Fixed: a problem in pc_jail_timer causing server to crash [akrus]
+	- (server crashes when some certain char names are automatically unjailed
+	  and only in case GM message is displayed)
 	* Added: 'IF NOT EXISTS' when we create tables in main_login.sqlite and main_char.sqlite files [DarkRaven]
 	* Added: comments in main_login.sqlite file [DarkRaven]
 
