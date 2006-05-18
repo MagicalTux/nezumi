@@ -1,4 +1,10 @@
+-- -------------------------------------------------------
+
 BEGIN TRANSACTION;
+
+-- Database: Ragnarok
+-- Table: 'login'
+-- 
 CREATE TABLE `login` (
   `account_id` INTEGER AUTO_INCREMENT PRIMARY KEY,
   `userid` varchar(24) NOT NULL default '',
@@ -16,6 +22,10 @@ CREATE TABLE `login` (
   `state` smallint(3) NOT NULL default '0'
 );
 CREATE INDEX `userid` ON `login` (`userid`);
+
+-- added standard accounts for servers, VERY INSECURE!!!
+-- inserted into the table called login which is above
+
 INSERT INTO "login" VALUES(1, 's1', 'p1', '0000-00-00 00:00:00', 'S', 0, 'a@a.com', 0, '', 0, '', '', 0, 0);
 INSERT INTO "login" VALUES(2, 's2', 'p2', '0000-00-00 00:00:00', 'S', 0, 'a@a.com', 0, '', 0, '', '', 0, 0);
 INSERT INTO "login" VALUES(3, 's3', 'p3', '0000-00-00 00:00:00', 'S', 0, 'a@a.com', 0, '', 0, '', '', 0, 0);
@@ -32,12 +42,20 @@ INSERT INTO "login" VALUES(13, 's13', 'p13', '0000-00-00 00:00:00', 'S', 0, 'a@a
 INSERT INTO "login" VALUES(14, 's14', 'p14', '0000-00-00 00:00:00', 'S', 0, 'a@a.com', 0, '', 0, '', '', 0, 0);
 INSERT INTO "login" VALUES(15, 's15', 'p15', '0000-00-00 00:00:00', 'S', 0, 'a@a.com', 0, '', 0, '', '', 0, 0);
 INSERT INTO "login" VALUES(2000001, 'test', 'test', '0000-00-00 00:00:00', 'M', 0, 'a@a.com', 0, '', 0, '', '', 0, 0);
+
+-- Database: Ragnarok
+-- Table: 'account_reg2_db'
+-- 
 CREATE TABLE `account_reg2_db` (
   `account_id` int(11) NOT NULL default '0',
   `str` varchar(32) NOT NULL default '',
   `value` int(11) NOT NULL default '0',
   PRIMARY KEY (`account_id`, `str`)
 );
+
+-- Database: Ragnarok
+-- Table: 'sstatus'
+-- 
 CREATE TABLE `sstatus` (
   `index` tinyint(4) NOT NULL default '0',
   `name` varchar(20) NOT NULL default '',

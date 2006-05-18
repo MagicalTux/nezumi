@@ -1,5 +1,8 @@
 // $Id$
 
+2006-05-18
+	* Added: comments in main_login.sqlite file [DarkRaven]
+
 2006-05-14
 	* Added: Knight - Charge Attack and Priest - Redemptio quest skills [akrus]
 
