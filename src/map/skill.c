@@ -1278,20 +1278,12 @@ int skill_attack(int attack_type, struct block_list* src, struct block_list *dsr
 
 	if(sc_data)
 	{
-		// trick dead is like 'real' death. nothing can hit player
 		if(sc_data[SC_TRICKDEAD].timer != -1)
 			return 0;
-		// pressure can hit hiding players [someone]
-		// lol, it can, but this part of source it not needed actually~ [akrus]
-		// we already have this part in another function [akrus]
-/*
-		if((sc_data[SC_HIDING].timer != -1 || sc_data[SC_CLOAKING].timer != -1) && skillid == PA_PRESSURE)
-		{
+		if(sc_data[SC_HIDING].timer != -1) {
 			if(skill_get_pl(skillid) != 2)
 				return 0;
 		}
-*/
-		// storm gust can't hit frozen players
 		if(skillid == WZ_STORMGUST && sc_data[SC_FREEZE].timer != -1)
 			return 0;
 	}
