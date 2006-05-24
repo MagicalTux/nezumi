@@ -1,5 +1,8 @@
 // $Id$
 
+2006-05-25
+	* Added: nozenypenalty.txt mapflag file [DarkRaven]
+
 2006-05-21
 	* Fixed: AoE skills not affecting cloaked players [akrus]
 
