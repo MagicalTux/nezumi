@@ -19,8 +19,8 @@ lhz_dun01.gat,148,10,0	warp	lhz006a	1,1,lhz_dun02.gat,150,18
 
 //current entrance
 lhz_dun01.gat,150,290,0	warp	lhz007	1,1,lighthalzen.gat,73,54
-//lighthalzen.gat,73,52,0	warp	lhz007a	1,1,lhz_dun01.gat,150,288
-//This should be only an Exit. This warp doesn't exist on kRO.
+lighthalzen.gat,73,52,0	warp	lhz007a	1,1,lhz_dun01.gat,150,288
+//This should be only an Exit (if quest is disabled). This warp doesn't exist on kRO.
 
 //--------------------------Sewage Tube--------------------------
 
