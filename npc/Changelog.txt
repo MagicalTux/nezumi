@@ -1,6 +1,9 @@
 // $Id: Changelog.txt 4392 2006-01-04 22:38:08Z Yor $
 Date	Added
 
+2006.05.28
+	Updated: /npc/other/kafra_bank.txt - with new cities [Darkraven]
+
 2006.05.14
 	Updated: /npc/server/Sapho/guild/mob_db_diff.txt [Sapho Team]
 
