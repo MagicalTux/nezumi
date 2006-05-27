@@ -1,5 +1,8 @@
 // $Id$
 
+2006-05-27
+	* Fixed: reading of some custumed GRF [DarkRaven].
+
 2006-05-25
 	* Added: nozenypenalty.txt mapflag file [DarkRaven]
 
