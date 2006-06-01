@@ -680,7 +680,7 @@ static unsigned char * decode_filename(unsigned char *buf, int len) {
  *------------------------------------------
  */
 static int grfio_entryread(char *gfname, int gentry) {
-	/* GRF header (size: 45 bytes (0x2d), version 0x0100 and 0x0200)
+	/* GRF header (size: 46 bytes (0x2e), version 0x0100 and 0x0200)
 	struct GRF_Header {                    // Offset
 	    unsigned char signature[16];       // 0  (0x00) always Master of Magic\0
 	    unsigned char allowEncryption[14]; // 16 (0x10)
@@ -691,7 +691,7 @@ static int grfio_entryread(char *gfname, int gentry) {
 	};*/
 	FILE *fp;
 	int grf_size, list_size;
-	unsigned char grf_header[0x2d];
+	unsigned char grf_header[0x2e];
 	int lop, entry, entrys, ofs, grf_version;
 	char *fname;
 	unsigned char *grf_filelist;
@@ -704,8 +704,8 @@ static int grfio_entryread(char *gfname, int gentry) {
 	fseek(fp, 0, 2); // SEEK_END
 	grf_size = ftell(fp);
 	fseek(fp, 0, 0); // SEEK_SET
-	fread(grf_header, 1, 0x2d, fp);
-	if (strcmp((char*)grf_header, GRF_HEADER) || fseek(fp, getlong(grf_header + 0x1e) + 1, 1)) { // SEEK_CUR
+	fread(grf_header, 1, 0x2e, fp);
+	if (strcmp((char*)grf_header, GRF_HEADER) || fseek(fp, getlong(grf_header + 0x1e), 1)) { // SEEK_CUR
 		fclose(fp);
 		printf("%s read error\n", gfname);
 		return 2; // 2:file format error

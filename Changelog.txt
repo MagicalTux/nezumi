@@ -1,5 +1,8 @@
 // $Id$
 
+2006-06-01
+	* Fixed: a little bug in grfio.c [DarkRaven].
+
 2006-05-27
 	* Fixed: reading of some custumed GRF [DarkRaven].
 
