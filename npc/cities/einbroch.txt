@@ -1548,10 +1548,7 @@ s_Forge:
 	next;
 	mes "[Uwe]";
 	mes "So, how can";
-	if(Sex = 0) mes "I help you?";
-	if(Sex != 0) mes "I help you, you";
-	if(Sex != 0) mes "adoooooooooorable";
-	if(Sex != 0) mes "hunk of a man?";
+	mes "I help you?";
 	next;
 	menu "Talk about Einbroch",s_Ein,"Ask him to forge a Weapon.",s_Weap,"Master, I want to learn cooking.",s_Cook,"Cancel.",-;
 
