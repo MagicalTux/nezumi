@@ -196,7 +196,7 @@
 1038,Osiris@SM_BASH,attack,5,10,2000,0,5000,yes,target,always,0,,,,,,
 1038,Osiris@WZ_QUAGMIRE,chase,92,5,200,0,5000,no,target,always,0,,,,,,
 
-1039,Baphomet@KN_BRANDISHSPEAR,attack,57,10,2000,500,5000,no,target,always,0,,,,,,29
+1039,Baphomet@KN_BRANDISHSPEAR,attack,57,20,2000,500,5000,no,target,always,0,,,,,,29
 1039,Baphomet@MO_BODYRELOCATION,chase,264,1,200,200,1000,yes,target,always,0,,,,,,
 1039,Baphomet@NPC_ARMORBRAKE,attack,344,10,2000,0,5000,no,target,always,0,,,,,,
 1039,Baphomet@NPC_CALLSLAVE,attack,352,1,10000,0,30000,yes,target,always,0,,,,,,
@@ -207,9 +207,9 @@
 1039,Baphomet@NPC_POWERUP,attack,349,5,10000,0,30000,yes,self,myhpltmaxrate,30,,,,,,6
 1039,Baphomet@NPC_SUMMONSLAVE,attack,196,6,10000,700,10000,no,self,slavele,3,1431,,,,,
 1039,Baphomet@NPC_SUMMONSLAVE,idle,196,6,10000,700,10000,no,self,slavele,3,1431,,,,,
-1039,Baphomet@WZ_VERMILION,attack,85,10,2000,500,2000,no,target,always,0,,,,,,29
-1039,Baphomet@WZ_VERMILION,chase,85,10,200,500,2000,no,target,always,0,,,,,,29
-1039,Baphomet@WZ_VERMILION,chase,85,10,500,500,2000,no,target,skillused,18,,,,,,29
+1039,Baphomet@WZ_VERMILION,attack,85,20,2000,500,2000,no,target,always,0,,,,,,29
+1039,Baphomet@WZ_VERMILION,chase,85,20,2000,500,2000,no,target,always,0,,,,,,29
+1039,Baphomet@WZ_VERMILION,chase,85,20,5000,500,2000,no,target,skillused,18,,,,,,29
 
 1040,Golem@CR_AUTOGUARD,attack,249,2,500,0,300000,yes,self,always,0,,,,,,
 1040,Golem@CR_AUTOGUARD,chase,249,2,200,0,300000,yes,self,longrangeattacked,,,,,,,
@@ -251,7 +251,7 @@
 1046,Doppelganger@BS_HAMMERFALL,chase,110,11,200,0,5000,yes,target,always,0,,,,,,
 1046,Doppelganger@CR_AUTOGUARD,attack,249,10,2000,500,300000,no,self,always,0,,,,,,29
 1046,Doppelganger@CR_AUTOGUARD,chase,249,10,200,500,300000,no,self,longrangeattacked,,,,,,,29
-1046,Doppelganger@KN_TWOHANDQUICKEN,attack,60,10,10000,0,120000,yes,self,myhpltmaxrate,30,,,,,,6
+1046,Doppelganger@KN_TWOHANDQUICKEN,attack,60,20,10000,0,120000,yes,self,myhpltmaxrate,30,,,,,,6
 1046,Doppelganger@NPC_ARMORBRAKE,attack,344,10,2000,0,5000,yes,target,always,0,,,,,,
 1046,Doppelganger@NPC_CALLSLAVE,attack,352,1,10000,0,30000,yes,target,always,0,,,,,,
 1046,Doppelganger@NPC_CALLSLAVE,idle,352,1,10000,0,30000,yes,self,always,0,,,,,,
@@ -322,8 +322,8 @@
 1059,Mistress@NPC_STOP,attack,342,1,2000,0,15000,no,target,always,0,,,,,,6
 1059,Mistress@NPC_SUMMONSLAVE,attack,196,5,10000,700,10000,no,self,slavele,3,1604,,,,,
 1059,Mistress@NPC_SUMMONSLAVE,idle,196,5,10000,700,10000,no,self,slavele,3,1604,,,,,
-1059,Mistress@WZ_JUPITEL,attack,84,10,2000,0,5000,yes,target,always,0,,,,,,
-1059,Mistress@WZ_JUPITEL,chase,84,10,200,0,5000,yes,target,always,0,,,,,,
+1059,Mistress@WZ_JUPITEL,attack,84,20,2000,0,5000,yes,target,always,0,,,,,,
+1059,Mistress@WZ_JUPITEL,chase,84,20,2000,0,5000,yes,target,always,0,,,,,,
 
 1060,Bigfoot@NPC_EMOTION,chase,197,1,20,0,5000,yes,self,always,0,19,129,,,,
 1060,Bigfoot@NPC_EMOTION,chase,197,1,200,0,5000,yes,self,always,0,6,,,,,
@@ -414,12 +414,12 @@
 1086,Golden Thief Bug@AL_HEAL,idle,28,11,10000,0,5000,yes,self,mystatuson,hiding,,,,,,
 1086,Golden Thief Bug@CR_REFLECTSHIELD,attack,252,10,10000,0,300000,yes,self,always,0,,,,,,6
 1086,Golden Thief Bug@CR_REFLECTSHIELD,chase,252,10,10000,0,300000,yes,self,always,0,,,,,,6
-1086,Golden Thief Bug@MC_MAMMONITE,attack,42,10,2000,0,5000,no,target,always,0,,,,,,8
+1086,Golden Thief Bug@MC_MAMMONITE,attack,42,20,2000,0,5000,no,target,always,0,,,,,,8
 1086,Golden Thief Bug@MG_FIREBALL,chase,17,10,200,0,5000,no,target,skillused,18,,,,,,
 1086,Golden Thief Bug@NPC_GUIDEDATTACK,attack,172,5,500,0,20000,no,target,always,0,,,,,,
 1086,Golden Thief Bug@NPC_SUMMONSLAVE,attack,196,10,10000,700,10000,no,self,slavele,5,1608,,,,,
 1086,Golden Thief Bug@NPC_SUMMONSLAVE,idle,196,10,10000,700,10000,no,self,slavele,5,1608,,,,,
-1086,Golden Thief Bug@SM_MAGNUM,attack,7,10,2000,0,5000,no,target,always,0,,,,,,
+1086,Golden Thief Bug@SM_MAGNUM,attack,7,20,2000,0,5000,no,target,always,0,,,,,,
 1086,Golden Thief Bug@TF_HIDING,attack,51,1,1000,0,5000,no,self,myhpltmaxrate,20,,,,,,19
 
 1087,Orc Hero@AL_DECAGI,chase,30,10,200,0,300000,no,target,always,0,,,,,,6
@@ -592,7 +592,7 @@
 1115,Eddga@NPC_SUMMONSLAVE,attack,196,8,10000,700,10000,no,self,slavele,3,1603,,,,,
 1115,Eddga@NPC_SUMMONSLAVE,idle,196,8,10000,700,10000,no,self,slavele,3,1603,,,,,
 1115,Eddga@SM_ENDURE,chase,8,1,500,0,10000,yes,self,longrangeattacked,,,,,,,6
-1115,Eddga@SM_MAGNUM,attack,7,10,3000,0,2000,no,target,always,0,,,,,,
+1115,Eddga@SM_MAGNUM,attack,7,20,3000,0,2000,no,target,always,0,,,,,,
 
 1116,Eggyra@CR_AUTOGUARD,attack,249,2,500,0,5000,yes,self,always,0,,,,,,
 1116,Eggyra@CR_AUTOGUARD,chase,249,2,200,0,5000,yes,self,longrangeattacked,,,,,,,
@@ -770,7 +770,7 @@
 1147,Maya@AL_HEAL,chase,28,11,10000,0,5000,no,friend,friendhpltmaxrate,60,,,,,,3
 1147,Maya@AL_HEAL,chase,28,11,10000,0,5000,no,self,myhpltmaxrate,30,,,,,,3
 1147,Maya@CR_AUTOGUARD,attack,249,10,500,0,5000,yes,self,always,0,,,,,,
-1147,Maya@KN_BRANDISHSPEAR,attack,57,10,2000,500,5000,no,target,always,0,,,,,,
+1147,Maya@KN_BRANDISHSPEAR,attack,57,20,2000,500,5000,no,target,always,0,,,,,,
 1147,Maya@NPC_ARMORBRAKE,attack,344,10,2000,0,5000,no,target,always,0,,,,,,6
 1147,Maya@NPC_CALLSLAVE,attack,352,1,10000,0,30000,yes,target,always,0,,,,,,
 1147,Maya@NPC_CALLSLAVE,idle,352,1,10000,0,30000,yes,self,always,0,,,,,,
@@ -800,7 +800,7 @@
 1150,Moonlight Flower@AL_HEAL,chase,28,11,10000,0,5000,no,self,myhpltmaxrate,30,,,,,,21
 1150,Moonlight Flower@BS_HAMMERFALL,attack,110,11,2000,0,5000,no,target,always,0,,,,,,0
 1150,Moonlight Flower@BS_HAMMERFALL,chase,110,11,200,0,5000,no,target,always,0,,,,,,0
-1150,Moonlight Flower@MC_MAMMONITE,attack,42,10,2000,0,5000,no,target,always,0,,,,,,8
+1150,Moonlight Flower@MC_MAMMONITE,attack,42,20,2000,0,5000,no,target,always,0,,,,,,8
 1150,Moonlight Flower@MG_COLDBOLT,chase,14,5,200,0,5000,no,target,always,0,,,,,,0
 1150,Moonlight Flower@MG_COLDBOLT,chase,14,5,400,0,5000,no,target,skillused,18,,,,,,0
 1150,Moonlight Flower@MG_FIREBOLT,chase,19,5,200,0,5000,no,target,always,0,,,,,,0

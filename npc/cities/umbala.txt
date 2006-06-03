@@ -460,7 +460,7 @@ umbala.gat,221,193,1	script	 #Skeletal Gate	111,{
 			//Blue
 			if(countitem(717) < 1) goto L1_2_e;//Items: Blue Gemstone,
 				mes "^3355FFYou inserted a Blue Gemstone into the";
-				mes "left socket.^000000";
+				mes "right socket.^000000";
 				next;
 				delitem 717,1;//Items: Blue Gemstone,
 				getitem 717,1;//Items: Blue Gemstone,
@@ -473,7 +473,7 @@ umbala.gat,221,193,1	script	 #Skeletal Gate	111,{
 			//Yellow
 			if(countitem(715) < 1) goto L1_3_e;//Items: Yellow Gemstone,
 				mes "^3355FFYou inserted a Yellow Gemstone into the";
-				mes "left socket.^000000";
+				mes "right socket.^000000";
 				next;
 				delitem 715,1;//Items: Yellow Gemstone,
 				getitem 715,1;//Items: Yellow Gemstone,
@@ -486,7 +486,7 @@ umbala.gat,221,193,1	script	 #Skeletal Gate	111,{
 			//Red
 			if(countitem(716) < 1) goto L1_4_e;//Items: Red Gemstone,
 				mes "^3355FFYou inserted a Red Gemstone into the";
-				mes "left socket.^000000";
+				mes "right socket.^000000";
 				next;
 				delitem 716,1;//Items: Red Gemstone,
 				getitem 716,1;//Items: Red Gemstone,
