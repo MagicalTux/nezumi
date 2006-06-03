@@ -1548,7 +1548,7 @@ s_Forge:
 	next;
 	mes "[Uwe]";
 	mes "So, how can";
-	if(Sex = 0)mes "I help you?";
+	if(Sex = 0) mes "I help you?";
 	if(Sex != 0) mes "I help you, you";
 	if(Sex != 0) mes "adoooooooooorable";
 	if(Sex != 0) mes "hunk of a man?";
