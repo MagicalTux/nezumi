@@ -9,7 +9,7 @@
 
 	// -------------------
 	// ---- Options (please modify desired values):
-	$Language = 'English'; // possible: 'English' (default), 'French', 'Russian'
+	$Language = 'English'; // possible: 'English' (default), 'French', 'Russian', 'Japanese'
 	$css_style = '<your style.css url>'; // Set here the link to add a style (used in <link rel="stylesheet" href="MylCastel.css" type="text/css">)
 	$CheckEmail = 1; // 0: doesn't check email of account, 1: Check Email of account (default)
 	$serverip = '127.0.0.1'; // Set here ip of the login server (default: 127.0.0.1)
@@ -151,6 +151,46 @@ $lang = array (
 		'Success' => 'Ваш пароль изменен.',
 		// Copyright
 		'Copyright' => 'Автор: Darkraven для Nezumi Project.',
+	),
+	'Japanese' => array (
+		// Language definition
+		'Lang' => 'ja',
+		'Display' => '日本語表示',
+		// Title
+		'Title' => 'パスワード変更',
+		// Maintenance
+		'Maintenance' => 'サーバーとの接続に失敗',
+		// Form fields
+		'text' => '全ての項目を埋めてください',
+		'account' => 'アカウントID',
+		'email' => 'メールアドレス',
+		'old_pass' => '変更前のパスワード',
+		'new_pass' => '新パスワード',
+		'new_conf_pass' => '新パスワード(確認)',
+		// Form buttons
+		'Submit' => '変更',
+		'Reset' => 'やり直し',
+		// Errors
+		'bad_account' => 'アカウントIDが無効',
+		'bad_email' => 'メールアドレスが無効',
+		'bad_email2' => 'メールアドレスが無効',
+		'bad_email3' => 'メールアドレスが無効',
+		'bad_email4' => 'メールアドレスが無効',
+		'bad_email5' => 'メールアドレスが無効',
+		'bad_email6' => 'メールアドレスが無効',
+		'bad_email7' => 'メールアドレスが無効',
+		'bad_email8' => 'メールアドレスが無効',
+		'bad_old_pass' => '変更前のパスワードが無効',
+		'bad_new_pass' => '新パスワードが無効',
+		'bad_new_pass2' => '変更前後のパスワードが同じ',
+		'bad_new_conf_pass' => '新パスワードが無効',
+		'bad_new_conf_pass2' => '新パスワードと確認パスワードが違う',
+		'bad_values' => 'IDまたはパスワードが違います',
+		'bad_values_email' => 'IDまたはパスワード・メールアドレスが違います',
+		// Success
+		'Success' => 'パスワード変更に成功',
+		// Copyright
+		'Copyright' => 'Powered by Darkraven for Nezumi Project.',
 	),
 );
 	

@@ -9,7 +9,7 @@
 
 	// -------------------
 	// ---- Options (please modify desired values):
-	$Language = 'English'; // possible: 'English' (default), 'French', 'Russian'
+	$Language = 'English'; // possible: 'English' (default), 'French', 'Russian', 'Japanese'
 	$css_style = '<your style.css url>'; // Set here the link to add a style (used in <link rel="stylesheet" href="MylCastel.css" type="text/css">)
 	$AddEmail = 1; // 0: doesn't create account with email, 1: Create account with email (default)
 //	for future extension
@@ -154,6 +154,46 @@ $lang = array (
 		'Failed' => 'Учетная запись не была создана (возможные причины: учетная запись уже существует, запрещенные символы в имени учетной записи).',
 		// Copyright
 		'Copyright' => 'Автор: Darkraven для Nezumi Project.',
+	),
+	'Japanese' => array (
+		// Language definition
+		'Lang' => 'ja',
+		'Display' => '日本語表示',
+		// Title
+		'Title' => 'アカウント作成',
+		// Maintenance
+		'Maintenance' => 'サーバーとの接続に失敗',
+		// Form fields
+		'text' => '全ての項目を埋めてください',
+		'account' => 'アカウントID',
+		'sex' => '性別',
+		'sex1' => '♂',
+		'sex2' => '♀',
+		'email' => 'メールアドレス',
+		'pass' => 'パスワード',
+		'conf_pass' => 'パスワード（確認）',
+		// Form buttons
+		'Submit' => '作成',
+		'Reset' => 'やり直し',
+		// Errors
+		'bad_account' => 'アカウントIDが無効',
+		'bad_sex' => '性別が無効',
+		'bad_email' => 'メールアドレスが無効',
+		'bad_email2' => 'メールアドレスが無効',
+		'bad_email3' => 'メールアドレスが無効',
+		'bad_email4' => 'メールアドレスが無効',
+		'bad_email5' => 'メールアドレスが無効',
+		'bad_email6' => 'メールアドレスが無効',
+		'bad_email7' => 'メールアドレスが無効',
+		'bad_email8' => 'メールアドレスが無効',
+		'bad_pass' => 'パスワードが無効',
+		'bad_conf_pass' => 'パスワード（確認）が無効',
+		'bad_conf_pass2' => 'パスワードとパスワード（確認）の内容が違う',
+		// Result
+		'Success' => 'アカウント \'%s\' の作成に成功',
+		'Failed' => 'アカウント作成に失敗(同名のアカウントが存在するか、不正な文字が含まれている)',
+		// Copyright
+		'Copyright' => 'Powered by Darkraven for Nezumi Project.',
 	),
 );
 	

@@ -1,5 +1,8 @@
 // $Id$
 
+2006-06-04
+	* Added: Japanese language to createaccount.php and chgpasswd.php [DarkRaven].
+
 2006-06-01
 	* Fixed: a little bug in grfio.c [DarkRaven].
 
