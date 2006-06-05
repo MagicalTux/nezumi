@@ -1121,6 +1121,15 @@ void map_deliddb(struct block_list *bl) {
  *------------------------------------------
  */
 void map_quit(struct map_session_data *sd) {
+	
+	// Duelling system by Daven {
+	int i;
+	struct map_session_data *pl_sd = NULL;
+	struct map_session_data *t_sd = NULL;
+	int duelid;
+	char msg1[120],msg2[120];
+	// } Duelling system by Daven
+
 	nullpo_retv(sd);
 
 	if (sd->state.event_disconnect) {
@@ -1161,6 +1170,63 @@ void map_quit(struct map_session_data *sd) {
 	skill_castcancel(&sd->bl, 0);
 	skill_stop_dancing(&sd->bl, 1);
 
+	// Duelling system by daven {
+	pl_sd=map_charid2sd(sd->d_id); // host sd
+	duelid=sd->d_id; // duel id
+
+
+	if (sd->d_id!=0 && ((sd->d_status==1 && sd->d_count==0) || sd->d_status==3)){
+		for (i = 0; i < fd_max; i++){
+			if(session[i] && (t_sd = session[i]->session_data) && t_sd->state.auth && t_sd->d_id==duelid) {
+				t_sd->d_id=0;
+				t_sd->d_status=0;
+				t_sd->d_count=0;
+				clif_displaymessage(t_sd->fd,"One of the players has left the game. Request cancelled.");
+			}
+		}
+	}
+
+
+	if(sd->d_status!=0){
+		// duellants counter [-1]
+		pl_sd->d_count--;
+		
+		sprintf(msg1,"%s has left the duel.", sd->status.name);
+		sprintf(msg2,"Current number of duellants: %d", sd->d_count);
+
+		// parsing number of duellants and their status
+		if(sd==pl_sd){ // player is a host => end the duel for all duellants
+			for (i = 0; i < fd_max; i++){
+			if(session[i] && (t_sd = session[i]->session_data) && t_sd->state.auth && t_sd->d_id==duelid) {
+					t_sd->d_id=0;
+					t_sd->d_status=0;
+					t_sd->d_count=0;
+					clif_displaymessage(t_sd->fd,"The host has left the duel. No blood will spill any more. Duel over.");
+					clif_set0199(t_sd->fd, 0);
+				}
+			}
+		} else {
+			sd->d_id=0;
+			sd->d_status=0;
+			sd->d_count=0;
+			if(pl_sd->d_count==0){
+				pl_sd->d_id=0;
+				pl_sd->d_status=0;
+				pl_sd->d_count=0;
+				clif_displaymessage(pl_sd->fd,"All duellants have left. Duel over.");
+			}
+			clif_displaymessage(sd->fd,"You have left the duel.");
+			clif_set0199(sd->fd, 0);
+			for (i = 0; i < fd_max; i++){
+				if(session[i] && (t_sd = session[i]->session_data) && t_sd->state.auth && t_sd->d_id==duelid && t_sd!=sd) {
+					clif_disp_onlyself(t_sd, msg1);
+					clif_disp_onlyself(t_sd, msg2);
+				}
+			}
+		}
+	}
+	// } Duelling system by daven
+
 	if (sd->sc_data[SC_BERSERK].timer != -1)
 		sd->status.hp = 100;
 
@@ -1193,6 +1259,7 @@ void map_quit(struct map_session_data *sd) {
 	pc_delinvincibletimer(sd);
 	pc_delspiritball(sd, sd->spiritball, 1);
 	skill_gangsterparadise(sd, 0);
+
 
 	status_calc_pc(sd, 4);
 //	skill_clear_unitgroup(&sd->bl);

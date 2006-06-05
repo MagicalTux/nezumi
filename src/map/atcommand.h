@@ -291,6 +291,14 @@ enum AtCommandType {
 	AtCommand_Version,
 	AtCommand_Version2,
 
+	// Duelling commands by Daven
+	AtCommand_Duel,
+	AtCommand_DuelOff,
+	AtCommand_Accept,
+	AtCommand_Reject,
+	AtCommand_DuelInfo,
+
+
 	// SQL-only commands start
 #ifdef USE_SQL
 	AtCommand_CheckMail,

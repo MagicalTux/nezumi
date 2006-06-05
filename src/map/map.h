@@ -249,6 +249,12 @@ struct map_session_data {
 		unsigned infinite_endure : 1;
 		unsigned intravision : 1;
 	} special_state;
+
+	// Duelling system by daven
+	int d_status; // 0 - duel is off , 1 - you are a host , 2 - you are a guest , 3 - request state
+	int d_id; // - duel id
+	int d_count; // - number of player in a certain duel
+
 	int char_id, login_id1, login_id2;
 	unsigned char sex, GM_level;
 	unsigned char packet_ver; // 0: old, 1: 7july04, 2: 13july04, 3: 26july04, 4: 9aug04/16aug04/17aug04, 5: 6sept04, 6: 21sept04, 7: 18oct04, 8: 25oct04/08nov04, 9: 6dec04, 10: 10jan05, 11: 9may05, 12: 28jun05 (by [Yor])

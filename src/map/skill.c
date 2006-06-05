@@ -6370,6 +6370,10 @@ int skill_check_condition(struct map_session_data *sd, int type) {
 			clif_skill_teleportmessage(sd,0);
 			return 0;
 		}
+		if(sd->d_status==1 || sd->d_status==2){
+			clif_displaymessage(sd->fd, "It is not allowed to teleport on the duel!");
+			return 0;
+		}
 		break;
 	case MO_CALLSPIRITS:	/* ‹CŒ÷ */
 		if (sd->spiritball >= lv) {

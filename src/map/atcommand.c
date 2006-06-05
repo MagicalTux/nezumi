@@ -326,6 +326,13 @@ ATCOMMAND_FUNC(request);
 ATCOMMAND_FUNC(version);
 ATCOMMAND_FUNC(version2);
 
+// Duelling commands by Daven
+ATCOMMAND_FUNC(duel);
+ATCOMMAND_FUNC(dueloff);
+ATCOMMAND_FUNC(accept);
+ATCOMMAND_FUNC(reject);
+ATCOMMAND_FUNC(duelinfo);
+
 #ifdef USE_SQL
 ATCOMMAND_FUNC(checkmail);
 ATCOMMAND_FUNC(listmail);
@@ -1045,6 +1052,16 @@ static struct AtCommandInfo {
 	{ AtCommand_Request,               "@contactgm",             0, atcommand_request },
 	{ AtCommand_Version,               "@version",               0, atcommand_version },
 	{ AtCommand_Version2,              "@version2",              0, atcommand_version2 },
+	{ AtCommand_Duel,				"@duel",			 0, atcommand_duel }, // By Daven
+	{ AtCommand_DuelOff,			"@dueloff",			 0, atcommand_dueloff }, // By Daven
+	{ AtCommand_Accept,				"@accept",			 0, atcommand_accept }, // By Daven
+	{ AtCommand_Reject,				"@reject",			 0, atcommand_reject }, // By Daven
+	{ AtCommand_Duel,				"@d",			 0, atcommand_duel }, // By Daven
+	{ AtCommand_DuelOff,			"@do",			 0, atcommand_dueloff }, // By Daven
+	{ AtCommand_Accept,				"@a",			 0, atcommand_accept }, // By Daven
+	{ AtCommand_Reject,				"@r",			 0, atcommand_reject }, // By Daven
+	{ AtCommand_DuelInfo,			"@di",			 0, atcommand_duelinfo }, // By Daven
+	{ AtCommand_DuelInfo,			"@duelinfo",			 0, atcommand_duelinfo }, // By Daven
 
 #ifdef USE_SQL
 	{ AtCommand_CheckMail,             "@checkmail",             1, atcommand_listmail }, // type: 1:checkmail, 2:listmail, 3:listnewmail
@@ -15182,7 +15199,250 @@ ATCOMMAND_FUNC(version2) {
 	return 0;
 }
 
+/*==========================================
+ * Duelling System commands by [Daven]
+ *
+ * It'd be great if some1 could 
+ * improve these @commands...
+ *------------------------------------------
+ * @d | @duel <char_name> - initiate duel
+ * @a | @accept - accept the duel request
+ * @r | @reject - reject the duel request
+ * @do | @dueloff - leave current duel
+ * @di | @duelinfo - info about duellants
+ *------------------------------------------
+ * For more details u can contact me via 
+ * Nezumi forums at http://nezumi.dns.st
+ *------------------------------------------
+ */
+
+ATCOMMAND_FUNC(duel) {
+
+	struct map_session_data *pl_sd = NULL;
+	char msg[120];
+
+	if (sd->d_status!=0 || sd->d_id!=0){
+		if(sd->d_status==3)
+			clif_displaymessage(fd, "Unable to send request. Request already sent.");
+		else
+			clif_displaymessage(fd, "Unable to send request. You are already on a duel.");
+		return -1;
+	}
+	
+	if (!message || !*message || sscanf(message, "%[^\n]", atcmd_name) < 1) {
+		send_usage(fd, "Please, enter a player name (usage: %s <char name>).", original_command);
+		return -1;
+	}
+
+	if ((pl_sd=map_nick2sd(atcmd_name))==NULL || (pl_sd!=NULL && !pl_sd->state.auth)){
+		clif_displaymessage(fd, "Opponent not found.");
+		return -1;
+	}
+
+	if(sd->char_id==pl_sd->char_id){
+		clif_displaymessage(fd, "You can not request a duel from yourself!");
+		return -1;
+	} 
+
+	if (sd->bl.m!=pl_sd->bl.m){
+		clif_displaymessage(fd, "Your opponent must be on the same location, as you.");
+		return -1;
+	}
+
+	if (/* map[sd->bl.m].flag.nopvp || */ map[sd->bl.m].flag.pvp || map[sd->bl.m].flag.gvg){ // flag nopvp commented out due to unavailability
+		clif_displaymessage(fd, "This location is not allowed for duelling.");
+		return -1;
+	}
+	
+	// set the duel id for both players equal to the host's char id
+	sd->d_id=sd->char_id;
+	pl_sd->d_id=sd->char_id;
+	
+	// set the host(1) and request(3) state for both opponents
+	sd->d_status=1;
+	pl_sd->d_status=3;
+	
+	// reset the duellant counter
+	sd->d_count=0;
+
+	// message output
+	sprintf(msg,"Player %s [%d/%d - %s] request a duel!", sd->status.name,sd->status.base_level,sd->status.job_level,job_name(pl_sd->status.class));
+	clif_displaymessage(sd->fd, "Request sent. Awaiting reply...");
+	clif_displaymessage(pl_sd->fd, msg);
+	clif_disp_onlyself(pl_sd, "@accept - accept the duel request");
+	clif_disp_onlyself(pl_sd, "@reject - reject the duel request");
+	return 0;	
+}
+
+ATCOMMAND_FUNC(accept) {
+
+	struct map_session_data *pl_sd;
+	struct map_session_data *t_sd = NULL;
+	int duelid, i;
+	char msg1[120], msg2[120];
+	pl_sd=NULL;
+
+	if (sd->d_status!=3 || sd->d_id==0){
+		clif_displaymessage(fd, "Unable to accept the duel request. No request was sent to you.");
+		return -1;
+	}
+
+	// initial definitions
+	pl_sd=map_charid2sd(sd->d_id); // duel host's session data
+	duelid=sd->d_id; // duel id
+	
+	// duellants counter [+1]
+	pl_sd->d_count++;
+
+	// эффекты
+	// clif_specialeffect(&pl_sd->bl, type, flag);
+
+	// prepare messages
+	sprintf(msg1,"%s [%d/%d - %s] has joined the duel!", sd->status.name,sd->status.base_level,sd->status.job_level,job_name(pl_sd->status.class));
+	sprintf(msg2,"Current number of duellants: %d", pl_sd->d_count);
+
+	// message output
+	for (i = 0; i < fd_max; i++){
+		if(session[i] && (t_sd = session[i]->session_data) && t_sd->state.auth && t_sd->d_id==duelid && t_sd!=sd) {
+			clif_disp_onlyself(t_sd, msg1);
+			clif_disp_onlyself(t_sd, msg2);
+		}
+	}
+	
+	sd->d_status=2;
+	clif_displaymessage(sd->fd,"Duel accepted! Let's get ready to rumble!");
+	clif_set0199(sd->fd, 1);
+	if(pl_sd->d_count==1){
+		clif_displaymessage(pl_sd->fd,"Duel accepted! Let's get ready to rumble!");
+		clif_set0199(pl_sd->fd, 1);
+	}
+	return 0;	
+}
+
+ATCOMMAND_FUNC(reject) {
+
+	struct map_session_data *pl_sd = NULL;
+	int duelid;
+	char msg1[120];
+
+	if (sd->d_status!=3 || sd->d_id==0){
+		clif_displaymessage(fd, "Unable to reject the duel request. No request was sent to you.");
+		return -1;
+	}
+
+	// стартовые задания
+	pl_sd=map_charid2sd(sd->d_id); // хост
+	duelid=sd->d_id; // ид дуэли отдельно
+	
+	sprintf(msg1,"%s has rejected your duel request.", sd->status.name);
+
+	// обработка кол-ва игроков и вывод сообщений
+	sd->d_status=0;
+	sd->d_id=0;
+	if(pl_sd->d_count==0){
+		pl_sd->d_status=0;
+		pl_sd->d_id=0;
+		clif_displaymessage(sd->fd,msg1);
+	}
+	
+	clif_displaymessage(sd->fd,"Duel rejected.");
+	return 0;	
+}
+
+ATCOMMAND_FUNC(dueloff) {
+
+	struct map_session_data *pl_sd = NULL;
+	struct map_session_data *t_sd = NULL;
+	int duelid, i;
+	char msg1[120],msg2[120];
+
+	if (sd->d_status==0 || sd->d_status==3 || sd->d_id==0){
+		clif_displaymessage(fd, "You are not duelling right now. Unable to leave");
+		return -1;
+	}
+
+	// init
+	pl_sd=map_charid2sd(sd->d_id); // duel host's session data
+	duelid=sd->d_id; // duel id
+
+	// duellants counter [-1]
+	pl_sd->d_count--;
+	
+	sprintf(msg1,"%s has left the duel.", sd->status.name);
+	sprintf(msg2,"Current number of duellants: %d", sd->d_count);
+
+	// parsing number of duellants and their status
+	if(sd==pl_sd){ // player is a host => end the duel for all duellants
+		for (i = 0; i < fd_max; i++){
+		if(session[i] && (t_sd = session[i]->session_data) && t_sd->state.auth && t_sd->d_id==duelid) {
+				t_sd->d_id=0;
+				t_sd->d_status=0;
+				t_sd->d_count=0;
+				clif_displaymessage(t_sd->fd,"The host has left the duel. No blood will spill any more. Duel over.");
+				clif_set0199(t_sd->fd, 0);
+			}
+		}
+	} else {
+		sd->d_id=0;
+		sd->d_status=0;
+		sd->d_count=0;
+		if(pl_sd->d_count==0){
+			pl_sd->d_id=0;
+			pl_sd->d_status=0;
+			pl_sd->d_count=0;
+			clif_displaymessage(pl_sd->fd,"All duellants have left. Duel over.");
+		}
+		clif_displaymessage(sd->fd,"You have left the duel.");
+		clif_set0199(sd->fd, 0);
+		for (i = 0; i < fd_max; i++){
+			if(session[i] && (t_sd = session[i]->session_data) && t_sd->state.auth && t_sd->d_id==duelid && t_sd!=sd) {
+				clif_disp_onlyself(t_sd, msg1);
+				clif_disp_onlyself(t_sd, msg2);
+			}
+		}
+	}
+	return 0;	
+}
+
+ATCOMMAND_FUNC(duelinfo) {
+
+	struct map_session_data *pl_sd = NULL;
+	struct map_session_data *t_sd = NULL;
+	int duelid, i;
+	char msg1[120], msg2[120];
+
+	if (sd->d_status==0 || sd->d_id==0){
+		clif_displaymessage(fd, "You are not duelling right now. Unable to retrieve duel information.");
+		return -1;
+	}
+
+	// init
+	pl_sd=map_charid2sd(sd->d_id); // duel host's session data
+	duelid=sd->d_id; // duel id
+	
+	// Prepare messages
+	sprintf(msg2,"Total number of duellants: %d", pl_sd->d_count);
+
+	// parse players output
+	clif_disp_onlyself(sd, "------------------------------------------");
+	clif_disp_onlyself(sd, "             [ Duel information ]            ");
+	clif_disp_onlyself(sd, "------------------------------------------");
+	clif_disp_onlyself(t_sd, msg2);
+	
+	// list duellants
+		for (i = 0; i < fd_max; i++){
+			if(session[i] && (t_sd = session[i]->session_data) && t_sd->state.auth && t_sd->d_id==duelid){
+			sprintf(msg1,"[ %s ]-[ %d/%d - %s ]", t_sd->status.name,t_sd->status.base_level,t_sd->status.job_level,job_name(t_sd->status.class));
+			clif_disp_onlyself(sd, msg1);
+		}
+	}
+	return 0;
+
+}
+
+
 #ifdef USE_SQL  /* Begin SQL-Only commands */
+
 
 /*==========================================
  * Mail System commands by [Valaris]

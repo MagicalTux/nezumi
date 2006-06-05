@@ -88,6 +88,8 @@ int pc_iskiller(struct map_session_data *src, struct map_session_data *target) {
 
 	if (target->bl.type != BL_PC)
 		return 0;
+	if(src->bl.type == BL_PC && target->bl.type == BL_PC && target->d_id==src->d_id && (src->d_status==1 || src->d_status==2) && (target->d_status==1 || target->d_status==2))
+		return 1;
 	if (target->special_state.killable)
 		return 1;
 
@@ -3116,15 +3118,15 @@ int pc_isUseitem(struct map_session_data *sd, int n)
 		return 0;
 	if (item->type != 0 && item->type != 2)
 		return 0;
-	if ((nameid == 605) && map[sd->bl.m].flag.gvg)
+	if (((nameid == 605) && map[sd->bl.m].flag.gvg) || (sd->d_status==1 || sd->d_status==2))
 		return 0;
-	if (nameid == 601 && (map[sd->bl.m].flag.noteleport || map[sd->bl.m].flag.gvg)) {
+	if ((nameid == 601 && (map[sd->bl.m].flag.noteleport || map[sd->bl.m].flag.gvg)) || (sd->d_status==1 || sd->d_status==2)) {
 		clif_skill_teleportmessage(sd, 0);
 		return 0;
 	}
-	if (nameid == 602 && map[sd->bl.m].flag.noreturn)
+	if ((nameid == 602 && map[sd->bl.m].flag.noreturn) || (sd->d_status==1 || sd->d_status==2))
 		return 0;
-	if ((nameid == 604 || nameid == 12103 || nameid == 12109) && (map[sd->bl.m].flag.nobranch || map[sd->bl.m].flag.gvg)) // 604: Dead Branch, 12103: Bloody Branch, 12109: Poring Box
+	if ((nameid == 604 || nameid == 12103 || nameid == 12109) || (map[sd->bl.m].flag.nobranch || map[sd->bl.m].flag.gvg)) // 604: Dead Branch, 12103: Bloody Branch, 12109: Poring Box
 		return 0;
 	if (battle_config.item_sex_check && item->sex != 2 && sd->status.sex != item->sex)
 		return 0;
@@ -3647,6 +3649,7 @@ int pc_setpos(struct map_session_data *sd, char *mapname_org, int x, int y, int 
 {
 	char mapname[17];
 	int m = 0, disguise = 0;
+	int i;
 
 	nullpo_retr(0, sd);
 
@@ -3715,6 +3718,26 @@ int pc_setpos(struct map_session_data *sd, char *mapname_org, int x, int y, int 
 				skill_delunitgroup(sg);
 			status_change_end(&sd->bl, SC_BASILICA, -1);
 		}
+	}
+	
+	// Duelling system by Daven {
+	if (sd->d_id!=0 && ((sd->d_status==1 && sd->d_count==0) || sd->d_status==3)){
+
+		int duelid = sd->d_id; // duel id
+		struct map_session_data *t_sd; 
+
+		if (sd->d_id!=0 && ((sd->d_status==1 && sd->d_count==0) || sd->d_status==3)){
+			for (i = 0; i < fd_max; i++){
+				if(session[i] && (t_sd = session[i]->session_data) && t_sd->state.auth && t_sd->d_id==duelid) {
+					t_sd->d_id=0;
+					t_sd->d_status=0;
+					t_sd->d_count=0;
+					clif_displaymessage(t_sd->fd,"One of the players has changed their location. Request cancelled.");
+				}
+			}
+		}
+
+
 	}
 
 	// if caster has changed map -> clear skill
@@ -5538,6 +5561,9 @@ int pc_damage(struct block_list *src, struct map_session_data *sd, int damage)
 {
 	int i = 0, j = 0;
 	struct pc_base_job s_class;
+	int duelid, s;
+	char msg1[120],msg2[120];
+
 
 	nullpo_retr(0, sd);
 
@@ -5670,6 +5696,63 @@ int pc_damage(struct block_list *src, struct map_session_data *sd, int damage)
 	status_change_clear(&sd->bl, 0);
 	clif_updatestatus(sd, SP_HP);
 	status_calc_pc(sd, 0);
+
+	// Duelling system by daven {
+	struct map_session_data *pl_sd=map_charid2sd(sd->d_id); // host sd
+	duelid = sd->d_id; // duel id
+	struct map_session_data *t_sd; 
+
+	if (sd->d_id!=0 && ((sd->d_status==1 && sd->d_count==0) || sd->d_status==3)){
+		for (i = 0; i < fd_max; i++){
+			if(session[i] && (t_sd = session[i]->session_data) && t_sd->state.auth && t_sd->d_id==duelid) {
+				t_sd->d_id=0;
+				t_sd->d_status=0;
+				t_sd->d_count=0;
+				clif_displaymessage(t_sd->fd,"One of the players has died. Request cancelled.");
+			}
+		}
+	}
+
+
+	if(sd->d_status!=0){
+		// duellants counter [-1]
+		pl_sd->d_count--;
+		
+		sprintf(msg1,"%s has left the duel.", sd->status.name);
+		sprintf(msg2,"Current number of duellants: %d", sd->d_count);
+
+		// parsing number of duellants and their status
+		if(sd==pl_sd){ // player is a host => end the duel for all duellants
+			for (s = 0; s < fd_max; s++){
+			if(session[s] && (t_sd = session[s]->session_data) && t_sd->state.auth && t_sd->d_id==duelid) {
+					t_sd->d_id=0;
+					t_sd->d_status=0;
+					t_sd->d_count=0;
+					clif_displaymessage(t_sd->fd,"The host has died. No blood will spill any more. Duel over.");
+					clif_set0199(t_sd->fd, 0);
+				}
+			}
+		} else {
+			sd->d_id=0;
+			sd->d_status=0;
+			sd->d_count=0;
+			if(pl_sd->d_count==0){
+				pl_sd->d_id=0;
+				pl_sd->d_status=0;
+				pl_sd->d_count=0;
+				clif_displaymessage(pl_sd->fd,"All duellants are dead. Duel over.");
+			}
+			clif_displaymessage(sd->fd,"You have left the duel.");
+			clif_set0199(sd->fd, 0);
+			for (s = 0; s < fd_max; s++){
+				if(session[s] && (t_sd = session[s]->session_data) && t_sd->state.auth && t_sd->d_id==duelid && t_sd!=sd) {
+					clif_disp_onlyself(t_sd, msg1);
+					clif_disp_onlyself(t_sd, msg2);
+				}
+			}
+		}
+	}
+	// } Duelling system by daven
 
 	if (src && src->type == BL_PC) {
 		struct map_session_data *ssd = (struct map_session_data *)src;
