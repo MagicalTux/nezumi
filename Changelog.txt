@@ -1,5 +1,9 @@
 // $Id$
 
+2006-06-05
+	* Added: start-nezumi.sh now tries to autodetect Nezumi installation path [MagicalTux]
+	* Added: ./start-nezumi.sh check : check if Nezumi is started, and start it if required [MagicalTux]
+
 2006-06-04
 	* Added: Japanese language to createaccount.php and chgpasswd.php [DarkRaven].
 

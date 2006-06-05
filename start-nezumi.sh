@@ -9,8 +9,21 @@
 # the server.
 #
 
-# CONFIG
+# Change this value to reflect your installation path if the resident can't locate Nezumi
 NEZUMI_PATH=.
+
+# Check our directory
+if [ ! -f "$NEZUMI_PATH/login-server" ]; then
+	# login-server isn't with us, try to locate it in the path found in $0
+	POSSIBLE_PATH=`dirname "$0"`
+	if [ ! -f "$POSSIBLE_PATH/login_server" ]; then
+		echo "Server not found, make sure that $0 is ran within Nezumi directory."
+		exit 1
+	fi
+	NEZUMI_PATH="$POSSIBLE_PATH"
+fi
+
+# CONFIG
 NEZUMI_BIN="login-server char-server map-server"
 UPDATE_STATUS_TIMER=60
 PIDFILE_PATH="$NEZUMI_PATH/save/agent.pid"
@@ -32,6 +45,21 @@ nezumi_start() {
 	PID="$!"
 	echo "$PID" >"$PIDFILE_PATH"
 	echo " started (pid: $PID)"
+}
+
+nezumi_check() {
+	if [ -f "$PIDFILE_PATH" ]; then
+		if kill -0 `cat "$PIDFILE_PATH"` 2>/dev/null; then
+			# already running, nothing to do
+			exit 0
+		fi
+		# stale pidfile
+		rm -f "$PIDFILE_PATH"
+	fi
+	# start nezumi resident...
+	nezumi_resident &
+	PID="$!"
+	echo "$PID" >"$PIDFILE_PATH"
 }
 
 nezumi_restart() {
@@ -150,6 +178,10 @@ nezumi_resident() {
 	# Nezumi Resident System
 	cd $NEZUMI_PATH
 	DAEMON=""
+	# close stdin, stdout and stderr
+	exec 0</dev/null
+	exec 1>/dev/null
+	exec 2>/dev/null
 	nezumi_res_log "Nezumi Resident v1.0 by MagicalTux <MagicalTux@ooKoo.org>"
 	trap nezumi_res_stop SIGINT
 	trap nezumi_res_stop SIGTERM
@@ -231,8 +263,11 @@ status)
 resident)
 	nezumi_resident
 	;;
+check)
+	nezumi_check
+	;;
 *)
-	echo "Usage: $0 ( start | stop | restart | status | resident )"
+	echo "Usage: $0 ( start | stop | restart | status | check | resident )"
 	exit 1
 	;;
 esac
