@@ -1,5 +1,12 @@
 // $Id$
 
+2006-06-06
+	* Added: Dueling system atcommands in atcommand.c and atcommand.h and duels support [Daven]
+	- The following files were modified: atcommand.c, atcommand.h, pc.c, map.c, map.h and skill.c.
+	  These commands are still to be added into the help and atcommand.conf.
+	  There are some comments on the duelling system in the atcommand.c file.
+	* Fixed: finished the duelling system, fixed all related bugs. Everything is fine now! [Daven]
+
 2006-06-05
 	* Added: start-nezumi.sh now tries to autodetect Nezumi installation path [MagicalTux]
 	* Added: ./start-nezumi.sh check : check if Nezumi is started, and start it if required [MagicalTux]

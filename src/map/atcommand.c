@@ -15214,6 +15214,9 @@ ATCOMMAND_FUNC(version2) {
  * For more details u can contact me via 
  * Nezumi forums at http://nezumi.dns.st
  *------------------------------------------
+ * Special thanks to akrus for helping
+ * debugging this crap :D
+ *------------------------------------------
  */
 
 ATCOMMAND_FUNC(duel) {
@@ -15267,9 +15270,6 @@ ATCOMMAND_FUNC(duel) {
 	// set the host(1) and request(3) state for both opponents
 	sd->d_status=1;
 	pl_sd->d_status=3;
-	
-	// reset the duellant counter
-	sd->d_count=0;
 
 	// message output
 	sprintf(msg,"Player %s [%d/%d - %s] request a duel!", sd->status.name,sd->status.base_level,sd->status.job_level,job_name(pl_sd->status.class));
@@ -15299,9 +15299,6 @@ ATCOMMAND_FUNC(accept) {
 	
 	// duellants counter [+1]
 	pl_sd->d_count++;
-
-	// эффекты
-	// clif_specialeffect(&pl_sd->bl, type, flag);
 
 	// prepare messages
 	sprintf(msg1,"%s [%d/%d - %s] has joined the duel!", sd->status.name,sd->status.base_level,sd->status.job_level,job_name(pl_sd->status.class));
@@ -15336,13 +15333,13 @@ ATCOMMAND_FUNC(reject) {
 		return -1;
 	}
 
-	// стартовые задания
-	pl_sd=map_charid2sd(sd->d_id); // хост
-	duelid=sd->d_id; // ид дуэли отдельно
+	// init
+	pl_sd=map_charid2sd(sd->d_id); // duel host's sd
+	duelid=sd->d_id; // duel id
 	
 	sprintf(msg1,"%s has rejected your duel request.", sd->status.name);
 
-	// обработка кол-ва игроков и вывод сообщений
+	// count players and output messages
 	sd->d_status=0;
 	sd->d_id=0;
 	if(pl_sd->d_count==0){
@@ -15375,7 +15372,7 @@ ATCOMMAND_FUNC(dueloff) {
 	pl_sd->d_count--;
 	
 	sprintf(msg1,"%s has left the duel.", sd->status.name);
-	sprintf(msg2,"Current number of duellants: %d", sd->d_count);
+	sprintf(msg2,"Current number of duellants: %d", pl_sd->d_count);
 
 	// parsing number of duellants and their status
 	if(sd==pl_sd){ // player is a host => end the duel for all duellants
@@ -15437,7 +15434,7 @@ ATCOMMAND_FUNC(duelinfo) {
 	
 	// list duellants
 		for (i = 0; i < fd_max; i++){
-			if(session[i] && (t_sd = session[i]->session_data) && t_sd->state.auth && t_sd->d_id==duelid && (t_sd->d_status==1 && t_sd->d_status==2)){
+			if(session[i] && (t_sd = session[i]->session_data) && t_sd->state.auth && t_sd->d_id==duelid && (t_sd->d_status==1 || t_sd->d_status==2)){
 			sprintf(msg1,"[ %s ]-[ %d/%d - %s ]", t_sd->status.name,t_sd->status.base_level,t_sd->status.job_level,job_name(t_sd->status.class));
 			clif_disp_onlyself(sd, msg1);
 		}
