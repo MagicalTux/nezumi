@@ -322,8 +322,8 @@
 1059,Mistress@NPC_STOP,attack,342,1,2000,0,15000,no,target,always,0,,,,,,6
 1059,Mistress@NPC_SUMMONSLAVE,attack,196,5,10000,700,10000,no,self,slavele,3,1604,,,,,
 1059,Mistress@NPC_SUMMONSLAVE,idle,196,5,10000,700,10000,no,self,slavele,3,1604,,,,,
-1059,Mistress@WZ_JUPITEL,attack,84,20,2000,0,5000,yes,target,always,0,,,,,,
-1059,Mistress@WZ_JUPITEL,chase,84,20,2000,0,5000,yes,target,always,0,,,,,,
+1059,Mistress@WZ_JUPITEL,attack,84,28,2000,0,5000,yes,target,always,0,,,,,,
+1059,Mistress@WZ_JUPITEL,chase,84,28,2000,0,5000,yes,target,always,0,,,,,,
 
 1060,Bigfoot@NPC_EMOTION,chase,197,1,20,0,5000,yes,self,always,0,19,129,,,,
 1060,Bigfoot@NPC_EMOTION,chase,197,1,200,0,5000,yes,self,always,0,6,,,,,
