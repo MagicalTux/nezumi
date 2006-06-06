@@ -15222,9 +15222,9 @@ ATCOMMAND_FUNC(duel) {
 	char msg[120];
 
 	if (sd->d_status!=0 && sd->d_id!=0){
-		sd->d_status==3
+		if(sd->d_status==3)
 			clif_displaymessage(fd, "Unable to send request. You have already been requested a duel.");
-		sd->d_status==2
+		if(sd->d_status==2)
 			clif_displaymessage(fd, "Unable to send request. You are already duelling.");
 		return -1;
 	}
