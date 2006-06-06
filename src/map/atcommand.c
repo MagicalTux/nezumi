@@ -15221,12 +15221,18 @@ ATCOMMAND_FUNC(duel) {
 	struct map_session_data *pl_sd = NULL;
 	char msg[120];
 
-	if (sd->d_status!=0 && sd->d_id!=0){
-		if(sd->d_status==3)
+	if (sd->d_id!=0){
+		
+		if(sd->d_status==3){
 			clif_displaymessage(fd, "Unable to send request. You have already been requested a duel.");
-		if(sd->d_status==2)
+			return -1;
+		}
+
+		if(sd->d_status==2){
 			clif_displaymessage(fd, "Unable to send request. You are already duelling.");
-		return -1;
+			return -1;
+		}
+
 	}
 	
 	if (!message || !*message || sscanf(message, "%[^\n]", atcmd_name) < 1) {
