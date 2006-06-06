@@ -15221,11 +15221,8 @@ ATCOMMAND_FUNC(duel) {
 	struct map_session_data *pl_sd = NULL;
 	char msg[120];
 
-	if (sd->d_status!=0 || sd->d_id!=0){
-		if(sd->d_status==3)
-			clif_displaymessage(fd, "Unable to send request. Request already sent.");
-		else
-			clif_displaymessage(fd, "Unable to send request. You are already on a duel.");
+	if (sd->d_status==3 && sd->d_id!=0){
+		clif_displaymessage(fd, "Unable to send request. You have already been requested a duel.");
 		return -1;
 	}
 	

@@ -3118,13 +3118,13 @@ int pc_isUseitem(struct map_session_data *sd, int n)
 		return 0;
 	if (item->type != 0 && item->type != 2)
 		return 0;
-	if (((nameid == 605) && map[sd->bl.m].flag.gvg) || (sd->d_status==1 || sd->d_status==2))
+	if ((nameid == 605) && (map[sd->bl.m].flag.gvg || (sd->d_status==1 || sd->d_status==2)))
 		return 0;
-	if ((nameid == 601 && (map[sd->bl.m].flag.noteleport || map[sd->bl.m].flag.gvg)) || (sd->d_status==1 || sd->d_status==2)) {
+	if (nameid == 601 && (map[sd->bl.m].flag.noteleport || map[sd->bl.m].flag.gvg || (sd->d_status==1 || sd->d_status==2))) {
 		clif_skill_teleportmessage(sd, 0);
 		return 0;
 	}
-	if ((nameid == 602 && map[sd->bl.m].flag.noreturn) || (sd->d_status==1 || sd->d_status==2))
+	if (nameid == 602 && (map[sd->bl.m].flag.noreturn || (sd->d_status==1 || sd->d_status==2)))
 		return 0;
 	if ((nameid == 604 || nameid == 12103 || nameid == 12109) || (map[sd->bl.m].flag.nobranch || map[sd->bl.m].flag.gvg)) // 604: Dead Branch, 12103: Bloody Branch, 12109: Poring Box
 		return 0;
