@@ -15221,8 +15221,11 @@ ATCOMMAND_FUNC(duel) {
 	struct map_session_data *pl_sd = NULL;
 	char msg[120];
 
-	if (sd->d_status==3 && sd->d_id!=0){
-		clif_displaymessage(fd, "Unable to send request. You have already been requested a duel.");
+	if (sd->d_status!=0 && sd->d_id!=0){
+		sd->d_status==3
+			clif_displaymessage(fd, "Unable to send request. You have already been requested a duel.");
+		sd->d_status==2
+			clif_displaymessage(fd, "Unable to send request. You are already duelling.");
 		return -1;
 	}
 	
@@ -15428,7 +15431,7 @@ ATCOMMAND_FUNC(duelinfo) {
 	
 	// list duellants
 		for (i = 0; i < fd_max; i++){
-			if(session[i] && (t_sd = session[i]->session_data) && t_sd->state.auth && t_sd->d_id==duelid){
+			if(session[i] && (t_sd = session[i]->session_data) && t_sd->state.auth && t_sd->d_id==duelid && (t_sd->d_status==1 && t_sd->d_status==2)){
 			sprintf(msg1,"[ %s ]-[ %d/%d - %s ]", t_sd->status.name,t_sd->status.base_level,t_sd->status.job_level,job_name(t_sd->status.class));
 			clif_disp_onlyself(sd, msg1);
 		}
