@@ -3980,7 +3980,6 @@ int status_change_start(struct block_list *bl, int type, intptr_t val1, intptr_t
 			break;
 
 		case SC_BASILICA:
-		case SC_HERMODE:
 			break;
 
 		case SC_GOSPEL:
@@ -4039,6 +4038,10 @@ int status_change_start(struct block_list *bl, int type, intptr_t val1, intptr_t
 		case SC_GRAVITATION:
 			if (val3 != BCT_SELF)
 				calc_flag = 1;
+			break;
+
+		case SC_HERMODE:
+			status_change_clear_buffs(bl);
 			break;
 
 		case SC_COMA:
@@ -4418,7 +4421,6 @@ int status_change_end(struct block_list* bl, int type, int tid)
 				calc_flag = 1;
 				break;
 
-			// celest
 			case SC_CONFUSION:
 			  {
 				struct map_session_data *sd;
@@ -4426,6 +4428,18 @@ int status_change_end(struct block_list* bl, int type, int tid)
 					sd->next_walktime = -1;
 				}
 			  }
+				break;
+
+			case SC_BASILICA:
+				if(sc_data[type].val3 == BCT_SELF)
+					skill_clear_unitgroup(bl);
+				break;
+
+			case SC_HERMODE:
+				if(sc_data[type].val3 == BCT_SELF)
+					skill_clear_unitgroup(bl);
+				else
+					calc_flag = 1;
 				break;
 
 			case SC_MARIONETTE:
@@ -4829,6 +4843,8 @@ TIMER_FUNC(status_change_timer) {
 					case DC_FORTUNEKISS:
 						s=4;
 						break;
+					case CG_HERMODE:
+						sp = 5;
 					case BD_INTOABYSS:
 					case BA_WHISTLE:
 					case DC_HUMMING:

@@ -3535,15 +3535,17 @@ int skill_castend_nodamage_id(struct block_list *src, struct block_list *bl, int
 	case HP_BASILICA:
 	case CG_HERMODE:
 		{
-			struct skill_unit_group *sg;
 
+			struct skill_unit_group *sg;
 			battle_stopwalking(src, 1);
 			skill_clear_unitgroup(src);
-
 			sg = skill_unitsetting(src, skillid, skilllv, src->x, src->y, 0);
 
+			if(skillid == CG_HERMODE)
+				status_change_start(src, SC_DANCING, skillid, 0, 0, sg->group_id, skill_get_time(skillid,skilllv),0);
+			else
+				status_change_start(src, SkillStatusChangeTable[skillid], skilllv, 0, BCT_SELF, sg->group_id, skill_get_time(skillid, skilllv), 0);
 			clif_skill_nodamage(src, bl, skillid, skilllv, 1);
-			status_change_start(src, SkillStatusChangeTable[skillid], skilllv, 0, 0, (intptr_t)sg, skill_get_time(skillid, skilllv), 0);
 		}
 		break;
 
@@ -3557,16 +3559,9 @@ int skill_castend_nodamage_id(struct block_list *src, struct block_list *bl, int
 	case BD_ADAPTATION:
 		{
 			struct status_change *sc_data = status_get_sc_data(src);
-			if(sc_data && sc_data[SC_DANCING].timer != -1)
-			{
-				if(sc_data[SC_DANCING].val1 == CG_HERMODE)
-				{
-					clif_skill_fail(sd, skillid, 0, 0);
-				} else {
-					clif_skill_nodamage(src,bl,skillid,skilllv,1);
-					skill_stop_dancing(src,0);
-				}
-			}
+			if(sc_data && sc_data[SC_DANCING].timer != -1) {
+				clif_skill_nodamage(src,bl,skillid,skilllv,1);
+				skill_stop_dancing(src,0);
 		}
 		break;
 
@@ -5493,15 +5488,12 @@ int skill_unit_onplace(struct skill_unit *src, struct block_list *bl, unsigned i
 	case 0xae:	/* 幸運のキス */
 	case 0xaf:	/* サ?ビスフォ?ユ? */
 	case 0xb9:
-		if(sg->src_id == bl->id)
+		if (sg->src_id == bl->id)
 			break;
-		if(sc_data && sc_data[type].timer != -1)
-		{
-			unit2 = (struct skill_unit *)sc_data[type].val4;
-			if(unit2 && unit2->group && (unit2 == src || DIFF_TICK(sg->tick, unit2->group->tick) <= 0))
-				break;
-		}
-		status_change_start(bl, type, sg->skill_lv, sg->val1, sg->val2, (intptr_t)src, skill_get_time2(sg->skill_id, sg->skill_lv), 0);
+		sc_data = status_get_sc_data(bl);
+		type = SkillStatusChangeTable[sg->skill_id];
+		if (sc_data && sc_data[type].timer == -1)
+			status_change_start(bl, type, sg->skill_lv, sg->val1, sg->val2, sg->group_id, skill_get_time2(sg->skill_id, sg->skill_lv), 0);
 		break;
 
 	case 0xb4:
@@ -5855,7 +5847,9 @@ int skill_unit_onout(struct skill_unit *src, struct block_list *bl, unsigned int
 			break;
 		case 0xb4:	// HP_BASILICA
 		case 0xb9:	// CG_HERMODE
-			if(sc_data[type].timer != -1 && sc_data[type].val4 == (intptr_t)sg)
+			sc_data = status_get_sc_data(bl);
+			type = SkillStatusChangeTable[sg->skill_id];
+			if(sc_data && sc_data[type].timer != -1)
 				status_change_end(bl, type, -1);
 			break;
 		case 0xb6:
@@ -6252,6 +6246,21 @@ static int skill_check_condition_mob_master_sub(struct block_list *bl,va_list ap
 	return 0;
 }
 
+static int skill_check_condition_hermod_sub(struct block_list *bl,va_list ap)
+{
+	int *c;
+	struct npc_data *nd;
+
+	nullpo_retr(0, bl);
+	nullpo_retr(0, ap);
+	nullpo_retr(0, nd=(struct npc_data*)bl);
+	nullpo_retr(0, c=va_arg(ap,int *));
+
+	if (nd->bl.subtype == WARP)
+		(*c)++;
+	return 0;
+}
+
 /*==========================================
  * Skill Check Condition
  *------------------------------------------
@@ -6357,13 +6366,26 @@ int skill_check_condition(struct map_session_data *sd, int type) {
 	case TF_HIDING:			/* ハイディング */
 	case AS_CLOAKING:		/* クローキング */
 	case CR_AUTOGUARD:				/* オートガード */
-	case CR_DEFENDER:				/* ディフェンダー */
+	case CR_DEFENDER:
 	case ST_CHASEWALK:
-		if(sd->sc_data[SkillStatusChangeTable[skill]].timer!=-1)
-			return 1;			/* 解除する場合はSP消費しない */
+		if(sd->sc_data[SkillStatusChangeTable[skill]].timer != -1)
+			return 1;
 		break;
 	case HW_GANBANTEIN:
 		break;
+
+	case CG_HERMODE:
+		{
+			int c = 0;
+			map_foreachinarea (skill_check_condition_hermod_sub, sd->bl.m,
+				sd->bl.x-3, sd->bl.y-3, sd->bl.x+3, sd->bl.y+3, BL_NPC, &c);
+			if (c < 1) {
+				clif_skill_fail(sd,skill,0,0);
+				return 0;
+			}
+		}
+		break;
+
 	case AL_TELEPORT:
 	case AL_WARP:
 		if(map[sd->bl.m].flag.noteleport) {
@@ -6375,19 +6397,21 @@ int skill_check_condition(struct map_session_data *sd, int type) {
 			return 0;
 		}
 		break;
-	case MO_CALLSPIRITS:	/* 気功 */
+
+	case MO_CALLSPIRITS:
 		if (sd->spiritball >= lv) {
 			clif_skill_fail(sd, skill, 0, 0);
 			return 0;
 		}
 		break;
-	case CH_SOULCOLLECT: /* 狂気功 */
+
+	case CH_SOULCOLLECT:
 		if (sd->spiritball >= 5) {
 			clif_skill_fail(sd, skill, 0, 0);
 			return 0;
 		}
 		break;
-	case MO_FINGEROFFENSIVE: //指弾
+	case MO_FINGEROFFENSIVE:
 		if (sd->spiritball > 0 && sd->spiritball < spiritball) {
 			spiritball = sd->spiritball;
 			sd->spiritball_old = sd->spiritball;
@@ -6879,6 +6903,7 @@ int skill_use_id(struct map_session_data *sd, int target_id, int skill_num, int 
 			sc_data[SC_STEELBODY].timer != -1 ||
 			sc_data[SC_BERSERK].timer != -1 ||
 			(sc_data[SC_GRAVITATION].timer != -1 && sc_data[SC_GRAVITATION].val3 == BCT_SELF) ||
+			sc_data[SC_HERMODE].timer != -1 ||
 			(sc_data[SC_MARIONETTE].timer != -1 && sd->skillid != CG_MARIONETTE)){
 			return 0;
 		}
@@ -6909,12 +6934,22 @@ int skill_use_id(struct map_session_data *sd, int target_id, int skill_num, int 
 			else
 				return 0;
 		}
-		if(sc_data[SC_DANCING].timer!=-1 )
-		{
-			if( sc_data[SC_DANCING].val4 && skill_num!=BD_ADAPTATION )
+
+
+		if(sc_data[SC_DANCING].timer != -1) {
+			if (sc_data[SC_DANCING].val1 == CG_HERMODE && skill_num == BD_ADAPTATION)
 				return 0;
-			if(skill_num!=BD_ADAPTATION && skill_num!=BA_MUSICALSTRIKE && skill_num!=DC_THROWARROW){
-				return 0;
+			if (sc_data[SC_LONGING].timer != -1) {
+				if (skill_get_unit_flag(skill_num) & UF_DANCE || skill_get_unit_flag(skill_num) & UF_ENSEMBLE) 
+					return 0;
+			}
+			else {
+				if (sc_data[SC_DANCING].val4 && skill_num != BD_ADAPTATION && skill_num != CG_LONGINGFREEDOM)
+					return 0;
+				if (skill_num != BD_ADAPTATION && skill_num != BA_MUSICALSTRIKE && skill_num != DC_THROWARROW && 
+					skill_num != CG_LONGINGFREEDOM){
+					return 0;
+				}
 			}
 		}
 	}

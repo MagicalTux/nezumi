@@ -365,7 +365,7 @@ int battle_calc_damage(struct block_list *src, struct block_list *bl, int damage
 		if(sc_data[SC_ROKISWEIL].timer != -1 && (flag & BF_MAGIC))	// TODO: Loki's Veil should not effect to AoE magic and bosses.
 			return 0;
 
-		if((sc_data[SC_LANDPROTECTOR].timer != -1 || sc_data[SC_HERMODE].timer != -1) && (flag & BF_MAGIC))
+		if((sc_data[SC_LANDPROTECTOR].timer != -1 && (flag & BF_MAGIC))
 			return 0;
 
 		if(sc_data[SC_AUTOGUARD].timer != -1 && (flag & BF_WEAPON) && (rand()%100 < sc_data[SC_AUTOGUARD].val2) && skill_num != PA_PRESSURE)

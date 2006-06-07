@@ -1,5 +1,9 @@
 // $Id: Changelog.txt akrus $
 
+06/07/2006
+	* Updated: mob_db and mob_skill_db [akrus]
+	* Fixed: item type 11 is now usable [akrus]
+
 05/17/2006
 	* Updated: mob_db and mob_skill_db [akrus]
 
