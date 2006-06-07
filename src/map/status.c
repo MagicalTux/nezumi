@@ -4824,7 +4824,7 @@ TIMER_FUNC(status_change_timer) {
 
 	case SC_DANCING:
 		{
-			int s = 0;
+			int s = 0, sp = 1;
 			if(sd){
 				if(sd->status.sp > 0 && (--sc_data[type].val3)>0){
 					switch(sc_data[type].val1){
@@ -4863,9 +4863,10 @@ TIMER_FUNC(status_change_timer) {
 					if(s && ((sc_data[type].val3 % s) == 0))
 					{
 						if(sc_data[SC_LONGING].timer != -1)
-							sd->status.sp = s;
+							sd->status.sp -= 3;
 						else
-							sd->status.sp--;
+							sd->status.sp -= sp;
+						if (sd->status.sp < 0) sd->status.sp = 0;
 						clif_updatestatus(sd, SP_SP);
 					}
 					sc_data[type].timer = add_timer(1000 + tick, status_change_timer, bl->id, data); 
