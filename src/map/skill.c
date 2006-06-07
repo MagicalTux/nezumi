@@ -3562,6 +3562,7 @@ int skill_castend_nodamage_id(struct block_list *src, struct block_list *bl, int
 			if(sc_data && sc_data[SC_DANCING].timer != -1) {
 				clif_skill_nodamage(src,bl,skillid,skilllv,1);
 				skill_stop_dancing(src,0);
+			}
 		}
 		break;
 
