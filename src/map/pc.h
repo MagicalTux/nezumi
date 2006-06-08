@@ -178,13 +178,13 @@ void pc_setstand(struct map_session_data *sd);
 //int pc_break_equip(struct map_session_data *sd, unsigned short where);
 int pc_candrop(struct map_session_data *sd, int item_id);
 
-struct pc_base_job{
-	int job; //E‹ÆA‚½‚¾‚µ“]¶E‚â—{qE‚Ìê‡‚ÍŒ³‚ÌE‹Æ‚ğ•Ô‚·(”pƒvƒŠ¨ƒvƒŠ)
-	int type; //ƒmƒr 0, ˆêŸE 1, “ñŸE 2, ƒXƒpƒmƒr 3
-	int upper; //’Êí 0, “]¶ 1, —{q 2
+struct pc_base_job {
+	int job;
+	int type;
+	int upper;
 };
 
-struct pc_base_job pc_calc_base_job(int b_class);//“]¶‚â—{qE‚ÌŒ³‚ÌE‹Æ‚ğ•Ô‚·
+struct pc_base_job pc_calc_base_job(int b_class);
 
 int pc_calc_base_job2(int b_class);
 int pc_calc_upper(int b_class);
