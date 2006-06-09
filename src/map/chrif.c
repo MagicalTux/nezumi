@@ -638,7 +638,6 @@ int chrif_changedsex(int fd) { // 0x2b0d <account_id>.L <sex>.B <account_id_of_G
 	int acc_asker;
 	struct map_session_data *sd;
 	struct map_session_data *sd_asker;
-	struct pc_base_job s_class;
 	char output[MAX_MSG_LEN + 100]; // max size of msg_txt + security (char name, char id, etc...) (100)
 
 	acc = RFIFOL(fd,2);
@@ -649,7 +648,6 @@ int chrif_changedsex(int fd) { // 0x2b0d <account_id>.L <sex>.B <account_id_of_G
 	sd = map_id2sd(acc);
 	if (acc > 0 && sex != -1 && sex != 255) { // sex == -1 -> not found
 		if (sd != NULL && sd->status.sex != sex) {
-			s_class = pc_calc_base_job(sd->status.class);
 			if (sd->status.sex == 0) {
 				sd->status.sex = 1;
 				sd->sex = 1;
@@ -663,8 +661,7 @@ int chrif_changedsex(int fd) { // 0x2b0d <account_id>.L <sex>.B <account_id_of_G
 					pc_unequipitem((struct map_session_data*)sd, i, 3); // eAthena: pc_unequipitem((struct map_session_data*)sd, i, 3)
 			}
 			// reset skill of some job
-			if (s_class.job == 19 || s_class.job == 4020 || s_class.job == 4042 ||
-			    s_class.job == 20 || s_class.job == 4021 || s_class.job == 4043) {
+				if ((sd->class_&MAPID_UPPERMASK) == MAPID_BARDDANCER) {
 				// remove specifical skills of classes 19, 4020 and 4042
 				for(i = 315; i <= 322; i++) {
 					if (sd->status.skill[i].id > 0 && sd->status.skill[i].flag != 1 && sd->status.skill[i].flag != 13) { // flag: 0 (normal), 1 (only card), 2-12 (card and skill (skill level +2)), 13 (cloneskill)
@@ -695,9 +692,9 @@ int chrif_changedsex(int fd) { // 0x2b0d <account_id>.L <sex>.B <account_id_of_G
 				}
 				clif_updatestatus(sd, SP_SKILLPOINT);
 				// change job if necessary
-				if (s_class.job == 20 || s_class.job == 4021 || s_class.job == 4043)
+				if (sd->status.sex) //Changed from Dancer
 					sd->status.class -= 1;
-				else if (s_class.job == 19 || s_class.job == 4020 || s_class.job == 4042)
+				else //Changed from Bard
 					sd->status.class += 1;
 			}
 			// save character

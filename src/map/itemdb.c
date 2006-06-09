@@ -152,7 +152,64 @@ struct item_data* itemdb_exists(intptr_t nameid)
 }
 
 /*==========================================
- * DBの検索
+ * Converts the jobid from the format in itemdb 
+ * to the format used by the map server. [Skotlex]
+ *------------------------------------------
+ */
+static void itemdb_jobid2mapid(unsigned int *bclass, unsigned int jobmask)
+{
+	int i;
+	bclass[0]= bclass[1]= bclass[2]= 0;
+	//Base classes
+	if (jobmask & 1<<JOB_NOVICE)
+	{	//Both Novice/Super-Novice are counted with the same ID
+		bclass[0] |= 1<<MAPID_NOVICE;
+		bclass[1] |= 1<<MAPID_NOVICE;
+	}
+	for (i = JOB_NOVICE+1; i <= JOB_THIEF; i++)
+	{
+		if (jobmask & 1<<i)
+			bclass[0] |= 1<<(MAPID_NOVICE+i);
+	}
+	//2-1 classes
+	if (jobmask & 1<<JOB_KNIGHT)
+		bclass[1] |= 1<<MAPID_SWORDMAN;
+	if (jobmask & 1<<JOB_PRIEST)
+		bclass[1] |= 1<<MAPID_ACOLYTE;
+	if (jobmask & 1<<JOB_WIZARD)
+		bclass[1] |= 1<<MAPID_MAGE;
+	if (jobmask & 1<<JOB_BLACKSMITH)
+		bclass[1] |= 1<<MAPID_MERCHANT;
+	if (jobmask & 1<<JOB_HUNTER)
+		bclass[1] |= 1<<MAPID_ARCHER;
+	if (jobmask & 1<<JOB_ASSASSIN)
+		bclass[1] |= 1<<MAPID_THIEF;
+	//2-2 classes
+	if (jobmask & 1<<JOB_CRUSADER)
+		bclass[2] |= 1<<MAPID_SWORDMAN;
+	if (jobmask & 1<<JOB_MONK)
+		bclass[2] |= 1<<MAPID_ACOLYTE;
+	if (jobmask & 1<<JOB_SAGE)
+		bclass[2] |= 1<<MAPID_MAGE;
+	if (jobmask & 1<<JOB_ALCHEMIST)
+		bclass[2] |= 1<<MAPID_MERCHANT;
+	if (jobmask & 1<<JOB_BARD)
+		bclass[2] |= 1<<MAPID_ARCHER;
+	if (jobmask & 1<<JOB_DANCER)
+		bclass[2] |= 1<<MAPID_ARCHER;
+	if (jobmask & 1<<JOB_ROGUE)
+		bclass[2] |= 1<<MAPID_THIEF;
+	//Special classes that don't fit above.
+	if (jobmask & 1<<21) //Taekwon boy
+		bclass[0] |= 1<<MAPID_TAEKWON;
+	if (jobmask & 1<<22) //Star Gladiator
+		bclass[1] |= 1<<MAPID_TAEKWON;
+	if (jobmask & 1<<23) //Soul Linker
+		bclass[2] |= 1<<MAPID_TAEKWON;
+}
+
+/*==========================================
+ * Search in item database
  *------------------------------------------
  */
 struct item_data* itemdb_search(intptr_t nameid)
@@ -172,9 +229,12 @@ struct item_data* itemdb_search(intptr_t nameid)
 	id->weight=10;
 	id->sex=2;
 	id->elv=0;
-	id->class=0xffffffff;
+	id->class_base[0]=0xff;
+	id->class_base[1]=0xff;
+	id->class_base[2]=0xff;
+	id->class_upper=5;
 	id->flag.available=0;
-	id->flag.value_notdc=0;  //一応・・・
+	id->flag.value_notdc=0;
 	id->flag.value_notoc=0;
 	id->flag.no_equip=0;
 	id->view_id=0;
@@ -317,26 +377,30 @@ static int itemdb_readdb(void)
 			printf("Generating the '" CL_WHITE ITEM_DB_SQL_NAME CL_RESET "' file.\n");
 			fprintf(item_db_fp, "# You can regenerate this file with an option in inter_athena.conf" RETCODE);
 			fprintf(item_db_fp, RETCODE);
+			fprintf(item_db_fp, "DROP TABLE IF EXISTS `%s`;" RETCODE, item_db_db);
 			fprintf(item_db_fp, "CREATE TABLE `%s` (" RETCODE, item_db_db);
 			fprintf(item_db_fp, "  `id` smallint(5) unsigned NOT NULL default '0'," RETCODE);
-			fprintf(item_db_fp, "  `name_english` varchar(32) NOT NULL default ''," RETCODE);
-			fprintf(item_db_fp, "  `name_japanese` varchar(32) NOT NULL default ''," RETCODE);
+			fprintf(item_db_fp, "  `name_english` varchar(50) NOT NULL default ''," RETCODE);
+			fprintf(item_db_fp, "  `name_japanese` varchar(50) NOT NULL default ''," RETCODE);
 			fprintf(item_db_fp, "  `type` tinyint(2) unsigned NOT NULL default '0'," RETCODE);
-			fprintf(item_db_fp, "  `price_buy` int(10) unsigned default NULL," RETCODE);
-			fprintf(item_db_fp, "  `price_sell` int(10) unsigned default NULL," RETCODE);
-			fprintf(item_db_fp, "  `weight` int(10) unsigned NOT NULL default '0'," RETCODE);
-			fprintf(item_db_fp, "  `attack` mediumint(9) unsigned default NULL," RETCODE);
-			fprintf(item_db_fp, "  `defence` mediumint(9) unsigned default NULL," RETCODE);
+			fprintf(item_db_fp, "  `price_buy` meduimint(10) unsigned default NULL," RETCODE);
+			fprintf(item_db_fp, "  `price_sell` mediumint(10) unsigned default NULL," RETCODE);
+			fprintf(item_db_fp, "  `weight` smallint(5) unsigned NOT NULL default '0'," RETCODE);
+			fprintf(item_db_fp, "  `attack` tinyint(4) unsigned default NULL," RETCODE);
+			fprintf(item_db_fp, "  `defence` tinyint(4) unsigned default NULL," RETCODE);
 			fprintf(item_db_fp, "  `range` tinyint(2) unsigned default NULL," RETCODE);
 			fprintf(item_db_fp, "  `slots` tinyint(2) unsigned default NULL," RETCODE); // max 5, but set to tinyint(2) to avoid possible BOOL replacement
-			fprintf(item_db_fp, "  `equip_jobs` mediumint(8) unsigned default NULL," RETCODE);
+			fprintf(item_db_fp, "  `equip_jobs` int(12) unsigned default NULL," RETCODE);
+			fprintf(item_db_fp, "  `equip_upper` tinyint(8) unsigned default NULL," RETCODE);
 			fprintf(item_db_fp, "  `equip_genders` tinyint(2) unsigned default NULL," RETCODE); // max 3 (1+2), but set to tinyint(2) to avoid possible BOOL replacement
 			fprintf(item_db_fp, "  `equip_locations` smallint(4) unsigned default NULL," RETCODE);
 			fprintf(item_db_fp, "  `weapon_level` tinyint(2) unsigned default NULL," RETCODE); // max 4, but set to tinyint(2) to avoid possible BOOL replacement
 			fprintf(item_db_fp, "  `equip_level` tinyint(3) unsigned default NULL," RETCODE);
+			fprintf(item_db_fp, "  `refineable` tinyint(1) unsigned default NULL," RETCODE);
 			fprintf(item_db_fp, "  `view` tinyint(3) unsigned default NULL," RETCODE);
-			fprintf(item_db_fp, "  `script_use` text," RETCODE);
-			fprintf(item_db_fp, "  `script_equip` text," RETCODE);
+			fprintf(item_db_fp, "  `script` text," RETCODE);
+			fprintf(item_db_fp, "  `equip_script` text," RETCODE);
+			fprintf(item_db_fp, "  `unequip_script` text," RETCODE);
 			fprintf(item_db_fp, "  PRIMARY KEY (`id`)" RETCODE);
 			fprintf(item_db_fp, ") TYPE=MyISAM;" RETCODE);
 			fprintf(item_db_fp, RETCODE);
@@ -389,7 +453,7 @@ static int itemdb_readdb(void)
 				line[j] = '\0';
 
 			memset(str, 0, sizeof(str));
-			for(j = 0, np = p = line; j < 17 && p; j++) {
+			for(j = 0, np = p = line; j < 19 && p; j++) {
 				str[j] = p;
 				p = strchr(p, ',');
 				if (p) { *p++ = 0; np = p; }
@@ -422,10 +486,13 @@ static int itemdb_readdb(void)
 			memset(id->jname, 0, sizeof(id->jname));
 			strncpy(id->jname, str[2], 24);
 			id->type = atoi(str[3]);
+			if (id->type == 11) {
+				id->type = 2;
+				id->flag.delay_consume = 1;
+			}
 
 			buy_price = atoi(str[4]);
 			sell_price = atoi(str[5]);
-			// buy≠sell*2 は item_value_db.txt で指定してください。
 			// If price_buy is not 0 and price_sell is not 0...
 			if (buy_price > 0 && sell_price > 0) {
 				id->value_buy = buy_price;
@@ -456,35 +523,40 @@ static int itemdb_readdb(void)
 			id->def = atoi(str[8]);
 			id->range = atoi(str[9]);
 			id->slot = atoi(str[10]);
-			id->class = atoi(str[11]);
-			id->sex = atoi(str[12]);
-			if (id->equip != atoi(str[13])) {
-				id->equip = atoi(str[13]);
+			itemdb_jobid2mapid(id->class_base, (unsigned int)strtoul(str[11],NULL,0));
+			id->class_upper = atoi(str[12]);
+			id->sex = atoi(str[13]);
+			if (id->equip != atoi(str[14])) {
+				id->equip = atoi(str[14]);
 			}
-			id->wlv = atoi(str[14]);
-			id->elv = atoi(str[15]);
-			id->look = atoi(str[16]);
+			id->wlv = atoi(str[15]);
+			id->elv = atoi(str[16]);
+			id->flag.no_refine = atoi(str[17]) ? 0 : 1;
+			id->look = atoi(str[18]);
 			id->flag.available = 1;
 			id->flag.value_notdc = 0;
 			id->flag.value_notoc = 0;
 			id->view_id = 0;
 
-			id->use_script = NULL;
+			id->script = NULL;
 			id->equip_script = NULL;
+			id->unequip_script = NULL;
 
 			if ((p = strchr(np, '{')) != NULL) {
-				id->use_script = parse_script((unsigned char *)p, lines);
+				id->script = parse_script((unsigned char *)p, lines);
 				if ((p = strchr(p + 1, '{')) != NULL)
 					id->equip_script = parse_script((unsigned char *)p, lines);
+				if ((p = strchr(p + 1, '{')) != NULL)
+					id->unequip_script = parse_script((unsigned char *)p, lines);
 			}
 
 #ifdef USE_SQL
-			// code to create SQL item db
+/*			// code to create SQL item db
 			if (create_item_db_script && item_db_fp != NULL) {
-				char item_name[49]; // 24 * 2 + NULL
-				char item_jname[49]; // 24 * 2 + NULL
-				char script1[1024], script2[1024], temp_script[1024], comment_script[1024];
-				char *p1, *p2;
+				char item_name[50]; // 24 * 2 + 1 + NULL
+				char item_jname[50]; // 24 * 2 + 1 + NULL
+				char script1[1024], script2[1024], script3[1024], temp_script[1024], comment_script[1024];
+				char *p1, *p2, *p3;
 				struct item_data *actual_item;
 
 				actual_item = id;
@@ -493,14 +565,17 @@ static int itemdb_readdb(void)
 				db_sql_escape_string(item_name, actual_item->name, strlen(actual_item->name));
 				memset(item_jname, 0, sizeof(item_jname));
 				db_sql_escape_string(item_jname, actual_item->jname, strlen(actual_item->jname));
-				// extract script 1 and 2
+				// extract script 1, 2 and 3
 				memset(script1, 0, sizeof(script1));
 				memset(script2, 0, sizeof(script2));
-				if ((p1 = strchr(np, '{')) != NULL && (p2 = strchr(p1, '}')) != NULL) {
+				memset(script3, 0, sizeof(script3));
+				if ((p1 = strchr(np, '{')) != NULL && (p2 = strchr(p1, '}')) != NULL && (p3 = strchr(p3, '}')) != NULL)) {
 					while(*p1 == ' ' || *p1 == '{')
 						p1++;
 					while((*p2 == ' ' || *p2 == '}') && p2 > p1)
 						p2--;
+					while((*p3 == ' ' || *p3 == '}') && p3 > p2)
+						p3--;
 					if (p2 > p1) {
 						memset(temp_script, 0, sizeof(temp_script));
 						strncpy(temp_script, p1, p2 - p1 + 1);
@@ -524,7 +599,22 @@ static int itemdb_readdb(void)
 							strcat(script2, "'");
 						}
 					}
+					if ((p1 = strchr(p2, '{')) != NULL && (p2 = strchr(p1, '}')) != NULL) {
+						while(*p1 == ' ' || *p1 == '{')
+							p1++;
+						while((*p2 == ' ' || *p2 == '}') && p2 > p1)
+							p2--;
+						if (p2 > p1) {
+							memset(temp_script, 0, sizeof(temp_script));
+							strncpy(temp_script, p1, p2 - p1 + 1);
+							memset(script3, 0, sizeof(script3));
+							script3[0] = '\'';
+							db_sql_escape_string(script3 + 1, temp_script, strlen(temp_script));
+							strcat(script3, "'");
+						}
+					}
 				}
+
 				memset(comment_script, 0 , sizeof(comment_script));
 				if ((p1 = strchr(np, '/')) != NULL && p1[1] == '/') {
 					comment_script[0] = ' ';
@@ -535,20 +625,22 @@ static int itemdb_readdb(void)
 				fprintf(item_db_fp, "INSERT INTO `%s` VALUES (%d, '%s', '%s', %d,"
 				                                             " %d, %d,"
 				                                             " %d, %d, %d, %d,"
+				                                             " %d, '%s', %d, %d, %d,"
 				                                             " %d, %d, %d, %d,"
-				                                             " %d, %d, %d,"
-				                                             " %s, %s);%s" RETCODE,
+				                                             " '%s', '%s', '%s');%s" RETCODE,
 				                    item_db_db, nameid, item_name, item_jname, actual_item->type,
 				                    atoi(str[4]), atoi(str[5]), // id->value_buy, id->value_sell: not modified
 				                    actual_item->weight, actual_item->atk, actual_item->def, actual_item->range,
-				                    actual_item->slot, actual_item->class, actual_item->sex, actual_item->equip,
-				                    actual_item->wlv, actual_item->elv, actual_item->look,
-				                    (script1[0] == 0) ? "NULL" : script1, (script2[0] == 0) ? "NULL" : script2, comment_script);
+				                    actual_item->slot, str[11], actual_item->class_upper, actual_item->sex, actual_item->equip,
+				                    actual_item->wlv, actual_item->elv, actual_item->flag.no_refine, actual_item->look,
+				                    (script1[0] == 0) ? "NULL" : script1, (script2[0] == 0) ? "NULL" : script2, (script3[0] == 0) ? "NULL" : script3, comment_script);
+
 			}
+*/
 #endif /* USE_SQL */
 		}
 		fclose(fp);
-		printf("DB '" CL_WHITE "%s" CL_RESET "' readed ('" CL_WHITE "%d" CL_RESET "' entrie%s).\n", filename[i], ln, (ln > 1) ? "s" : "");
+		printf("DB '" CL_WHITE "%s" CL_RESET "' readed ('" CL_WHITE "%d" CL_RESET "' %s).\n", filename[i], ln, (ln > 1) ? "entries" : "entry");
 	}
 
 #ifdef USE_SQL
@@ -996,11 +1088,11 @@ static int itemdb_read_sqldb(void) {
 	sql_request("SELECT * FROM `%s`", item_db_db);
 
 	while (sql_get_row()) {
-		/* +----+--------------+---------------+------+-----------+------------+--------+--------+---------+-------+-------+------------+---------------+-----------------+--------------+-------------+------+------------+--------------+
-		   |  0 |            1 |             2 |    3 |         4 |          5 |      6 |      7 |       8 |     9 |    10 |         11 |            12 |              13 |           14 |          15 |   16 |         17 |           18 |
-		   +----+--------------+---------------+------+-----------+------------+--------+--------+---------+-------+-------+------------+---------------+-----------------+--------------+-------------+------+------------+--------------+
-		   | id | name_english | name_japanese | type | price_buy | price_sell | weight | attack | defence | range | slots | equip_jobs | equip_genders | equip_locations | weapon_level | equip_level | view | script_use | script_equip |
-		   +----+--------------+---------------+------+-----------+------------+--------+--------+---------+-------+-------+------------+---------------+-----------------+--------------+-------------+------+------------+--------------+ */
+		/* +----+--------------+---------------+------+-----------+------------+--------+--------+---------+-------+-------+------------+-------------+---------------+-----------------+--------------+-------------+------------+------+--------+--------------+----------------+
+		   |  0 |            1 |             2 |    3 |         4 |          5 |      6 |      7 |       8 |     9 |    10 |         11 |          12 |            13 |              14 |           15 |          16 |         17 |   18 |     19 |           20 |             21 |
+		   +----+--------------+---------------+------+-----------+------------+--------+--------+---------+-------+-------+------------+-------------+---------------+-----------------+--------------+-------------+------------+------+--------+--------------+----------------+
+		   | id | name_english | name_japanese | type | price_buy | price_sell | weight | attack | defence | range | slots | equip_jobs | equip_upper | equip_genders | equip_locations | weapon_level | equip_level | refineable | view | script | equip_script | unequip_script |
+		   +----+--------------+---------------+------+-----------+------------+--------+--------+---------+-------+-------+------------+-------------+---------------+-----------------+--------------+-------------+------------+------+--------+--------------+----------------+ */
 
 		nameid = sql_get_integer(0);
 
@@ -1017,16 +1109,12 @@ static int itemdb_read_sqldb(void) {
 #endif
 
 		ln++;
-		if (ln % 20 == 19) {
+		if (ln % 22 == 21) {
 			printf("Reading item #%ld (id: %d)...\r", ln, nameid);
 			fflush(stdout);
 		}
 
 		// Insert a new row into the item database
-
-		/*CALLOC(id, struct item_data, 1);
-
-		numdb_insert(item_db, (int) nameid, id);*/
 
 		// ----------
 		id = itemdb_search(nameid);
@@ -1037,6 +1125,10 @@ static int itemdb_read_sqldb(void) {
 		strncpy(id->jname, sql_get_string(2), 24);
 
 		id->type = sql_get_integer(3);
+		if (id->type == 11) {
+			id->type = 2;
+			id->flag.delay_consume=1;
+		}
 
 		// fix NULL for buy/sell prices
 		if (sql_get_string(4) == NULL)
@@ -1047,7 +1139,6 @@ static int itemdb_read_sqldb(void) {
 			sell_price = 0;
 		else
 			sell_price = sql_get_integer(5);
-		// buy≠sell*2 は item_value_db.txt で指定してください。
 		// If price_buy is not 0 and price_sell is not 0...
 		if (buy_price > 0 && sell_price > 0) {
 			id->value_buy = buy_price;
@@ -1079,34 +1170,47 @@ static int itemdb_read_sqldb(void) {
 		id->def   = (sql_get_string( 8) != NULL) ? sql_get_integer( 8) : 0;
 		id->range = (sql_get_string( 9) != NULL) ? sql_get_integer( 9) : 0;
 		id->slot  = (sql_get_string(10) != NULL) ? sql_get_integer(10) : 0;
-		id->class = (sql_get_string(11) != NULL) ? sql_get_integer(11) : 0;
-		id->sex   = (sql_get_string(12) != NULL) ? sql_get_integer(12) : 0;
-		id->equip = (sql_get_string(13) != NULL) ? sql_get_integer(13) : 0;
-		id->wlv   = (sql_get_string(14) != NULL) ? sql_get_integer(14) : 0;
-		id->elv   = (sql_get_string(15) != NULL) ? sql_get_integer(15) : 0;
-		id->look  = (sql_get_string(16) != NULL) ? sql_get_integer(16) : 0;
+		itemdb_jobid2mapid(id->class_base, (sql_get_string(11) != NULL) ? (unsigned int)strtoul(sql_get_string(11), NULL, 0) : 0);
+		id->class_upper = (sql_get_string(12) != NULL) ? sql_get_integer(12) : 0;
+		id->sex   = (sql_get_string(13) != NULL) ? sql_get_integer(13) : 0;
+		id->equip = (sql_get_string(14) != NULL) ? sql_get_integer(14) : 0;
+		id->wlv   = (sql_get_string(15) != NULL) ? sql_get_integer(15) : 0;
+		id->elv   = (sql_get_string(16) != NULL) ? sql_get_integer(16) : 0;
+		id->flag.no_refine = (sql_get_integer(17) == 0 || sql_get_integer(17) == 1)?0:1;
+		id->look  = (sql_get_string(18) != NULL) ? sql_get_integer(18) : 0;
 
 		id->view_id = 0;
 
 		// ----------
 
-		if (sql_get_string(17) != NULL) {
-			if (sql_get_string(17)[0] == '{')
-				id->use_script = parse_script((unsigned char *)sql_get_string(17), 0);
+		if (sql_get_string(19) != NULL) {
+			if (sql_get_string(19)[0] == '{')
+				id->script = parse_script((unsigned char *)sql_get_string(19), 0);
 			else {
-				sprintf(script, "{%s}", sql_get_string(17));
-				id->use_script = parse_script((unsigned char *)script, 0);
+				sprintf(script, "{%s}", sql_get_string(19));
+				id->script = parse_script((unsigned char *)script, 0);
 			}
 		} else {
-			id->use_script = NULL;
+			id->script = NULL;
 		}
 
-		if (sql_get_string(18) != NULL) {
-			if (sql_get_string(18)[0] == '{')
-				id->equip_script = parse_script((unsigned char *)sql_get_string(18), 0);
+		if (sql_get_string(20) != NULL) {
+			if (sql_get_string(20)[0] == '{')
+				id->equip_script = parse_script((unsigned char *)sql_get_string(20), 0);
 			else {
-				sprintf(script, "{%s}", sql_get_string(18));
+				sprintf(script, "{%s}", sql_get_string(20));
 				id->equip_script = parse_script((unsigned char *)script, 0);
+			}
+		} else {
+			id->equip_script = NULL;
+		}
+
+		if (sql_get_string(21) != NULL) {
+			if (sql_get_string(21)[0] == '{')
+				id->unequip_script = parse_script((unsigned char *)sql_get_string(21), 0);
+			else {
+				sprintf(script, "{%s}", sql_get_string(21));
+				id->unequip_script = parse_script((unsigned char *)script, 0);
 			}
 		} else {
 			id->equip_script = NULL;
@@ -1134,8 +1238,9 @@ static int itemdb_final(void *key,void *data, va_list ap) {
 
 	nullpo_retr(0, id = data);
 
-	FREE(id->use_script);
+	FREE(id->script);
 	FREE(id->equip_script);
+	FREE(id->unequip_script);
 	FREE(id);
 
 	return 0;

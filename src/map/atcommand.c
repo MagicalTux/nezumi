@@ -5060,23 +5060,18 @@ ATCOMMAND_FUNC(baselevelup) {
  */
 ATCOMMAND_FUNC(joblevelup) {
 	int up_level, level;
-	struct pc_base_job s_class;
 
 	if (!message || !*message || sscanf(message, "%d", &level) < 1 || level == 0) {
 		send_usage(fd, "Please, enter a level adjustement (usage: %s <number of levels>).", original_command);
 		return -1;
 	}
 
-	s_class = pc_calc_base_job(sd->status.class);
-
-	up_level = 50;
-	if (s_class.job == 0) // novice
-		up_level -= 40;
-	// super novices can go up to 99 [celest]
-	else if (s_class.job == 23)
-		up_level += 49;
-	else if (sd->status.class > 4007 && sd->status.class < 4023)
-		up_level += 20;
+	if ((sd->class_&MAPID_UPPERMASK) == MAPID_NOVICE) //Novice
+		up_level = 10;
+	else if ((sd->class_&MAPID_BASEMASK) == MAPID_NOVICE) //S. Novice
+		up_level = 99;
+	else if (sd->class_&JOBL_UPPER && sd->class_&JOBL_2)
+		up_level = 70; //2nd Adv Class
 
 	if (level > 0) {
 		if (sd->status.job_level == up_level) {

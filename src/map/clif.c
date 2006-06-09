@@ -8587,7 +8587,7 @@ void clif_parse_GlobalMessage(int fd, struct map_session_data *sd) { // S 0x008c
 	SENDPACKET(fd, packet_size);
 
 	// Super novice angel
-	if (pc_calc_base_job2(sd->status.class) == 23) {
+	if ((sd->class_&MAPID_UPPERMASK) == MAPID_SUPER_NOVICE) { //Super Novice.
 		int next = pc_nextbaseexp(sd);
 		if (next <= 0)
 			next = sd->status.base_exp;
@@ -11838,19 +11838,11 @@ void clif_parse_sn_doridori(int fd, struct map_session_data *sd) { // S 0x01e7
  */
 void clif_parse_sn_explosionspirits(int fd, struct map_session_data *sd) { // S 0x01ed
 	double nextbaseexp;
-	struct pc_base_job s_class;
 
 //	nullpo_retv(sd); // checked before to call function
 
 	nextbaseexp = (double)pc_nextbaseexp(sd);
-	s_class = pc_calc_base_job(sd->status.class);
-	if (s_class.job == 23 && sd->status.base_exp > 0 && nextbaseexp > 0 && (int)(1000. * (double)sd->status.base_exp / nextbaseexp) % 100 == 0) {
-		if (battle_config.etc_log) {
-			if (nextbaseexp != 0)
-				printf("SuperNovice explosionspirits!! %d %d %d %d\n", sd->bl.id, s_class.job, sd->status.base_exp, (int)((double)1000 * sd->status.base_exp / nextbaseexp));
-			else
-				printf("SuperNovice explosionspirits!! %d %d %d 000\n", sd->bl.id, s_class.job, sd->status.base_exp);
-		}
+	if((sd->class_&MAPID_UPPERMASK) == MAPID_SUPER_NOVICE && sd->status.base_exp > 0 && nextbaseexp > 0 && (int)((double)1000*sd->status.base_exp/nextbaseexp)%100==0){
 		clif_skill_nodamage(&sd->bl, &sd->bl, MO_EXPLOSIONSPIRITS, 5, 1);
 		status_change_start(&sd->bl, SkillStatusChangeTable[MO_EXPLOSIONSPIRITS], 5, 0, 0, 0, skill_get_time(MO_EXPLOSIONSPIRITS, 5), 0);
 	}

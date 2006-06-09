@@ -4593,12 +4593,12 @@ int buildin_changesex(struct script_state *st) {
 	if (sd->status.sex == 0) {
 		sd->status.sex = 1;
 		sd->sex = 1;
-		if (sd->status.class == 20 || sd->status.class == 4021)
+		if ((sd->class_&MAPID_UPPERMASK) == MAPID_BARDDANCER)
 			sd->status.class -= 1;
 	} else if (sd->status.sex == 1) {
 		sd->status.sex = 0;
 		sd->sex = 0;
-		if(sd->status.class == 19 || sd->status.class == 4020)
+		if ((sd->class_&MAPID_UPPERMASK) == MAPID_BARDDANCER)
 			sd->status.class += 1;
 	}
 	chrif_char_ask_name(-1, sd->status.name, 5, 0, 0, 0, 0, 0, 0); // type: 5 - changesex
@@ -6699,7 +6699,7 @@ int buildin_getiteminfo(struct script_state *st) {
 			push_val(st->stack, C_INT, (int)i_data->type);
 			break;
 		case  3: // class / equip_job
-			push_val(st->stack, C_INT, (int)i_data->class);
+			push_val(st->stack, C_INT, (int)i_data->class_base);
 			break;
 		case  4: // sex / equip_gender
 			push_val(st->stack, C_INT, (int)i_data->sex);

@@ -1634,6 +1634,8 @@ static int skill_check_unit_range_sub(struct block_list *bl, va_list ap) {
 	} else if (skillid == HP_BASILICA) {
 		if ((unit_id < 0x8f || unit_id > 0x99) && unit_id != 0x92 && unit_id != 0x83)
 			return 0;
+		if (skillid != g_skillid)
+			return 0;
 	} else
 		return 0;
 
@@ -3867,7 +3869,7 @@ int skill_castend_nodamage_id(struct block_list *src, struct block_list *bl, int
 			sd->state.potionpitcher_flag = 1;
 			sd->potion_hp = sd->potion_sp = sd->potion_per_hp = sd->potion_per_sp = 0;
 			sd->skilltarget = bl->id;
-			run_script(sd->inventory_data[i]->use_script, 0, sd->bl.id, 0);
+			run_script(sd->inventory_data[i]->script, 0, sd->bl.id, 0);
 			pc_delitem(sd, i, skill_db[skillid].amount[x], 0);
 			sd->state.potionpitcher_flag = 0;
 			if (sd->potion_per_hp > 0 || sd->potion_per_sp > 0) {
@@ -5037,7 +5039,7 @@ int skill_castend_pos2(struct block_list *src, int x, int y, int skillid, int sk
 			}
 			sd->state.potionpitcher_flag = 1;
 			sd->potion_hp = 0;
-			run_script(sd->inventory_data[j]->use_script, 0, sd->bl.id, 0);
+			run_script(sd->inventory_data[j]->script, 0, sd->bl.id, 0);
 			pc_delitem(sd, j, skill_db[skillid].amount[i], 0);
 			sd->state.potionpitcher_flag = 0;
 			clif_skill_poseffect(src, skillid, skilllv, x, y, tick);
@@ -6927,7 +6929,8 @@ int skill_use_id(struct map_session_data *sd, int target_id, int skill_num, int 
 				return 0;
 		}
 
-		if (sc_data[SC_BASILICA].timer != -1)
+// Moved code to another part of source because of a bug [akrus]
+/*		if (sc_data[SC_BASILICA].timer != -1)
 		{
 			struct skill_unit_group *sg = (struct skill_unit_group *)sc_data[SC_BASILICA].val4;
 			if (sg && sg->src_id == sd->bl.id && skill_num == HP_BASILICA)
@@ -6935,6 +6938,7 @@ int skill_use_id(struct map_session_data *sd, int target_id, int skill_num, int 
 			else
 				return 0;
 		}
+*/
 
 
 		if(sc_data[SC_DANCING].timer != -1) {

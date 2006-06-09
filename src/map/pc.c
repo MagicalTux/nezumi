@@ -164,6 +164,234 @@ void pc_set_gm_level_by_gm(int account_id, signed char level, int account_id_of_
 	return;
 }
 
+/*==========================================
+ * Convert's from the client's lame Job ID system
+ * to the map server's 'makes sense' system. [Skotlex]
+ *------------------------------------------
+ */
+int pc_jobid2mapid(unsigned short b_class)
+{
+	int class_ = 0;
+	if (b_class >= JOB_BABY && b_class <= JOB_SUPER_BABY)
+	{
+		if (b_class == JOB_SUPER_BABY)
+			b_class = JOB_SUPER_NOVICE;
+		else
+			b_class -= JOB_BABY;
+		class_|= JOBL_BABY;
+	}
+	else if (b_class >= JOB_NOVICE_HIGH && b_class <= JOB_PALADIN2)
+	{
+		b_class -= JOB_NOVICE_HIGH;
+		class_|= JOBL_UPPER;
+	}
+	if (b_class >= JOB_KNIGHT && b_class <= JOB_KNIGHT2)
+		class_|= JOBL_2_1;
+	else if (b_class >= JOB_CRUSADER && b_class <= JOB_CRUSADER2)
+		class_|= JOBL_2_2;
+	switch (b_class)
+	{
+		case JOB_NOVICE:
+		case JOB_SWORDMAN:
+		case JOB_MAGE:
+		case JOB_ARCHER:
+		case JOB_ACOLYTE:
+		case JOB_MERCHANT:
+		case JOB_THIEF:
+			class_ |= b_class;
+			break;
+		case JOB_KNIGHT:
+		case JOB_KNIGHT2:
+		case JOB_CRUSADER:
+		case JOB_CRUSADER2:
+			class_ |= MAPID_SWORDMAN;
+			break;
+		case JOB_PRIEST:
+		case JOB_MONK:
+			class_ |= MAPID_ACOLYTE;
+			break;
+		case JOB_WIZARD:
+		case JOB_SAGE:
+			class_ |= MAPID_MAGE;
+			break;
+		case JOB_BLACKSMITH:
+		case JOB_ALCHEMIST:
+			class_ |= MAPID_MERCHANT;
+			break;
+		case JOB_HUNTER:
+		case JOB_BARD:
+		case JOB_DANCER:
+			class_ |= MAPID_ARCHER;
+			break;
+		case JOB_ASSASSIN:
+		case JOB_ROGUE:
+			class_ |= MAPID_THIEF;
+			break;
+			
+		case JOB_STAR_GLADIATOR:
+		case JOB_STAR_GLADIATOR2:
+			class_ |= JOBL_2_1;
+			class_ |= MAPID_TAEKWON;
+			break;	
+		case JOB_SOUL_LINKER:
+			class_ |= JOBL_2_2;
+		case JOB_TAEKWON:
+			class_ |= MAPID_TAEKWON;
+			break;
+		case JOB_WEDDING:
+			class_ = MAPID_WEDDING;
+			break;
+		case JOB_SUPER_NOVICE: //Super Novices are considered 2-1 novices. [Skotlex]
+			class_ |= JOBL_2_1;
+			break;
+		default:
+			return -1;
+	}
+	return class_;
+}
+
+//Reverts the map-style class id to the client-style one.
+int pc_mapid2jobid(unsigned short class_, int sex) {
+	switch(class_) {
+		case MAPID_NOVICE:
+			return JOB_NOVICE;
+		case MAPID_SWORDMAN:
+			return JOB_SWORDMAN;
+		case MAPID_MAGE:
+			return JOB_MAGE;
+		case MAPID_ARCHER:
+			return JOB_ARCHER;
+		case MAPID_ACOLYTE:
+			return JOB_ACOLYTE;
+		case MAPID_MERCHANT:
+			return JOB_MERCHANT;
+		case MAPID_THIEF:
+			return JOB_THIEF;
+		case MAPID_TAEKWON:
+			return JOB_TAEKWON;
+		case MAPID_WEDDING:
+			return JOB_WEDDING;
+	//2_1 classes
+		case MAPID_SUPER_NOVICE:
+			return JOB_SUPER_NOVICE;
+		case MAPID_KNIGHT:
+			return JOB_KNIGHT;
+		case MAPID_WIZARD:
+			return JOB_WIZARD;
+		case MAPID_HUNTER:
+			return JOB_HUNTER;
+		case MAPID_PRIEST:
+			return JOB_PRIEST;
+		case MAPID_BLACKSMITH:
+			return JOB_BLACKSMITH;
+		case MAPID_ASSASSIN:
+			return JOB_ASSASSIN;
+		case MAPID_STAR_GLADIATOR:
+			return JOB_STAR_GLADIATOR;
+	//2_2 classes
+		case MAPID_CRUSADER:
+			return JOB_CRUSADER;
+		case MAPID_SAGE:
+			return JOB_SAGE;
+		case MAPID_BARDDANCER:
+			return sex?JOB_BARD:JOB_DANCER;
+		case MAPID_MONK:
+			return JOB_MONK;
+		case MAPID_ALCHEMIST:
+			return JOB_ALCHEMIST;
+		case MAPID_ROGUE:
+			return JOB_ROGUE;
+		case MAPID_SOUL_LINKER:
+			return JOB_SOUL_LINKER;
+	//1-1: advanced
+		case MAPID_NOVICE_HIGH:
+			return JOB_NOVICE_HIGH;
+		case MAPID_SWORDMAN_HIGH:
+			return JOB_SWORDMAN_HIGH;
+		case MAPID_MAGE_HIGH:
+			return JOB_MAGE_HIGH;
+		case MAPID_ARCHER_HIGH:
+			return JOB_ARCHER_HIGH;
+		case MAPID_ACOLYTE_HIGH:
+			return JOB_ACOLYTE_HIGH;
+		case MAPID_MERCHANT_HIGH:
+			return JOB_MERCHANT_HIGH;
+		case MAPID_THIEF_HIGH:
+			return JOB_THIEF_HIGH;
+	//2_1 advanced
+		case MAPID_LORD_KNIGHT:
+			return JOB_LORD_KNIGHT;
+		case MAPID_HIGH_WIZARD:
+			return JOB_HIGH_WIZARD;
+		case MAPID_SNIPER:
+			return JOB_SNIPER;
+		case MAPID_HIGH_PRIEST:
+			return JOB_HIGH_PRIEST;
+		case MAPID_WHITESMITH:
+			return JOB_WHITESMITH;
+		case MAPID_ASSASSIN_CROSS:
+			return JOB_ASSASSIN_CROSS;
+	//2_2 advanced
+		case MAPID_PALADIN:
+			return JOB_PALADIN;
+		case MAPID_PROFESSOR:
+			return JOB_PROFESSOR;
+		case MAPID_CLOWNGYPSY:
+			return sex?JOB_CLOWN:JOB_GYPSY;
+		case MAPID_CHAMPION:
+			return JOB_CHAMPION;
+		case MAPID_CREATOR:
+			return JOB_CREATOR;
+		case MAPID_STALKER:
+			return JOB_STALKER;
+	//1-1 baby
+		case MAPID_BABY:
+			return JOB_BABY;
+		case MAPID_BABY_SWORDMAN:
+			return JOB_BABY_SWORDMAN;
+		case MAPID_BABY_MAGE:
+			return JOB_BABY_MAGE;
+		case MAPID_BABY_ARCHER:
+			return JOB_BABY_ARCHER;
+		case MAPID_BABY_ACOLYTE:
+			return JOB_BABY_ACOLYTE;
+		case MAPID_BABY_MERCHANT:
+			return JOB_BABY_MERCHANT;
+		case MAPID_BABY_THIEF:
+			return JOB_BABY_THIEF;
+	//2_1 baby
+		case MAPID_SUPER_BABY:
+			return JOB_SUPER_BABY;
+		case MAPID_BABY_KNIGHT:
+			return JOB_BABY_KNIGHT;
+		case MAPID_BABY_WIZARD:
+			return JOB_BABY_WIZARD;
+		case MAPID_BABY_HUNTER:
+			return JOB_BABY_HUNTER;
+		case MAPID_BABY_PRIEST:
+			return JOB_BABY_PRIEST;
+		case MAPID_BABY_BLACKSMITH:
+			return JOB_BABY_BLACKSMITH;
+		case MAPID_BABY_ASSASSIN:
+			return JOB_BABY_ASSASSIN;
+	//2_2 baby
+		case MAPID_BABY_CRUSADER:
+			return JOB_BABY_CRUSADER;
+		case MAPID_BABY_SAGE:
+			return JOB_BABY_SAGE;
+		case MAPID_BABY_BARDDANCER:
+			return sex?JOB_BABY_BARD:JOB_BABY_DANCER;
+		case MAPID_BABY_MONK:
+			return JOB_BABY_MONK;
+		case MAPID_BABY_ALCHEMIST:
+			return JOB_BABY_ALCHEMIST;
+		case MAPID_BABY_ROGUE:
+			return JOB_BABY_ROGUE;
+		default:
+			return -1;
+	}
+}
+
 static int distance(int x0, int y_0, int x1, int y_1) {
 	int dx, dy;
 
@@ -339,11 +567,7 @@ int pc_delspiritball(struct map_session_data *sd, int count, int type) {
 }
 
 int pc_setrestartvalue(struct map_session_data *sd,int type) {
-	struct pc_base_job s_class;
-
 	nullpo_retr(0, sd);
-
-	s_class = pc_calc_base_job(sd->status.class);
 
 	if (sd->state.snovice_flag == 3) { // [Celest]
 		sd->status.hp = sd->status.max_hp;
@@ -355,9 +579,8 @@ int pc_setrestartvalue(struct map_session_data *sd,int type) {
 		sd->status.sp = sd->status.max_sp;
 	}
 	else {
-		if (s_class.job == 0 && battle_config.restart_hp_rate < 50) {
+		if((sd->class_&MAPID_BASEMASK) == MAPID_NOVICE && !(sd->class_&JOBL_2) && battle_config.restart_hp_rate < 50)
 			sd->status.hp = (sd->status.max_hp) / 2;
-		}
 		else {
 			if (battle_config.restart_hp_rate <= 0)
 				sd->status.hp = 1;
@@ -379,9 +602,7 @@ int pc_setrestartvalue(struct map_session_data *sd,int type) {
 		clif_updatestatus(sd, SP_SP);
 
 	/* removed exp penalty on spawn [Valaris] */
-	if (type & 2 &&
-	    sd->status.class != 0 && sd->status.class != 4001 && sd->status.class != 4023 && // only novices/High novice/Baby novice will recieve no penalty
-	    !map[sd->bl.m].flag.nozenypenalty) {
+	if(type&2 && (sd->class_&MAPID_UPPERMASK) != MAPID_NOVICE && battle_config.zeny_penalty > 0 && !map[sd->bl.m].flag.nozenypenalty) {
 		double zeny_penalty;
 		zeny_penalty = (double)battle_config.zeny_penalty + ((double)sd->status.base_level * (double)battle_config.zeny_penalty_by_lvl);
 		if (battle_config.zeny_penalty_percent > 0)
@@ -479,16 +700,13 @@ void pc_setnewpc(struct map_session_data *sd, int account_id, int char_id, int l
 int pc_equippoint(struct map_session_data *sd,int n)
 {
 	int ep = 0;
-	struct pc_base_job s_class;
 
 	nullpo_retr(0, sd);
-
-	s_class = pc_calc_base_job(sd->status.class);
 
 	if(sd->inventory_data[n]) {
 		ep = sd->inventory_data[n]->equip;
 		if(sd->inventory_data[n]->look == 1 || sd->inventory_data[n]->look == 2 || sd->inventory_data[n]->look == 6) {
-			if(ep == 2 && (pc_checkskill(sd,AS_LEFT) > 0 || s_class.job == 12))
+			if(ep == 2 && (pc_checkskill(sd,AS_LEFT) > 0 || (sd->class_&MAPID_UPPERMASK) == MAPID_ASSASSIN))
 				return 34;
 		}
 	}
@@ -590,7 +808,6 @@ int pc_isequip(struct map_session_data *sd, int n)
 
 	item = sd->inventory_data[n];
 	sc_data = status_get_sc_data(&sd->bl);
-	//s_class = pc_calc_base_job(sd->status.class);
 
 	if (battle_config.gm_allequip > 0 && sd->GM_level >= battle_config.gm_allequip)
 		return 1;
@@ -601,15 +818,15 @@ int pc_isequip(struct map_session_data *sd, int n)
 		return 0;
 	if (item->elv > 0 && sd->status.base_level < item->elv)
 		return 0;
-	if (((sd->status.class == 13 || sd->status.class == 4014 || sd->status.class == 4036) && ((1<<7)&item->class) == 0) || // have mounted classes use unmounted equipment [Valaris]
-	    ((sd->status.class == 21 || sd->status.class == 4022 || sd->status.class == 4044) && ((1<<14)&item->class) == 0))
+
+	//Not equipable by class. [Skotlex]
+	if (!(1<<(sd->class_&MAPID_BASEMASK)&item->class_base[(sd->class_&JOBL_2_1)?1:((sd->class_&JOBL_2_2)?2:0)]))
 		return 0;
-	if (sd->status.class !=   13 && sd->status.class !=   21 &&
-	    sd->status.class != 4014 && sd->status.class != 4022 &&
-	    sd->status.class != 4036 && sd->status.class != 4044)
-		if ((sd->status.class<=4000 && ((1<<sd->status.class)&item->class) == 0) || (sd->status.class>4000 && sd->status.class<4023 && ((1<<(sd->status.class-4001))&item->class) == 0) ||
-			(sd->status.class>=4023 && ((1<<(sd->status.class-4023))&item->class) == 0))
-			return 0;
+
+	//Not equipable by upper class. [Skotlex]
+	if(!(1<<((sd->class_&JOBL_UPPER)?1:((sd->class_&JOBL_BABY)?2:0))&item->class_upper))
+		return 0;
+
 	if (map[sd->bl.m].flag.pvp && (item->flag.no_equip & 1)) // no_equip = 1- not in PvP, 2- GvG restriction, 3- PvP and GvG which restriction
 		return 0;
 	if (map[sd->bl.m].flag.gvg && (item->flag.no_equip & 2)) // no_equip = 1- not in PvP, 2- GvG restriction, 3- PvP and GvG which restriction
@@ -1030,6 +1247,8 @@ void pc_authok(int id, int login_id2, struct mmo_charstatus *st) {
 	sd->login_id2 = login_id2;
 
 	memcpy(&sd->status, st, sizeof(*st));
+
+	sd->class_ =  pc_jobid2mapid((unsigned short) sd->status.class);
 
 //	intif_request_accountreg(sd); // now send at same moment of character (synchronized)
 
@@ -3092,7 +3311,9 @@ int pc_isUseitem(struct map_session_data *sd, int n)
 
 	if (item == NULL)
 		return 0;
-	if (item->type != 0 && item->type != 2 && item->type != 11)
+	if (item->type != 0 && item->type != 2)
+		return 0;
+	if (!item->script)
 		return 0;
 	if ((nameid == 605) && (map[sd->bl.m].flag.gvg || (sd->d_status==1 || sd->d_status==2)))
 		return 0;
@@ -3104,20 +3325,26 @@ int pc_isUseitem(struct map_session_data *sd, int n)
 		return 0;
 	if ((nameid == 604 || nameid == 12103 || nameid == 12109) && (map[sd->bl.m].flag.nobranch || map[sd->bl.m].flag.gvg)) // 604: Dead Branch, 12103: Bloody Branch, 12109: Poring Box
 		return 0;
+	if ((nameid == 605 || nameid == 606) && pc_issit(sd))
+		return 0;
 	if (battle_config.item_sex_check && item->sex != 2 && sd->status.sex != item->sex)
 		return 0;
-	if (item->elv > 0 && sd->status.base_level < item->elv)
+	if (item->elv && sd->status.base_level < item->elv)
 		return 0;
-	if (((sd->status.class == 13 || sd->status.class == 4014 || sd->status.class == 4036) && ((1<< 7)&item->class) == 0) || // have mounted classes use unmounted items [Valaris]
-	    ((sd->status.class == 21 || sd->status.class == 4022 || sd->status.class == 4044) && ((1<<14)&item->class) == 0))
+
+	//Not equipable by class. [Skotlex]
+	if (!(
+		(1<<(sd->class_&MAPID_BASEMASK)) &
+		(item->class_base[sd->class_&JOBL_2_1?1:(sd->class_&JOBL_2_2?2:0)])
+	))
 		return 0;
-	if  (sd->status.class !=   13 && sd->status.class !=   21 &&
-	     sd->status.class != 4014 && sd->status.class != 4022 &&
-	     sd->status.class != 4036 && sd->status.class != 4044)
-		if ((sd->status.class <= 4000 && ((1 << sd->status.class)&item->class) == 0) ||
-		    (sd->status.class > 4000 && sd->status.class < 4023 && ((1 << (sd->status.class-4001))&item->class) == 0) ||
-		    (sd->status.class >= 4023 && ((1 << (sd->status.class-4023))&item->class) == 0))
-			return 0;
+
+	//Not usable by upper class. [Skotlex]
+	if(!(
+		(1<<(sd->class_&JOBL_UPPER?1:(sd->class_&JOBL_BABY?2:0))) &
+		item->class_upper
+	))
+		return 0;
 
 	return 1;
 }
@@ -3150,7 +3377,7 @@ void pc_useitem(struct map_session_data *sd, short n) {
 		}
 		sd->itemid = itemid; // for script of heal items
 		if (sd->inventory_data[n])
-			run_script(sd->inventory_data[n]->use_script, 0, sd->bl.id, 0);
+			run_script(sd->inventory_data[n]->script, 0, sd->bl.id, 0);
 
 		pc_delitem(sd, n, 1, 1);
 		amount = sd->status.inventory[n].amount;
@@ -4401,16 +4628,6 @@ int pc_calc_base_job2(int b_class)
 	return b_class - 4023;
 }
 
-int pc_calc_upper(int b_class)
-{
-	if(b_class < 4001)
-		return 0;
-	else if(b_class >= 4001 && b_class < 4023)
-		return 1;
-
-	return 2;
-}
-
 // === GET CLASS OF PLAYER ===
 // ===========================
 // RETURN 0  -> NOVICE
@@ -4738,8 +4955,6 @@ int pc_checkbaselevelup(struct map_session_data *sd)
 	nullpo_retr(0, sd);
 
 	if (sd->status.base_exp >= next && next > 0) {
-		struct pc_base_job s_class = pc_calc_base_job(sd->status.class);
-
 		sd->status.base_exp -= next;
 
 		sd->status.base_level++;
@@ -4758,7 +4973,7 @@ int pc_checkbaselevelup(struct map_session_data *sd)
 		status_calc_pc(sd, 0);
 		pc_heal(sd, sd->status.max_hp, sd->status.max_sp);
 
-		if (s_class.job == 23) {
+		if((sd->status.class&MAPID_UPPERMASK) == MAPID_SUPER_NOVICE) {
 			status_change_start(&sd->bl, SkillStatusChangeTable[PR_KYRIE], 1, 0, 0, 0, skill_get_time(PR_KYRIE, 1), 0);
 			status_change_start(&sd->bl, SkillStatusChangeTable[PR_IMPOSITIO], 1, 0, 0, 0, skill_get_time(PR_IMPOSITIO, 1), 0);
 			status_change_start(&sd->bl, SkillStatusChangeTable[PR_MAGNIFICAT], 1, 0, 0, 0, skill_get_time(PR_MAGNIFICAT, 1), 0);
@@ -5001,7 +5216,7 @@ void pc_statusup(struct map_session_data *sd, int type) {
 
 	nullpo_retv(sd);
 
-	max = (pc_calc_upper(sd->status.class) == 2) ? 80 : battle_config.max_parameter;
+	max = (sd->class_&JOBL_BABY) ? 80 : battle_config.max_parameter;
 
 	need = pc_need_status_point(sd, type);
 	if (type < SP_STR || type > SP_LUK || need < 0 || need>sd->status.status_point) {
@@ -5379,7 +5594,7 @@ int pc_resetstate(struct map_session_data* sd)
 
 	lv = sd->status.base_level < MAX_LEVEL ? sd->status.base_level : MAX_LEVEL;
 	sd->status.status_point = statp[lv - 1];
-	if (sd->status.class >= 4001 && sd->status.class <= 4024)
+	if (sd->class_&JOBL_UPPER)
 		sd->status.status_point += 52; // extra 52 + 48 = 100 stat points
 
 	clif_updatestatus(sd, SP_STATUSPOINT);
@@ -5462,14 +5677,11 @@ int pc_resetskill(struct map_session_data* sd) {
 int pc_damage(struct block_list *src, struct map_session_data *sd, int damage)
 {
 	int i = 0, j = 0;
-	struct pc_base_job s_class;
 	int duelid, s;
 	char msg1[120],msg2[120];
 
 
 	nullpo_retr(0, sd);
-
-	s_class = pc_calc_base_job(sd->status.class);
 
 	if (pc_isdead(sd))
 		return 0;
@@ -5695,7 +5907,7 @@ int pc_damage(struct block_list *src, struct map_session_data *sd, int damage)
 	}
 
 	// activate Steel body if a super novice dies at 99+% exp [celest]
-	if (s_class.job == 23) {
+	if ((sd->class_&MAPID_UPPERMASK) == MAPID_SUPER_NOVICE) {
 		if ((i = pc_nextbaseexp(sd)) <= 0)
 			i = sd->status.base_exp;
 		if (i > 0 && (j = sd->status.base_exp * 1000 / i) >= 990 && j <= 1000)
@@ -5990,11 +6202,8 @@ int pc_readparam(struct map_session_data *sd,int type)
 int pc_setparam(struct map_session_data *sd,int type,int val)
 {
 	int i = 0,up_level = 50;
-	struct pc_base_job s_class;
 
 	nullpo_retr(0, sd);
-
-	s_class = pc_calc_base_job(sd->status.class);
 
 	switch(type) {
 	case SP_BASELEVEL:
@@ -6012,12 +6221,11 @@ int pc_setparam(struct map_session_data *sd,int type,int val)
 		pc_heal(sd, sd->status.max_hp, sd->status.max_sp);
 		break;
 	case SP_JOBLEVEL:
-		if (s_class.job == 0)
-			up_level -= 40;
-		// super novices can go up to 99 [celest]
-		else if (s_class.job == 23)
+		if ((sd->class_&MAPID_UPPERMASK) == MAPID_NOVICE)
+			up_level = 10;  //Novice & Baby Novice have 10 Job Levels only
+		else if ((sd->class_&MAPID_UPPERMASK) == MAPID_SUPER_NOVICE) //Super Novice & Super Baby can go up to 99
 			up_level += 49;
-		else if (sd->status.class >= 4008 && sd->status.class <= 4022)
+		else if (sd->class_&JOBL_UPPER && sd->class_&JOBL_2) //3rd Job has 70 Job Levels
 			up_level += 20;
 		if (val >= sd->status.job_level) {
 			if (val > up_level)val = up_level;
@@ -6370,6 +6578,7 @@ int pc_jobchange(struct map_session_data *sd, int job, int upper)
 	pc_setglobalreg(sd, "jobchange_level", sd->change_level);
 
 	sd->status.class = sd->view_class = b_class;
+	sd->class_ = pc_jobid2mapid(sd->status.class);
 
 	sd->status.job_level = 1;
 	sd->status.job_exp = 0;
@@ -7147,6 +7356,27 @@ void pc_equipitem(struct map_session_data *sd, int n, int pos) {
 	}
 	status_calc_pc(sd,0);
 
+	//OnEquip script [Skotlex]
+	if (sd->inventory_data[n]) {
+		int i;
+		struct item_data *data;
+		if (sd->inventory_data[n]->equip_script)
+			run_script(sd->inventory_data[n]->equip_script,0,sd->bl.id,0);
+		if(sd->status.inventory[n].card[0]==0x00ff ||
+			sd->status.inventory[n].card[0]==0x00fe ||
+			sd->status.inventory[n].card[0]==(short)0xff00)
+			; //No cards
+		else
+		for(i=0;i<sd->inventory_data[n]->slot; i++)
+		{
+			if (!sd->status.inventory[n].card[i])
+				continue;
+			data = itemdb_exists(sd->status.inventory[n].card[i]);
+			if (data && data->equip_script)
+				run_script(data->equip_script,0,sd->bl.id,0);
+		}
+	}
+
 	if(sd->special_state.infinite_endure) {
 		if(sd->sc_data[SC_ENDURE].timer == -1)
 			status_change_start(&sd->bl,SC_ENDURE,10,1,0,0,0,0);
@@ -7233,6 +7463,27 @@ void pc_unequipitem(struct map_session_data *sd, int n, int flag) {
 			skill_encchant_eremental_end(&sd->bl,-1);  //•ŠíŽ‚¿¾‚¦‚Í–³ðŒ‚Å‘®«•t—^‰ðœ
 	} else {
 		clif_unequipitemack(sd,n,0,0);
+	}
+
+	//OnUnEquip script [Skotlex]
+	if (sd->inventory_data[n]) {
+		struct item_data *data;
+		int i;
+		if (sd->inventory_data[n]->unequip_script)
+			run_script(sd->inventory_data[n]->unequip_script,0,sd->bl.id,0);
+		if(sd->status.inventory[n].card[0]==0x00ff ||
+			sd->status.inventory[n].card[0]==0x00fe ||
+			sd->status.inventory[n].card[0]==(short)0xff00)
+			; //No cards
+		else
+		for(i=0;i<sd->inventory_data[n]->slot; i++)
+		{
+			if (!sd->status.inventory[n].card[i])
+				continue;
+			data = itemdb_exists(sd->status.inventory[n].card[i]);
+			if (data && data->unequip_script)
+				run_script(data->unequip_script,0,sd->bl.id,0);
+		}
 	}
 
 	if (sd->unequip_damage > 0) {
@@ -7469,7 +7720,7 @@ int pc_ismarried(struct map_session_data *sd)
  */
 int pc_marriage(struct map_session_data *sd, struct map_session_data *dstsd)
 {
-	if (sd == NULL || dstsd == NULL || sd->status.partner_id > 0 || dstsd->status.partner_id > 0 || pc_calc_upper(sd->status.class) == 2)
+	if(sd == NULL || dstsd == NULL || sd->status.partner_id > 0 || dstsd->status.partner_id > 0 || sd->class_&JOBL_BABY)
 		return -1;
 
 	sd->status.partner_id = dstsd->status.char_id;
@@ -7756,8 +8007,7 @@ static int pc_natural_heal_sp(struct map_session_data *sd)
 
 	if (sd->nshealsp > 0) {
 		if (sd->inchealsptick >= battle_config.natural_heal_skill_interval && sd->status.sp < sd->status.max_sp) {
-			struct pc_base_job s_class = pc_calc_base_job(sd->status.class);
-			if (sd->doridori_counter && s_class.job == 23)
+			if(sd->doridori_counter && (sd->class_&MAPID_UPPERMASK) == MAPID_SUPER_NOVICE)
 				bonus = sd->nshealsp * 2;
 			else
 				bonus = sd->nshealsp;

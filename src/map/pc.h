@@ -178,6 +178,9 @@ void pc_setstand(struct map_session_data *sd);
 //int pc_break_equip(struct map_session_data *sd, unsigned short where);
 int pc_candrop(struct map_session_data *sd, int item_id);
 
+int pc_jobid2mapid(unsigned short b_class);    // Skotlex
+int pc_mapid2jobid(unsigned short class_, int sex);    // Skotlex
+
 struct pc_base_job {
 	int job;
 	int type;
@@ -187,7 +190,6 @@ struct pc_base_job {
 struct pc_base_job pc_calc_base_job(int b_class);
 
 int pc_calc_base_job2(int b_class);
-int pc_calc_upper(int b_class);
 
 short pc_calc_class(short job_id);
 
