@@ -1603,7 +1603,7 @@ int skill_area_sub( struct block_list *bl,va_list ap )
 static int skill_check_unit_range_sub(struct block_list *bl, va_list ap) {
 	struct skill_unit *unit;
 	int *c;
-	int skillid, unit_id;
+	int skillid, g_skillid, unit_id;
 
 	nullpo_retr(0, bl);
 	nullpo_retr(0, ap);
@@ -1617,6 +1617,7 @@ static int skill_check_unit_range_sub(struct block_list *bl, va_list ap) {
 		return 0;
 
 	skillid = va_arg(ap,int);
+	g_skillid = unit->group->skill_id;
 	unit_id = unit->group->unit_id;
 
 	if (skillid == MG_SAFETYWALL || skillid == AL_PNEUMA) {
