@@ -1,5 +1,8 @@
 // $Id$
 
+2006-06-09
+    * Fixed: a possible crash in pc.c [zug]
+	
 2006-06-08
 	* Fixed: a bug with Cloaking and SC_COMA leaving Cloaking even after death [akrus]
 

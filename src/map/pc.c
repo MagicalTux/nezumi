@@ -7018,7 +7018,6 @@ int pc_cleareventtimer(struct map_session_data *sd) {
 			evname = (char *)(get_timer(sd->eventtimer[i])->data);
 			delete_timer(sd->eventtimer[i], pc_eventtimer);
 			sd->eventtimer[i] = -1;
-			FREE(evname);
 		}
 
 	return 0;

@@ -568,6 +568,7 @@ struct mob_data {
 	short attacked_count;
 	int hp;
 	int target_id, attacked_id;
+	int maxdamaged;
 	short target_lv;
 	struct walkpath_data walkpath;
 	unsigned int next_walktime;

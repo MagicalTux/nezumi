@@ -21,5 +21,4 @@
 488,19		// CG_HERMODE
 10013,19	// GD_EMERGENCYCALL
 
-//488,19	// CG_HERMODE		// Not Added Yet
 //491,4		// CR_CULTIVATION	// Not Added Yet
