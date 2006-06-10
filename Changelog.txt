@@ -1,6 +1,7 @@
 // $Id$
 
 2006-06-09
+	* Added: duel commands in at_command.conf [DarkRaven]
 	* Fixed: some fixes to new item_db structure [akrus]
 	* Fixed: an exploit in change cart [zug]
 	* Improved: added MAPIDs for internal map-server usage, for compatibility with eAthena [akrus]

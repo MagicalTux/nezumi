@@ -260,8 +260,8 @@ key:item,items,storage,refine,produce,repair
 @produce           :	Element: 0=None 1=Ice 2=Earth 3=Fire 4=Wind
 @repairall         :@repairall - Repair all items of your inventory
 key:pvp,groups,guild,party,woe,gvg
-                 40: 
-                 40:--- PVP CMD ---
+                  0: 
+                  0:--- PVP CMD ---
 @pvpon             :@pvpon - Turns PVP on on the current map.
 @pvpoff            :@pvpoff - Turns PVP off on the current map.
 @gvgon             :@gvgon/@gpvpon - Turns GVG on on the current map. This does NOT enable War of Emperium.
@@ -272,17 +272,22 @@ key:pvp,groups,guild,party,woe,gvg
 @charkiller        :@charkiller <char name|account_id> - Enable a player hitting any player even when not in pvp.
 @killable          :@killable - Makes your character killable.
 @charkillable      :@charkillable <char name|account_id> - Makes another character killable.
-key:groups,guild,party
-                  1: 
-                  1:--- GROUPS CMD ---
+@duel              :@d/@duel <char name|account_id> - initiate duel.
+@accept            :@a/@accept - accept the duel request.
+@reject            :@r/@reject - reject the duel request.
+@dueloff           :@do/@dueloff - leave current duel.
+@duelinfo          :@di/@duelinfo - info about duellants.
+key:groups,guild,party,duel
+                  2: 
+                  2:--- GROUPS CMD ---
 @party             :@party "party_name"|<party_name> - Create a party.
 @guild             :@guild "Desired guild name"|<Desired guild name> - Creates a guild with the desired name (Spaces are allowed)
 @guildlevelup      :@guildlvup/@guildlvlup/@guildlevelup <#_of_levels> - Raises Guild by desired number of levels.
 @guildrecall       :@guildrecall <guild_name|guild_id> - Warps all online characters of a guild to you.
 @partyrecall       :@partyrecall <party_name|party_id> - Warps all online characters of a party to you.
 key:pet,pets,egg
-                  1: 
-                  1:--- PETS CMD ---
+                  2: 
+                  2:--- PETS CMD ---
 @makeegg           :@makeegg/@createegg <pet_id> - Gives pet egg for monster ID in pet DB.
 @hatch             :@hatch/@incubate/@incubator/@pet_incubator/@petincubator/@petbirth/@pet_birth - Creates a pet from your inventory eggs list.
 @petfriendly       :@petfriendly <#> - Sets pet friendly amount (0-1000) 1000 = Max

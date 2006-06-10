@@ -260,8 +260,8 @@ key:item,items,storage,refine,produce,repair,objet,objets,réserve,rafinage
 @produce           :	Elément: 0=Aucun 1=Eau 2=Terre 3=Feu 4=Vent
 @repairall         :@repairall - Répare tous les objets de votre inventaire
 key:pvp,groups,guild,party,woe,gvg,groupes,guilde,groupe
-                 40: 
-                 40:--- COMMANDES DE PVP ---
+                  0: 
+                  0:--- COMMANDES DE PVP ---
 @pvpon             :@pvpon - Active le PVP sur la carte où vous êtes.
 @pvpoff            :@pvpoff - Désactive le PVP sur la carte où vous êtes.
 @gvgon             :@gvgon/@gpvpon - Active le GVG sur la carte où vous êtes. Cela n'active PAS la Guerre de l'Emperium.
@@ -272,17 +272,22 @@ key:pvp,groups,guild,party,woe,gvg,groupes,guilde,groupe
 @charkiller        :@charkiller <nom personnage|numéro_compte> - Permet à un joueur de frapper n'importe quel joueur même en dehors d'un pvp.
 @killable          :@killable - Rend votre personnage tuable.
 @charkillable      :@charkillable <nom personnage|numéro_compte> - Rend un personnage tuable.
-key:groups,guild,party,groupes,guilde,groupe
-                  1: 
-                  1:--- COMMANDES DE GROUPES ---
+@duel              :@d/@duel <nom personnage|numéro_compte> - Initialise un duel.
+@accept            :@a/@accept - Accepte une demande de duel.
+@reject            :@r/@reject - Rejette une demande de duel.
+@dueloff           :@do/@dueloff - Quitte un duel.
+@duelinfo          :@di/@duelinfo - Info sur les duellistes.
+key:groups,guild,party,groupes,guilde,groupe,duel
+                  2: 
+                  2:--- COMMANDES DE GROUPES ---
 @party             :@party "nom_du_groupe"|<nom_du_groupe> - Crée un groupe.
 @guild             :@guild "Nom_désiré_de_la_guide"|<Nom_désiré_de_la_guide> - Crée une guilde avec le nom désiré (les espaces sont autorisés)
 @guildlevelup      :@guildlvup/@guildlvlup/@guildlevelup <nb_de_niveaux> - Augmense le nombre de niveaux de la Guilde.
 @guildrecall       :@guildrecall <nom|id_de_la_guilde> - Teleporte tous les personnages présents d'une guilde sur votre position.
 @partyrecall       :@partyrecall <nom|id_du_groupe> - Teleporte tous les personnages présents d'un groupe sur votre position.
 key:pet,pets,egg,oeuf
-                  1: 
-                  1:--- COMMANDES CONCERNANT LES PETS ---
+                  2: 
+                  2:--- COMMANDES CONCERNANT LES PETS ---
 @makeegg           :@makeegg/@createegg <pet_id> - Vous donne un oeuf du monstre specifié.
 @hatch             :@hatch/@incubate/@incubator/@pet_incubator/@petincubator/@petbirth/@pet_birth - Fait éclore un oeuf que vous avez dans votre inventaire.
 @petfriendly       :@petfriendly <#> - Fixe la valeur d'amitié de votre pet (0-1000) 1000 = Max

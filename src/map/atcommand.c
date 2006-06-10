@@ -1052,16 +1052,18 @@ static struct AtCommandInfo {
 	{ AtCommand_Request,               "@contactgm",             0, atcommand_request },
 	{ AtCommand_Version,               "@version",               0, atcommand_version },
 	{ AtCommand_Version2,              "@version2",              0, atcommand_version2 },
-	{ AtCommand_Duel,				"@duel",			 0, atcommand_duel }, // By Daven
-	{ AtCommand_DuelOff,			"@dueloff",			 0, atcommand_dueloff }, // By Daven
-	{ AtCommand_Accept,				"@accept",			 0, atcommand_accept }, // By Daven
-	{ AtCommand_Reject,				"@reject",			 0, atcommand_reject }, // By Daven
-	{ AtCommand_Duel,				"@d",			 0, atcommand_duel }, // By Daven
-	{ AtCommand_DuelOff,			"@do",			 0, atcommand_dueloff }, // By Daven
-	{ AtCommand_Accept,				"@a",			 0, atcommand_accept }, // By Daven
-	{ AtCommand_Reject,				"@r",			 0, atcommand_reject }, // By Daven
-	{ AtCommand_DuelInfo,			"@di",			 0, atcommand_duelinfo }, // By Daven
-	{ AtCommand_DuelInfo,			"@duelinfo",			 0, atcommand_duelinfo }, // By Daven
+
+	// Duel commands
+	{ AtCommand_Duel,                  "@duel",                  0, atcommand_duel }, // By Daven
+	{ AtCommand_Duel,                  "@d",                     0, atcommand_duel }, // By Daven
+	{ AtCommand_Accept,                "@accept",                0, atcommand_accept }, // By Daven
+	{ AtCommand_Accept,                "@a",                     0, atcommand_accept }, // By Daven
+	{ AtCommand_Reject,                "@reject",                0, atcommand_reject }, // By Daven
+	{ AtCommand_Reject,                "@r",                     0, atcommand_reject }, // By Daven
+	{ AtCommand_DuelOff,               "@dueloff",               0, atcommand_dueloff }, // By Daven
+	{ AtCommand_DuelOff,               "@do",                    0, atcommand_dueloff }, // By Daven
+	{ AtCommand_DuelInfo,              "@duelinfo",              0, atcommand_duelinfo }, // By Daven
+	{ AtCommand_DuelInfo,              "@di",                    0, atcommand_duelinfo }, // By Daven
 
 #ifdef USE_SQL
 	{ AtCommand_CheckMail,             "@checkmail",             1, atcommand_listmail }, // type: 1:checkmail, 2:listmail, 3:listnewmail
