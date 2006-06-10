@@ -2365,16 +2365,6 @@ int pc_bonus(struct map_session_data *sd, int type, int val) {
 		if (!sd->state.lr_flag)
 			sd->hp_gain_value += val;
 		break;
-	case SP_DAMAGE_WHEN_UNEQUIP:
-		if(!sd->state.lr_flag) {
-			sd->unequip_damage += val;
-		}
-		break;
-	case SP_LOSESP_WHEN_UNEQUIP:
-		if(!sd->state.lr_flag) {
-			sd->unequip_damage_sp += val;
-		}
-		break;
 	case SP_INTRAVISION:
 		if(sd->state.lr_flag != 2)
             sd->special_state.intravision = 1;
@@ -7484,20 +7474,6 @@ void pc_unequipitem(struct map_session_data *sd, int n, int flag) {
 			if (data && data->unequip_script)
 				run_script(data->unequip_script,0,sd->bl.id,0);
 		}
-	}
-
-	if (sd->unequip_damage > 0) {
-		short dmg = sd->unequip_damage;
-		if (dmg > sd->status.hp)
-			dmg = sd->status.hp - 1; // HP cannot be set to 0
-		pc_heal(sd, -dmg, 0);
-	}
-
-	if (sd->unequip_damage_sp > 0) {
-		short dmg = sd->unequip_damage_sp;
-		if (dmg > sd->status.sp)
-			dmg = sd->status.sp;
-		pc_heal(sd, 0, -dmg);
 	}
 
 	if (flag & 1) {

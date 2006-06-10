@@ -682,8 +682,6 @@ int status_calc_pc(struct map_session_data* sd, int first)
 	memset(sd->addrace2_, 0, sizeof(sd->addrace2_));
 	sd->hp_gain_value = sd->sp_drain_type = 0;
 	memset(sd->subsize, 0, sizeof(sd->subsize));
-	sd->unequip_damage = 0;
-	sd->unequip_damage_sp = 0;
 	memset(sd->exp_addrace, 0, sizeof(sd->exp_addrace));
 	memset(sd->sp_gain_race, 0, sizeof(sd->sp_gain_race));
 	memset(sd->itemhealrate,0,sizeof(sd->itemhealrate));	// Reset itemhealrate to prevent stacking

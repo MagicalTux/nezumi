@@ -7150,18 +7150,6 @@ int skill_use_id(struct map_session_data *sd, int target_id, int skill_num, int 
 			clif_skill_fail(sd, sd->skillid, 0, 0);
 			return 0;
 		}
-	  {
-		// cancel Basilica if already in effect
-		struct status_change *sc_data = status_get_sc_data(&sd->bl);
-		if (sc_data && sc_data[SC_BASILICA].timer != -1) {
-			struct skill_unit_group *sg = (struct skill_unit_group *)sc_data[SC_BASILICA].val4;
-			if (sg && sg->src_id == sd->bl.id) {
-				status_change_end(&sd->bl, SC_BASILICA, -1);
-				skill_delunitgroup(sg);
-				return 0;
-			}
-		}
-	  }
 		break;
 	case GD_BATTLEORDER:
 	case GD_REGENERATION:
@@ -7263,13 +7251,6 @@ int skill_use_pos(struct map_session_data *sd,
 		    sc_data[SC_MARIONETTE].timer != -1 ||
 		    (sc_data[SC_GRAVITATION].timer != -1 && sc_data[SC_GRAVITATION].val3 == BCT_SELF && skill_num != HW_GRAVITATION))
 			return 0;
-
-		if (sc_data[SC_BASILICA].timer != -1) {
-			struct skill_unit_group *sg = (struct skill_unit_group *)sc_data[SC_BASILICA].val4;
-			if (sg && sg->src_id == sd->bl.id && skill_num == HP_BASILICA)
-				;	// do nothing
-			else
-				return 0;
 		}
 	}
 

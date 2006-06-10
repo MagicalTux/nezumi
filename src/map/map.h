@@ -37,7 +37,6 @@
 #define MAX_VENDING 12
 #define MAX_MOB_DB 2000
 
-// MAX_PC_BONUS -- how many autospells may be used at once
 #define MAX_PC_BONUS 10
 
 #define DEFAULT_AUTOSAVE_INTERVAL 120*1000
@@ -461,8 +460,6 @@ struct map_session_data {
 	int exp_addrace[12];
 	short sp_gain_race[12];
 	int subsize[3];
-	short unequip_damage;
-	short unequip_damage_sp;
 	int itemid;
 	int itemhealrate[7];
 
@@ -830,8 +827,9 @@ enum {
 	SP_CRIT_ATK_RATE, SP_CRITICAL_ADDRACE, SP_NO_REGEN, SP_ADDEFF_WHENHIT, SP_AUTOSPELL_WHENHIT, // 2013-2017
 	SP_SKILL_ATK, SP_UNSTRIPABLE, SP_ADD_DAMAGE_BY_CLASS, // 2018-2020
 	SP_SP_GAIN_VALUE, SP_IGNORE_DEF_MOB, SP_HP_LOSS_RATE, SP_ADDRACE2, SP_HP_GAIN_VALUE, // 2021-2025
-	SP_SUBSIZE, SP_DAMAGE_WHEN_UNEQUIP, SP_ADD_ITEM_HEAL_RATE, SP_LOSESP_WHEN_UNEQUIP, SP_EXP_ADDRACE,	// 2026-2030
+	SP_SUBSIZE, SP_ADD_ITEM_HEAL_RATE, SP_EXP_ADDRACE,	// 2026-2030
 	SP_SP_GAIN_RACE,SP_INTRAVISION, SP_ADD_MONSTER_DROP_ITEMGROUP // 2031-2033
+// 2027 & 2029 are free at the moment
 };
 
 enum {
