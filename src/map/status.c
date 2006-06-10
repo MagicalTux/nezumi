@@ -729,7 +729,7 @@ int status_calc_pc(struct map_session_data* sd, int first)
 						if(c>0){
 							if(i == 8 && sd->status.inventory[idx].equip == 0x20)
 								sd->state.lr_flag = 1;
-							run_script(itemdb_equipscript(c),0,sd->bl.id,0);
+							run_script(itemdb_usescript(c),0,sd->bl.id,0);
 							sd->state.lr_flag = 0;
 						}
 					}
@@ -741,7 +741,7 @@ int status_calc_pc(struct map_session_data* sd, int first)
 					for(j=0;j<sd->inventory_data[idx]->slot;j++){	// ƒJ[ƒh
 						int c=sd->status.inventory[idx].card[j];
 						if(c>0)
-							run_script(itemdb_equipscript(c),0,sd->bl.id,0);
+							run_script(itemdb_usescript(c),0,sd->bl.id,0);
 					}
 				}
 			}

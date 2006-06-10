@@ -996,7 +996,7 @@
 2335,Thief_Clothes,Thief Clothes,5,74000,,100,,6,,0,0x02021040,7,2,16,,0,1,0,{ bonus bAgi,1; },{},{}
 2336,Thief_Clothes_,Thief Clothes,5,74000,,100,,6,,1,0x00021040,7,2,16,,0,1,0,{ bonus bAgi,1; },{},{}
 2337,Ninja_Suit,Ninja Suit,5,,10,1500,,7,,0,0x00021040,7,2,16,,50,1,0,{ bonus bAgi,1; bonus bMdef,3; },{},{}
-2338,Wedding_Dress,Wedding Dress,5,43000,,500,,0,,0,0xFFFFFFFE,7,0,16,,0,1,0,{ bonus bMdef,15; changebase 22; },{},{}
+2338,Wedding_Dress,Wedding Dress,5,43000,,500,,0,,0,0xFFFFFFFE,7,0,16,,0,1,0,{ bonus bMdef,15; },{ changebase 22; },{ changebase Class; }
 2339,Pantie,Pantie,5,1000,,100,,4,,0,0xFFFFFFFF,7,2,16,,0,1,0,{},{},{}
 2340,Novice_Breastplate,Novice Breastplate,5,89000,,500,,4,,1,0x00000001,7,2,16,,10,1,0,{},{},{}
 2341,Legion_Plate_Armor,Legion Plate Armor,5,94000,,5500,,11,,0,0x00004000,7,2,16,,70,1,0,{},{},{}
