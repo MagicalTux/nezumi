@@ -7251,7 +7251,6 @@ int skill_use_pos(struct map_session_data *sd,
 		    sc_data[SC_MARIONETTE].timer != -1 ||
 		    (sc_data[SC_GRAVITATION].timer != -1 && sc_data[SC_GRAVITATION].val3 == BCT_SELF && skill_num != HW_GRAVITATION))
 			return 0;
-		}
 	}
 
 	if (sd->status.option & 2)
