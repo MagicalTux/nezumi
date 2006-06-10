@@ -1,12 +1,14 @@
 // $Id$
 
 2006-06-09
+	* Fixed: an exploit in change cart [zug]
 	* Improved: added MAPIDs for internal map-server usage, for compatibility with eAthena [akrus]
 	* Updated: item_db structure, eAthena-compatible [akrus]
 	- SQL Creation script & SQL databases are missing, please avoid using them for a while
 	* Fixed: a bug with HP_BASILICA causing server to crash [akrus]
 	* Fixed: a possible crash in pc.c [zug]
 
+>>>>>>> .r647
 2006-06-08
 	* Fixed: a bug with Cloaking and SC_COMA leaving Cloaking even after death [akrus]
 

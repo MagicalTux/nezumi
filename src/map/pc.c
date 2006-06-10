@@ -6698,7 +6698,7 @@ void pc_setcart(struct map_session_data *sd, unsigned short type) {
 
 //	nullpo_retv(sd); // checked before to call function
 
-	if (pc_checkskill(sd, MC_PUSHCART) > 0) {
+	if (pc_checkskill(sd, MC_PUSHCART) > 0 && type < 6) {
 		if (!pc_iscarton(sd)) {
 			pc_setoption(sd, sd->status.option | cart[type]);
 			clif_cart_itemlist(sd);

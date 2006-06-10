@@ -9783,7 +9783,20 @@ void clif_parse_RemoveOption(int fd, struct map_session_data *sd) { // S 0x012a
 void clif_parse_ChangeCart(int fd, struct map_session_data *sd) { // S 0x01af <type>.w
 //	nullpo_retv(sd); // checked before to call function
 
-	pc_setcart(sd, RFIFOW(fd,2));
+    int i = RFIFOW(fd,2);
+    char * message_to_gm;
+
+    if (i<6) {
+        pc_setcart(sd, i);
+    } else {
+        CALLOC(message_to_gm, char, MAX_MSG_LEN + 100);
+        chrif_char_ask_name(-1, sd->status.name, 1, 0, 0, 0, 0, 0, 0);
+        clif_setwaitclose(fd); // forced to disconnect because of the hack
+        // message about the ban
+        sprintf(message_to_gm, msg_txt(680), sd->status.name); //  This player has been blocked
+        intif_wis_message_to_gm(wisp_server_name, battle_config.hack_info_GM_level, message_to_gm);
+        FREE(message_to_gm);
+    }
 
 	return;
 }

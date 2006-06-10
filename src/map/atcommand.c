@@ -2132,6 +2132,7 @@ void set_default_msg() {
 
 	add_msg(678, "For the record: War of Emperium is actually running. Because you are member of a guild, you can not use 'Main channel'.");
 	add_msg(679, "War of Emperium is actually running. Because you are member of a guild, you can not use 'Main channel'.");
+	add_msg(680, " This player has been banned : tried to crash server with a wrong cart: %s");
 
 	return;
 }
