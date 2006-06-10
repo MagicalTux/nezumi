@@ -797,7 +797,7 @@ int status_calc_pc(struct map_session_data* sd, int first)
 					}
 					sd->attackrange_ += sd->inventory_data[idx]->range;
 					sd->state.lr_flag = 1;
-					run_script(sd->inventory_data[idx]->equip_script,0,sd->bl.id,0);
+					run_script(sd->inventory_data[idx]->script,0,sd->bl.id,0);
 					sd->state.lr_flag = 0;
 				}
 				else {	//“ñ“—¬•ŠíˆÈŠO
@@ -812,13 +812,13 @@ int status_calc_pc(struct map_session_data* sd, int first)
 						wele = (sd->status.inventory[idx].card[1]&0x0f);	// ‘® «
 					}
 					sd->attackrange += sd->inventory_data[idx]->range;
-					run_script(sd->inventory_data[idx]->equip_script,0,sd->bl.id,0);
+					run_script(sd->inventory_data[idx]->script,0,sd->bl.id,0);
 				}
 			}
 			else if (sd->inventory_data[idx]->type == 5) {
 				sd->watk += sd->inventory_data[idx]->atk;
 				refinedef += sd->status.inventory[idx].refine * refinebonus[0][0];
-				run_script(sd->inventory_data[idx]->equip_script, 0, sd->bl.id, 0);
+				run_script(sd->inventory_data[idx]->script, 0, sd->bl.id, 0);
 			}
 		}
 	}
@@ -827,7 +827,7 @@ int status_calc_pc(struct map_session_data* sd, int first)
 		idx = sd->equip_index[10];
 		if(sd->inventory_data[idx]){		//‚Ü‚¾‘®«‚ª“ü‚Á‚Ä‚¢‚È‚¢
 			sd->state.lr_flag = 2;
-			run_script(sd->inventory_data[idx]->equip_script,0,sd->bl.id,0);
+			run_script(sd->inventory_data[idx]->script,0,sd->bl.id,0);
 			sd->state.lr_flag = 0;
 			sd->arrow_atk += sd->inventory_data[idx]->atk;
 		}
