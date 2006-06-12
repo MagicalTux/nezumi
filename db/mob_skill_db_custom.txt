@@ -1897,8 +1897,8 @@
 1392,Rotar Zairo@NPC_COMBOATTACK,attack,171,1,500,700,5000,no,target,always,0,,,,,,6
 1392,Rotar Zairo@NPC_SELFDESTRUCTION,attack,173,1,500,2000,5000,no,self,myhpltmaxrate,50,,,,,,23
 
-1393,G Mummy@NPC_COMBOATTACK,angry,171,1,500,700,5000,no,target,always,0,,,,,,
-1393,G Mummy@NPC_COMBOATTACK,attack,171,1,500,700,5000,no,target,always,0,,,,,,
+//1393,G Mummy@NPC_COMBOATTACK,angry,171,1,500,700,5000,no,target,always,0,,,,,,
+//1393,G Mummy@NPC_COMBOATTACK,attack,171,1,500,700,5000,no,target,always,0,,,,,,
 
 1399,Event Baphomet@KN_BRANDISHSPEAR,attack,57,10,2000,0,5000,yes,target,always,0,,,,,,29
 1399,Event Baphomet@KN_TWOHANDQUICKEN,attack,60,10,10000,0,120000,yes,self,myhpltmaxrate,30,,,,,,6

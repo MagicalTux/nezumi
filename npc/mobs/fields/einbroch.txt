@@ -1,12 +1,23 @@
 //===== Nezumi Script ========================================
-//= Einbroch Field Monsters
+//= Einbroch Fields Monster Spawn Script
 //===== By: ==================================================
-//= Original:	Japanese Athena Developer Team
-//= Updated:	Nezumi Developer Team
+//= Athena (1.0)
 //===== Current Version: =====================================
-//= 1.0.0
+//= 1.4
 //===== Compatible With: =====================================
-//= Nezumi 1.0.0 or newer
+//= Any Nezumi Version
+//===== Additional Comments: =================================
+//= 1.1 correct spawn maps, but not yet exact amount of
+//= monsters [Lupus]
+//= maps, marked with * are correct
+//= 1.2 Updated to correct mobs. Many thanks to vicious_pucca
+//=    again for providing the information [MasterOfMuppets]
+//= 1.2a Fixed missing tabs [Lupus]
+//= 1.3 Updated after Episode 10.4 - Hugel [Poki#3]
+//=	Mob quantity is custom.
+//= 1.3b Changed the spawn numbers a bit. [Poki#3]
+//=	Thanks to Playtester and Emperium.org
+//= 1.4 Updated by using Tharis' Homun AI, by Tharis [Vicious]
 //============================================================
 
 //==================================================
@@ -17,14 +28,14 @@ einbech.gat,0,0,0,0	monster	Tarou	1175,5,3600000,1800000,0
 //==================================================
 // ein_fild01 - Einbroch Field
 //==================================================
-ein_fild01.gat,0,0,0,0	monster	Punk	1199,40,0,0,0
-ein_fild01.gat,0,0,0,0	monster	Demon Fungus	1378,40,0,0,0
+ein_fild01.gat,0,0,0,0	monster	Punk	1199,50,0,0,0
+ein_fild01.gat,0,0,0,0	monster	Demon Fungus	1378,50,0,0,0
 
 //==================================================
 // ein_fild02 - Einbroch Field
 //==================================================
 ein_fild02.gat,0,0,0,0	monster	Driller	1380,40,0,0,0
-ein_fild02.gat,0,0,0,0	monster	Demon Fungus	1378,40,0,0,0
+ein_fild02.gat,0,0,0,0	monster	Demon Fungus	1378,25,0,0,0
 ein_fild02.gat,0,0,0,0	monster	Ungoliant	1618,1,3600000,1800000,0
 
 //==================================================
