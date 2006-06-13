@@ -1564,30 +1564,23 @@ s_Got:
 	mes "[Laspuchin Gregory]";
 	mes "Uh-uh, what did you bring?";
 	next;
-	switch( select( "Mystic Frozen", "Great Nature", "Flame Heart", "Rough Wind" ) )
-		{
+	menu "Mystic Frozen",-,"Great Nature",L_2,"Flame Heart",L_3,"Rough Wind",L_4;
 
-		case 1:
 			set @stoneID,995;
 			set @stoneStr$,"Mystic Frozen";
-		break;
 
-		case 2:
+		L_2:
 			set @stoneID,997;
 			set @stoneStr$,"Great Nature";
-		break;
 
-		case 3:
+		L_3:
 			set @stoneID,994;
 			set @stoneStr$,"Flame Heart";
-		break;
 
-		case 4:
+		L_4:
 			set @stoneID,996;
 			set @stoneStr$,"Rough Wind";
-		break;
 
-		}
 	if(countitem(@stoneID) < 8)goto s_NEnough;
 	mes "[Laspuchin Gregory]";
 	mes "Kehekeh. I see you brought";
