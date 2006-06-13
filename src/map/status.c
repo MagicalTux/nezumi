@@ -3086,7 +3086,7 @@ int status_get_size(struct block_list *bl)
 		value = mob_db[((struct pet_data *)bl)->class].size;
 		break;
 	case BL_PC:
-		value = (sd->class_&MAPID_UPPERMASK) ? 0 : 1;
+		value = (sd->class_&JOBL_BABY) ? 0 : 1;
 		break;
 	default:
 		value = 1;

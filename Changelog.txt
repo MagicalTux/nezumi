@@ -1,5 +1,8 @@
 // $Id$
 
+2006-06-13
+	* Fixed: upper classes character size [akrus]
+
 2006-06-09
 	* Added: duel commands in at_command.conf [DarkRaven]
 	* Fixed: some fixes to new item_db structure [akrus]
