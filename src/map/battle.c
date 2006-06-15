@@ -4300,6 +4300,8 @@ static const struct {
 	{ "mob_skill_success_chance",                   &battle_config.mob_skill_success_chance},
 	{ "item_sex_check",                             &battle_config.item_sex_check},
 
+	{ "extra_system_flag",                          &battle_config.extra_system_flag},
+
 //SQL-only options start
 #ifdef USE_SQL
 	{ "mail_system",                                &battle_config.mail_system }, // added by [Valaris]
@@ -4634,6 +4636,8 @@ void battle_set_defaults() {
 	battle_config.mob_skill_delay = 100;
 	battle_config.mob_skill_success_chance = 100;
 	battle_config.item_sex_check = 0;
+
+	battle_config.extra_system_flag = 1;
 
 //SQL-only options start
 #ifdef USE_SQL

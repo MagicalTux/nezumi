@@ -216,6 +216,7 @@ int pc_delspiritball(struct map_session_data *sd, int, int);
 
 TIMER_FUNC(pc_eventtimer); // for npc_dequeue
 
+int do_final_pc(void);
 int do_init_pc(void);
 
 enum {ADDITEM_EXIST, ADDITEM_NEW, ADDITEM_OVERAMOUNT};

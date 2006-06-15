@@ -392,6 +392,8 @@ extern struct Battle_Config {
 	int mob_skill_success_chance;
 	int item_sex_check;
 
+	int extra_system_flag;
+
 #ifdef USE_SQL /* SQL-only options */
 	int mail_system; // [Valaris]
 #endif /* USE_SQL */

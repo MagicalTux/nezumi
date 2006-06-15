@@ -2134,7 +2134,12 @@ void set_default_msg() {
 
 	add_msg(678, "For the record: War of Emperium is actually running. Because you are member of a guild, you can not use 'Main channel'.");
 	add_msg(679, "War of Emperium is actually running. Because you are member of a guild, you can not use 'Main channel'.");
-	add_msg(680, " This player has been banned : tried to crash server with a wrong cart: %s");
+	add_msg(680, " This player has been banned : tried to crash server with a wrong cart: %s.");
+
+	add_msg(681, "Server (special action): you lost %ld zenys.");
+	add_msg(682, "Server (special action): you gain %ld zenys.");
+	add_msg(683, "Server (special action): you lost %ld %s.");
+	add_msg(684, "Server (special action): you obtain %ld %s.");
 
 	return;
 }
