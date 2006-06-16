@@ -1,5 +1,8 @@
 // $Id$
 
+2006-06-16
+	* Fixed: server crashing when using Dissonance on plants [akrus]
+
 2006-06-15
 	* Added: extra system. What is it? [DarkRaven]
 	  - it a system managed by map-server to add/remove zenys/items to/from characters.
@@ -10,7 +13,7 @@
 	  - To have more informations, read save/map_extra.txt file after a start of the map-server.
 	  - you can disable this function by a option in map_athena.conf.
 	  - The name? Because it's extra bonus/malus.
-	  - Example of usages: on web site (bonus after an action), to remove easyly some items from a character (sprite error?), exchange of items, etc...
+	  - Example of usages: on web site (bonus after an action), to remove easily some items from a character (sprite error?), exchange of items, etc...
 
 2006-06-13
 	* Fixed: upper classes character size [akrus]

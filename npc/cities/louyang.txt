@@ -1662,13 +1662,13 @@ L_DONE:
 	next;
 	mes "[Hua Tuo]";
 	mes "It's not much, but this medicine is an old family secret. I hope that it will be of use to you in dangerous situations.";
+	set QL_GOTHERB,0;
+	set QL_DOC1STTIME,0;
+	set QL_DOCQUEST,2;
 	getitem 679,2; //Pilule
 	next;
 	mes "[Hua Tuo]";
 	mes "Well then, I will see you around. Once again, I'd like to thank you for your help.";
-	set QL_GOTHERB,0;
-	set QL_DOC1STTIME,0;
-	set QL_DOCQUEST,2;
 	close;
 
 L_NOMED:

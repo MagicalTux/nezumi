@@ -5726,6 +5726,10 @@ int skill_unit_onplace_timer(struct skill_unit *src, struct block_list *bl, unsi
 		}
 		break;
 
+	case 0xa6:	/* BA_DISSONANCE */
+		skill_attack(BF_MISC, ss, &src->bl, bl, sg->skill_id, sg->skill_lv, tick, 0);
+		break;
+
 	// Basilica
 	case 0xb4:				/* バジリカ */
 		if (battle_check_target(&src->bl, bl, BCT_ENEMY) > 0 && !(status_get_mode(bl) & 0x20))
@@ -5833,10 +5837,10 @@ int skill_unit_onout(struct skill_unit *src, struct block_list *bl, unsigned int
 		case 0xa3:	/* ロキの叫び */
 		case 0xa4:	/* 深淵の中に */
 		case 0xa5:	/* 不死身のジークフリード */
+		case 0xa6:	/* BA_DISSONANCE */
 		case 0xad:	/* 私を忘れないで… */
-			if (sc_data[type].timer != -1 && sc_data[type].val4 == (intptr_t)src) {
+			if (sc_data[type].timer != -1 && sc_data[type].val4 == (intptr_t)src)
 				status_change_end(bl, type, -1);
-			}
 			break;
 		case 0xa6:	/* 不協和音 */
 		case 0xa7:	/* 口笛 */

@@ -196,7 +196,7 @@ int SkillStatusChangeTable[]={
 	SC_INTOABYSS,
 	SC_SIEGFRIED,
 	-1,-1,-1,
-	SC_DISSONANCE,
+	-1,
 	-1,
 	SC_WHISTLE,
 /* 320- */
@@ -4669,23 +4669,6 @@ TIMER_FUNC(status_change_timer) {
 		}
 		break;
 
-	case SC_DISSONANCE:
-		if ((--sc_data[type].val2) > 0) {
-			struct skill_unit *unit = (struct skill_unit *)sc_data[type].val4;
-			struct block_list *src;
-			if (!unit || !unit->group)
-				break;
-			src = map_id2bl(unit->group->src_id);
-			if (!src)
-				break;
-			skill_attack(BF_MISC, src, &unit->bl, bl, unit->group->skill_id, sc_data[type].val1, tick, 0);
-			if ((bl->type == BL_MOB) && (MS_DEAD == ((struct mob_data *)bl)->state.state))
-				break;
-			sc_data[type].timer = add_timer(skill_get_time2(unit->group->skill_id, unit->group->skill_lv) + tick, status_change_timer, bl->id, data);
-			return 0;
-		}
-		break;
-
 	case SC_LULLABY:
 		if ((--sc_data[type].val2) > 0) {
 			struct skill_unit *unit= (struct skill_unit *)sc_data[type].val4;
@@ -4830,7 +4813,7 @@ TIMER_FUNC(status_change_timer) {
 					case BD_DRUMBATTLEFIELD:
 					case BD_RINGNIBELUNGEN:
 					case BD_SIEGFRIED:
-					case BA_DISSONANCE:	
+					case BA_DISSONANCE:
 					case BA_ASSASSINCROSS:
 					case DC_UGLYDANCE:
 						s=3;
