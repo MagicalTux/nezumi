@@ -5837,7 +5837,6 @@ int skill_unit_onout(struct skill_unit *src, struct block_list *bl, unsigned int
 		case 0xa3:	/* ロキの叫び */
 		case 0xa4:	/* 深淵の中に */
 		case 0xa5:	/* 不死身のジークフリード */
-		case 0xa6:	/* BA_DISSONANCE */
 		case 0xad:	/* 私を忘れないで… */
 			if (sc_data[type].timer != -1 && sc_data[type].val4 == (intptr_t)src)
 				status_change_end(bl, type, -1);
@@ -5863,8 +5862,7 @@ int skill_unit_onout(struct skill_unit *src, struct block_list *bl, unsigned int
 		case 0xb6:
 			{
 				struct block_list *target = map_id2bl(sg->val2);
-				if(target && target == bl)
-				{
+				if(target && target == bl) {
 					status_change_end(bl, SC_FOGWALL, -1);
 					if(sc_data && sc_data[SC_BLIND].timer != -1)
 						sc_data[SC_BLIND].timer = add_timer(gettick_cache + 30000, status_change_timer, bl->id, 0);
