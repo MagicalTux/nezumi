@@ -34,8 +34,8 @@ yuno.gat,196,139,0	warp	yun11	1,1,yuno_in01.gat,32,34
 yuno_in01.gat,32,37,0	warp	yun12	1,1,yuno.gat,195,141
 yuno.gat,264,87,0	warp	yun13	1,1,yuno_in01.gat,168,101
 yuno_in01.gat,168,104,0	warp	yun14	1,1,yuno.gat,264,90
-yuno.gat,342,203,0	warp	yun15	1,1,yuno_in04.gat,32,58
-yuno_in04.gat,28,58,0	warp	yun16	1,1,yuno.gat,338,203
+yuno.gat,341,203,0	warp	yun15	1,1,yuno_in04.gat,32,58
+yuno_in04.gat,29,58,0	warp	yun16	1,1,yuno.gat,338,203
 yuno_in04.gat,52,58,0	warp	yun17	1,1,yuno_in04.gat,97,58
 yuno_in04.gat,95,58,0	warp	yun18	1,1,yuno_in04.gat,50,58
 yuno_in04.gat,103,64,0	warp	yun19	1,1,yuno_in04.gat,103,95

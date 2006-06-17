@@ -629,6 +629,7 @@ int status_calc_pc(struct map_session_data* sd, int first)
 	sd->def_ratio_atk_ele = sd->def_ratio_atk_ele_ = 0;
 	sd->def_ratio_atk_race = sd->def_ratio_atk_race_ = 0;
 	sd->get_zeny_num = 0;
+	sd->get_zeny_rate = 0;
 	sd->add_damage_class_count = sd->add_damage_class_count_ = sd->add_magic_damage_class_count = 0;
 	sd->add_def_class_count = sd->add_mdef_class_count = 0;
 	sd->monster_drop_item_count = 0;
@@ -852,7 +853,6 @@ int status_calc_pc(struct map_session_data* sd, int first)
 	}
 	sd->double_rate += sd->double_add_rate;
 	sd->perfect_hit += sd->perfect_hit_add;
-	sd->get_zeny_num += sd->get_zeny_add_num;
 	sd->splash_range += sd->splash_add_range;
 	if(sd->speed_add_rate != 100)
 		sd->speed_rate += sd->speed_add_rate - 100;

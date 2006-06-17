@@ -418,7 +418,9 @@ struct map_session_data {
 	int matk_rate, ignore_def_ele, ignore_def_race, ignore_def_ele_, ignore_def_race_;
 	int ignore_mdef_ele, ignore_mdef_race;
 	int magic_addele[10], magic_addrace[12], magic_subrace[12];
-	int perfect_hit, get_zeny_num;
+	int perfect_hit;
+	int get_zeny_rate;
+	int get_zeny_num;
 	int critical_rate, hit_rate, flee_rate, flee2_rate, def_rate, def2_rate, mdef_rate, mdef2_rate;
 	int def_ratio_atk_ele, def_ratio_atk_ele_, def_ratio_atk_race, def_ratio_atk_race_;
 	int add_damage_class_count, add_damage_class_count_, add_magic_damage_class_count;

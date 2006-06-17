@@ -2161,7 +2161,7 @@ int pc_bonus(struct map_session_data *sd, int type, int val) {
 		break;
 	case SP_ADD_GET_ZENY_NUM:
 		if(sd->state.lr_flag != 2)
-			sd->get_zeny_add_num += val;
+			sd->get_zeny_num += val;
 		break;
 	case SP_DEF_RATIO_ATK_ELE:
 		if(!sd->state.lr_flag)
@@ -2553,6 +2553,7 @@ int pc_bonus2(struct map_session_data *sd, int type, int type2, int val) {
 		}
 		sd->sp_drain_type = 0;
 		break;
+
 	case SP_SP_DRAIN_VALUE:
 		if(!sd->state.lr_flag) {
 			sd->sp_drain_rate += type2;
@@ -2564,24 +2565,43 @@ int pc_bonus2(struct map_session_data *sd, int type, int type2, int val) {
 		}
 		sd->sp_drain_type = 0;
 		break;
+
+	case SP_GET_ZENY_NUM:
+		if(sd->state.lr_flag != 2 && sd->get_zeny_rate < val)	{
+			sd->get_zeny_rate = val;
+			sd->get_zeny_num = type2;
+		}
+		break;
+
+	case SP_ADD_GET_ZENY_NUM:
+		if(sd->state.lr_flag != 2) {
+			sd->get_zeny_rate += val;
+			sd->get_zeny_num += type2;
+		}
+		break;
+
 	case SP_WEAPON_COMA_ELE:
 		if(sd->state.lr_flag != 2)
 			sd->weapon_coma_ele[type2] += val;
 		break;
+
 	case SP_WEAPON_COMA_RACE:
 		if(sd->state.lr_flag != 2)
 			sd->weapon_coma_race[type2] += val;
 		break;
+
 	case SP_RANDOM_ATTACK_INCREASE:
 		if(sd->state.lr_flag !=2) {
 			sd->random_attack_increase_add = type2;
 			sd->random_attack_increase_per += val;
 		}
 		break;
+
 	case SP_WEAPON_ATK:
 		if (sd->state.lr_flag != 2)
 			sd->weapon_atk[type2] += val;
 		break;
+
 	case SP_WEAPON_ATK_RATE:
 		if (sd->state.lr_flag != 2)
 			sd->weapon_atk_rate[type2] += val;

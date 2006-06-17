@@ -1,5 +1,8 @@
 // $Id$
 
+2006-06-17
+	* Added: bonus2 get zeny with rate bonuses [akrus]
+
 2006-06-16
 	* Fixed: server crashing when using Dissonance on plants [akrus]
 

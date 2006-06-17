@@ -2863,8 +2863,8 @@ int mob_damage(struct block_list *src, struct mob_data *md, int damage, int type
 						add_timer(gettick_cache + 520 + i, mob_delay_item_drop, (intptr_t)ditem, drop_rate);
 					}
 				}
-				if (sd->get_zeny_num > 0)
-					pc_getzeny(sd, mob_db[md->class].lv * 10 + rand() % (sd->get_zeny_num + 1));
+				if (sd->get_zeny_num > 0 && rand()%100 < sd->get_zeny_rate)
+					pc_getzeny(sd, mob_db[md->class].lv * sd->get_zeny_num * (90 + rand()%21) / 100);
 			}
 
 			if (md->lootitem) {
