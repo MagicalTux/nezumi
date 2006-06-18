@@ -3209,7 +3209,7 @@ static inline void init_db(void)
 		memset(last_ip, 0, LINE_SIZE);
 		memset(memo, 0, LINE_SIZE);
 
-		// Are some of these useless ? [Harbin]
+		// Are some of these useless ? [Harbin] -> We can read jAthena, eAthena with old version. Don't think only for you (like remove all comments, you don't think for futur and other people)
 		if ((i = sscanf(line, "%d\t%[^\t]\t%[^\t]\t%[^\t]\t%c\t%d\t%d\t%[^\t]\t%[^\t]\t%ld\t%[^\t]\t%[^\t]\t%ld\t%d\t%n",
 		                &account_id, userid, pass, lastlogin, &sex, &logincount, &state,
 		                email, error_message, &connect_until_time, last_ip, memo, &ban_until_time, &level, &n)) == 14 ||
