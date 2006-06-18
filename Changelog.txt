@@ -1,5 +1,8 @@
 // $Id$
 
+2006-06-18
+	* Fixed: compilation error in atcommand.c [DarkRaven]
+
 2006-06-17
 	* Added: bonus2 get zeny with rate bonuses [akrus]
 

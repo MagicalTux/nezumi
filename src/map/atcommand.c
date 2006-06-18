@@ -5074,6 +5074,7 @@ ATCOMMAND_FUNC(joblevelup) {
 		return -1;
 	}
 
+	up_level = 50;
 	if ((sd->class_&MAPID_UPPERMASK) == MAPID_NOVICE) //Novice
 		up_level = 10;
 	else if ((sd->class_&MAPID_BASEMASK) == MAPID_NOVICE) //S. Novice
