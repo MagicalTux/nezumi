@@ -3931,14 +3931,12 @@ int skill_castend_nodamage_id(struct block_list *src, struct block_list *bl, int
 	  {
 		int i;
 		clif_skill_nodamage(src,bl,skillid,skilllv,1);
-		if( bl->type==BL_PC && ((struct map_session_data *)bl)->special_state.no_magic_damage )
+		if(bl->type == BL_PC && ((struct map_session_data *)bl)->special_state.no_magic_damage)
 			break;
-		for(i = 0; i < SC_MAX; i++)
-		{
-			if(i == SC_RIDING || i == SC_FALCON || i == SC_HALLUCINATION || i == SC_WEIGHT50 || i == SC_WEIGHT90 || i == SC_STRIPWEAPON || i == SC_STRIPSHIELD || i == SC_STRIPARMOR || i == SC_STRIPHELM || i == SC_CP_WEAPON || i == SC_CP_SHIELD || i == SC_CP_ARMOR || i == SC_CP_HELM || i == SC_COMBO || i == SC_MELTDOWN || i == SC_CARTBOOST)
+		for(i = 0; i < SC_MAX; i++) {
+			if(i == SC_WEIGHT50 || i == SC_WEIGHT90 || i == SC_RIDING || i == SC_FALCON || i == SC_HALLUCINATION || i == SC_WEIGHT50 || i == SC_WEIGHT90 || i == SC_STRIPWEAPON || i == SC_STRIPSHIELD || i == SC_STRIPARMOR || i == SC_STRIPHELM || i == SC_CP_WEAPON || i == SC_CP_SHIELD || i == SC_CP_ARMOR || i == SC_CP_HELM || i == SC_COMBO || i == SC_MELTDOWN || i == SC_CARTBOOST || i == SC_DANCING || i == SC_EDP || i == SC_CARTBOOST || i == SC_MELTDOWN || i == SC_MOONLIT)
 				continue;
-			int temp = (int)(10.0 * (rand() /(RAND_MAX + 1.0)));
-			if(temp < (5 - skilllv))
+			if(rand()%10000 >= (10000 - i) * (50 + 10 * skilllv) / 100)
 				break;
 			status_change_end(bl, i, -1);
 		}

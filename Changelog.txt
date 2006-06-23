@@ -1,5 +1,8 @@
 // $Id$
 
+2006-06-23
+	* Fixed: Dispell skill rate & status list [akrus]
+
 2006-06-18
 	* Fixed: compilation error in atcommand.c [DarkRaven]
 
