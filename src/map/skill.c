@@ -3722,26 +3722,13 @@ int skill_castend_nodamage_id(struct block_list *src, struct block_list *bl, int
 			mob_warp((struct mob_data *)bl, -1, -1, -1, 3);
 		break;
 
-	case AL_HOLYWATER:			/* アクアベネディクタ */
+	case AL_HOLYWATER:
 		if(sd) {
-			int eflag;
-			struct item item_tmp;
-			clif_skill_nodamage(src,bl,skillid,skilllv,1);
-			memset(&item_tmp,0,sizeof(item_tmp));
-			item_tmp.nameid = 523;
-			item_tmp.identify = 1;
-			if(battle_config.holywater_name_input) {
-				item_tmp.card[0] = 0x00fe;
-				item_tmp.card[1] = 0;
-				*((unsigned long *)(&item_tmp.card[2]))=sd->char_id;	/* キャラID */
-			}
-			eflag = pc_additem(sd, &item_tmp, 1);
-			if (eflag) {
-				clif_additem(sd, 0, 0, eflag);
-				map_addflooritem(&item_tmp, 1, sd->bl.m, sd->bl.x, sd->bl.y, NULL, NULL, NULL, sd->bl.id, 0);
-			}
+			if(!skill_produce_mix(sd, 523, 0, 0, 0)) //523: Holy Water
+				clif_skill_fail(sd, skillid, 0, 0);
 		}
 		break;
+
 	case TF_PICKSTONE:
 		if (sd) {
 			int eflag;
@@ -8737,7 +8724,7 @@ int skill_unit_move_unit_group( struct skill_unit_group *group, int m,int dx,int
  * Skill Can Produce Mix
  *------------------------------------------
  */
-int skill_can_produce_mix( struct map_session_data *sd, int nameid, int trigger) {
+int skill_can_produce_mix( struct map_session_data *sd, int nameid, int trigger, unsigned int flag) {
 	int i, j;
 
 	nullpo_retr(0, sd);
@@ -8753,34 +8740,47 @@ int skill_can_produce_mix( struct map_session_data *sd, int nameid, int trigger)
 		return 0;
 
 	if (trigger >= 0) {
-		if (trigger == 32 || trigger == 16 || trigger == 64 || trigger == 256) {
-			if (skill_produce_db[i].itemlv != trigger) /* ファーマシー＊ポーション類と溶鉱炉＊鉱石以外はだめ */
+		if(trigger > 20) { // Non-weapon, non-food item (itemlv must match)
+			if(skill_produce_db[i].itemlv != trigger)
 				return 0;
 		} else {
-			if (skill_produce_db[i].itemlv >= 16) /* 武器以外はだめ */
+			if (skill_produce_db[i].itemlv >= 16)
 				return 0;
-			if (itemdb_wlv(nameid) > trigger) /* 武器Lv判定 */
+			if (itemdb_wlv(nameid) > trigger)
 				return 0;
 		}
 	}
 	if ((j = skill_produce_db[i].req_skill) > 0 && pc_checkskill(sd, j) <= 0)
 		return 0; /* スキルが足りない */
 
+
+
 	for(j = 0; j < MAX_PRODUCE_RESOURCE; j++) {
 		int id, x, y;
-		id = skill_produce_db[i].mat_id[j];
-		if (!(id == 713 && pc_checkskill(sd,CR_ALCHEMY)>=1) && !(id == 1092 && pc_checkskill(sd,CR_ALCHEMY)>=3) && !(id == 1093 && pc_checkskill(sd,CR_ALCHEMY)>=5)) {
-			if (id <= 0) /* これ以上は材料要らない */
-				continue;
-			if (skill_produce_db[i].mat_amount[j] <= 0) {
-				if (pc_search_inventory(sd,id) < 0)
-					return 0;
-			} else {
-				for(y = 0, x = 0; y < MAX_INVENTORY; y++)
-					if (sd->status.inventory[y].nameid == id)
-						x += sd->status.inventory[y].amount;
-				if (x < skill_produce_db[i].mat_amount[j]) /* アイテムが足りない */
-					return 0;
+		if((id = skill_produce_db[i].mat_id[j]) <= 0)
+			continue;
+		if(skill_produce_db[i].mat_amount[j] <= 0) {
+			if(pc_search_inventory(sd, id) < 0)
+				return 0;
+			else if(flag&1)
+				return i + 1;
+		}
+		else {
+			for(y = 0, x = 0; y < MAX_INVENTORY; y++) {
+				if(sd->status.inventory[y].nameid == id)
+					x += sd->status.inventory[y].amount;
+			}
+			if(x < skill_produce_db[i].mat_amount[j]) {
+				switch(skill_produce_db[i].req_skill) {
+					case AM_PHARMACY:
+						clif_produceeffect(sd, 3, nameid);
+						clif_misceffect(&sd->bl, 6);
+						return 0;
+					case ASC_EDP:
+						clif_skill_fail(sd, skill_produce_db[i].req_skill, 3, 0); //Insufficient Materials
+					default:
+						return 0;
+				}
 			}
 		}
 	}
@@ -8792,14 +8792,14 @@ int skill_can_produce_mix( struct map_session_data *sd, int nameid, int trigger)
  * Skill Produce Mix
  *------------------------------------------
  */
-void skill_produce_mix( struct map_session_data *sd, int nameid, int slot1, int slot2, int slot3) {
+int skill_produce_mix( struct map_session_data *sd, int nameid, int slot1, int slot2, int slot3) {
 	int slot[3];
 	int i, sc, ele, idx, equip, wlv, make_per, flag;
 
 //	nullpo_retv(sd); // checked before to call function
 
-	if (!(idx = skill_can_produce_mix(sd, nameid, -1))) /* 条件不足 */
-		return;
+	if (!(idx = skill_can_produce_mix(sd, nameid, -1), 2))
+		return 0;
 
 	idx--;
 	slot[0] = slot1;
@@ -8811,96 +8811,155 @@ void skill_produce_mix( struct map_session_data *sd, int nameid, int slot1, int 
 		if (slot[i] <= 0)
 			continue;
 		j = pc_search_inventory(sd, slot[i]);
-		if (j < 0) /* 不正パケット(アイテム存在)チェック */
+		if (j < 0)
 			continue;
-		if (slot[i] == 1000) { /* 星のかけら */
+		if (slot[i] == 1000) {
 			pc_delitem(sd, j, 1, 1);
 			sc++;
 		}
-		if (slot[i] >= 994 && slot[i] <= 997 && ele == 0) { /* 属性石 */
+		if (slot[i] >= 994 && slot[i] <= 997 && ele == 0) {
 			static const int ele_table[4] = {3, 1, 4, 2};
 			pc_delitem(sd, j, 1, 1);
 			ele = ele_table[slot[i] - 994];
 		}
 	}
 
+
 	for(i = 0; i < MAX_PRODUCE_RESOURCE; i++) {
 		int j, id, x;
 		id = skill_produce_db[idx].mat_id[i];
-		// Check if its a bottle, and if he has alchemy (Level 1 for empty bottle, 3 for Empty potion bottle, 5 for Empty test tube - [Aalye]
-		if (!(id == 713 && pc_checkskill(sd, CR_ALCHEMY) >= 1) && !(id == 1092 && pc_checkskill(sd, CR_ALCHEMY) >= 3) && !(id == 1093 && pc_checkskill(sd, CR_ALCHEMY) >= 5)) {
-			if (id <= 0)
-				continue;
-			x = skill_produce_db[idx].mat_amount[i]; /* 必要な個数 */
-			do{ /* ２つ以上のインデックスにまたがっているかもしれない */
-				int y = 0;
-				j = pc_search_inventory(sd,id);
+		if (id <= 0)
+			continue;
+		x = skill_produce_db[idx].mat_amount[i];
+		do{
+			int y = 0;
+			j = pc_search_inventory(sd,id);
 
-				if (j >= 0) {
-					y = sd->status.inventory[j].amount;
-					if (y > x) y = x; /* 足りている */
-					pc_delitem(sd, j, y, 0);
-				}else {
-					if (battle_config.error_log)
-						printf("skill_produce_mix: material item error\n");
-				}
+			if (j >= 0) {
+				y = sd->status.inventory[j].amount;
+				if (y > x) y = x;
+				pc_delitem(sd, j, y, 0);
+			}else {
+				if (battle_config.error_log)
+					printf("skill_produce_mix: material item error\n");
+			}
 
-				x -= y; /* まだ足りない個数を計算 */
-			}while(j >= 0 && x > 0); /* 材料を消費するか、エラーになるまで繰り返す */
-		}
+			x -= y;
+		}while(j >= 0 && x > 0);
 	}
 
-	equip = itemdb_isequip(nameid);
-	if (!equip) {
-		if (skill_produce_db[idx].req_skill == AM_PHARMACY)
-		{
-			make_per = (pc_checkskill(sd, AM_PHARMACY) * 300) + (pc_checkskill(sd, AM_LEARNINGPOTION) * 100) + (sd->status.job_level * 20) + (sd->status.dex * 10) + (sd->status.luk * 10) + (sd->status.int_ * 5) + 5;
-			if (nameid >= 501 && nameid <= 505)
-				make_per += 2000 + pc_checkskill(sd, AM_POTIONPITCHER) * 100;
-			else if (nameid >= 605 && nameid <= 606)
-				make_per += 2000;
-			else if (nameid >= 545 && nameid <= 547)
-				;
-			else if (nameid == 970)
-				make_per += 1000;
-			else if (nameid == 7135)
-				make_per += 500 + pc_checkskill(sd, AM_DEMONSTRATION) * 100;
-			else if (nameid == 7136)
-				make_per += 500 + pc_checkskill(sd, AM_ACIDTERROR) * 100;
-			else if (nameid == 7137)
-				make_per += 500 + pc_checkskill(sd, AM_CANNIBALIZE) * 100;
-			else if (nameid == 7138)
-				make_per += 500 + pc_checkskill(sd, AM_SPHEREMINE) * 100;
-			else if (nameid == 7139)
-				make_per += 500 + pc_checkskill(sd, AM_CP_WEAPON) * 100 + pc_checkskill(sd,AM_CP_SHIELD) * 100 +
-				            pc_checkskill(sd, AM_CP_ARMOR) * 100 + pc_checkskill(sd, AM_CP_HELM) * 100;
-			else
-				make_per = 1000 + sd->status.base_level * 30 + sd->paramc[3] * 20 + sd->paramc[4] * 15 + pc_checkskill(sd, AM_LEARNINGPOTION) * 100 + pc_checkskill(sd, AM_PHARMACY) * 300;
-		} else if(skill_produce_db[idx].req_skill == ASC_CDP) {
-			make_per = 2000 + 40 * sd->paramc[4] + 20 * sd->paramc[5];
-		} else {
-			if(nameid == 998)		// iron
-				make_per = 2000 + sd->status.job_level * 20 + sd->paramc[4] * 10 + sd->paramc[5] * 10 + pc_checkskill(sd, skill_produce_db[idx].req_skill) * 600;
-			else if(nameid == 999)	// steel
-				make_per = 2000 + sd->status.job_level * 20 + sd->paramc[4] * 10 + sd->paramc[5] * 10 + pc_checkskill(sd, skill_produce_db[idx].req_skill) * 500;
-			else					// elemental stones
-				make_per = 500 + sd->status.job_level * 20 + sd->paramc[4] * 10 + sd->paramc[5] * 10 + pc_checkskill(sd, skill_produce_db[idx].req_skill) * 500;
-		}
-	} else {
-		int add_per = 0;
 
-		if(pc_search_inventory(sd, 989) >= 0)
-			add_per = 1000;
-		else if(pc_search_inventory(sd, 988) >= 0)
-			add_per = 500;
-		else if(pc_search_inventory(sd, 987) >= 0)
-			add_per = 300;
-		else if(pc_search_inventory(sd, 986) >= 0)
-			add_per = 0;
-
+	if((equip = itemdb_isequip(nameid)))
 		wlv = itemdb_wlv(nameid);
-
-		make_per = 2000 + sd->status.job_level * 20 + sd->paramc[4] * 10 + sd->paramc[5] * 10 + ((pc_checkskill(sd, skill_produce_db[idx].req_skill) * 500) + 2500) + pc_checkskill(sd, BS_WEAPONRESEARCH) * 100 + ((wlv >= 3) ? pc_checkskill(sd, BS_ORIDEOCON) * 100 : 0) + add_per - (ele ? 2000 : 0) - sc * 1500 - (wlv > 1 ? wlv * 1000 : 0);
+	if (!equip) {
+		switch(skill_produce_db[idx].req_skill) {
+			case BS_IRON:
+			case BS_STEEL:
+			case BS_ENCHANTEDSTONE:
+				{ // Ores & Metals Refining - skill bonuses are straight from kRO website [DracoRPG]
+				int skill = pc_checkskill(sd, skill_produce_db[idx].req_skill);
+				make_per = sd->status.job_level * 20 + sd->paramc[4] * 10 + sd->paramc[5] * 10; //Base chance
+				switch(nameid) {
+					case 998: // Iron
+						make_per += 4000 + skill * 500; // Temper Iron bonus: +26/+32/+38/+44/+50
+						break;
+					case 999: // Steel
+						make_per += 3000 + skill * 500; // Temper Steel bonus: +35/+40/+45/+50/+55
+						break;
+					case 1000: //Star Crumb
+						make_per = 100000; // Star Crumbs are 100% success crafting rate? (made 1000% so it succeeds even after penalties) [Skotlex]
+						break;
+					default: // Enchanted Stones
+						make_per += 1000 + skill * 500; // Enchantedstone Craft bonus: +15/+20/+25/+30/+35
+					break;
+				}
+				}
+				break;
+			case ASC_CDP:
+				make_per = (2000 + 40 * sd->paramc[4] + 20 * sd->paramc[5]);
+				break;	
+			case AL_HOLYWATER:
+				make_per = 100000; //100% success
+				break;
+			case AM_PHARMACY: // Potion Preparation - reviewed with the help of various Ragnainfo sources [DracoRPG]
+				make_per = pc_checkskill(sd, AM_LEARNINGPOTION) * 100
+					+ pc_checkskill(sd, AM_PHARMACY) * 300 + sd->status.job_level * 20
+					+ sd->paramc[3] * 5 + sd->paramc[4] * 10 + sd->paramc[5] * 10;
+				switch(nameid){
+					case 501: // Red Potion
+					case 503: // Yellow Potion
+					case 504: // White Potion
+					case 605: // Anodyne
+					case 606: // Aloevera
+						make_per += 2000;
+						break;
+					case 505: // Blue Potion
+						make_per -= 500;
+						break;
+					case 545: // Condensed Red Potion
+					case 546: // Condensed Yellow Potion
+					case 547: // Condensed White Potion
+						flag = 1; //Condensed potions
+						make_per -= 1000;
+					  break;
+				 	case 970: // Alcohol
+						make_per += 1000;
+						break;
+					case 7139: // Glistening Coat
+						make_per -= 1000;
+						break;
+					case 7135: // Bottle Grenade
+					case 7136: // Acid Bottle
+					case 7137: // Plant Bottle
+					case 7138: // Marine Sphere Bottle
+					default:
+						break;
+				}
+				if(battle_config.pp_rate != 100)
+					make_per = make_per * battle_config.pp_rate / 100;
+				break;
+			case SA_CREATECON: // Elemental Converter Creation - skill bonuses are from kRO [DracoRPG]
+				make_per = pc_checkskill(sd, SA_ADVANCEDBOOK) * 100 + //TODO: Advanced Book bonus is custom! [Skotlex]
+					sd->status.job_level * 20 + sd->paramc[3] * 10 + sd->paramc[4] * 10;
+				switch(nameid) {
+					case 12114:
+						flag = pc_checkskill(sd, SA_FLAMELAUNCHER);
+						if (flag > 0)
+							make_per += 1000 * flag - 500;
+						break;
+					case 12115:
+						flag = pc_checkskill(sd, SA_FROSTWEAPON);
+						if (flag > 0)
+							make_per += 1000 * flag - 500;
+						break;
+					case 12116:
+						flag = pc_checkskill(sd, SA_SEISMICWEAPON);
+						if (flag > 0)
+							make_per += 1000 * flag - 500;
+						break;
+					case 12117:
+						flag = pc_checkskill(sd, SA_LIGHTNINGLOADER);
+						if (flag > 0)
+							make_per += 1000 * flag - 500;
+						break;
+				}
+				break;
+			default:
+				make_per = 5000;
+				break;
+		} //end switch skill_produce_db[idx].req_skill
+	} else {
+	} else { // Weapon Forging - skill bonuses are straight from kRO website, other things from a jRO calculator [DracoRPG]
+		make_per = 5000 + sd->status.job_level * 20 + sd->paramc[4] * 10 + sd->paramc[5] * 10; // Base chance
+		make_per += pc_checkskill(sd, skill_produce_db[idx].req_skill) * 500; // Smithing skills bonus: +5/+10/+15
+		make_per += pc_checkskill(sd, BS_WEAPONRESEARCH) * 100 +((wlv >= 3)? pc_checkskill(sd,BS_ORIDEOCON) * 100 : 0); // Weaponry Research bonus: +1/+2/+3/+4/+5/+6/+7/+8/+9/+10, Oridecon Research bonus (custom): +1/+2/+3/+4/+5
+		make_per -= (ele?2000:0) + sc * 1500 + (wlv > 1 ? wlv * 1000 : 0); // Element Stone: -20%, Star Crumb: -15% each, Weapon level malus: -0/-20/-30
+		if(pc_search_inventory(sd, 989) > 0) make_per+= 1000; // Emperium Anvil: +10
+		else if(pc_search_inventory(sd, 988) > 0) make_per+= 500; // Golden Anvil: +5
+		else if(pc_search_inventory(sd, 987) > 0) make_per+= 300; // Oridecon Anvil: +3
+		else if(pc_search_inventory(sd, 986) > 0) make_per+= 0; // Anvil: +0?
+		if(battle_config.wp_rate != 100)
+			make_per = make_per * battle_config.wp_rate / 100;
 	}
 
 	if(make_per < 1)
@@ -8911,46 +8970,55 @@ void skill_produce_mix( struct map_session_data *sd, int nameid, int slot1, int 
 		if(battle_config.pp_rate != 100)
 			make_per = make_per * battle_config.pp_rate / 100;
 	} else {
-		if (battle_config.wp_rate != 100) /* 確率補正 */
+		if (battle_config.wp_rate != 100)
 			make_per = make_per * battle_config.wp_rate / 100;
 	}
 
-	if(rand() % 10000 < make_per)
-	{
+
+
+	if (rand() % 10000 < make_per) {
 		struct item tmp_item;
 		memset(&tmp_item, 0, sizeof(tmp_item));
 		tmp_item.nameid = nameid;
 		tmp_item.amount = 1;
 		tmp_item.identify = 1;
-		if (equip) { /* 武器の場合 */
-			tmp_item.card[0] = 0x00ff; /* 製造武器フラグ */
-			tmp_item.card[1] = ((sc*5)<<8) + ele; /* 属性とつよさ */
-			*((unsigned long *)(&tmp_item.card[2])) = sd->char_id; /* キャラID */
-		} else if((battle_config.produce_item_name_input && skill_produce_db[idx].req_skill != AM_PHARMACY) ||
-		          (battle_config.produce_potion_name_input && skill_produce_db[idx].req_skill == AM_PHARMACY)) {
-			tmp_item.card[0] = 0x00fe;
-			tmp_item.card[1] = 0;
-			*((unsigned long *)(&tmp_item.card[2])) = sd->char_id; /* キャラID */
-		} else if((battle_config.produce_item_name_input && skill_produce_db[idx].req_skill != CR_ALCHEMY) ||
-		          (battle_config.produce_potion_name_input && skill_produce_db[idx].req_skill == CR_ALCHEMY)) {
-			tmp_item.card[0] = 0x00fe;
-			tmp_item.card[1] = 0;
-			*((unsigned long *)(&tmp_item.card[2])) = sd->char_id; /* キャラID */
+		if (equip) {
+			tmp_item.card[0] = 0x00ff;
+			tmp_item.card[1] = ((sc*5)<<8) + ele;
+			*((unsigned long *)(&tmp_item.card[2])) = sd->char_id;
+			clif_produceeffect(sd,0,nameid);
+			clif_misceffect(&sd->bl,3);
+		} else {
+			switch(skill_produce_db[idx].req_skill) {
+				case AM_PHARMACY:
+					flag = battle_config.produce_potion_name_input;
+					break;
+				case AL_HOLYWATER:
+					flag = battle_config.holywater_name_input;
+					break;
+				default:
+					flag = battle_config.produce_item_name_input;
+					break;
+			}
+			if (flag) {
+				tmp_item.card[0] = 0x00fe;
+				tmp_item.card[1] = 0;
+				*((unsigned long *)(&tmp_item.card[2])) = sd->char_id;
+			}
 		}
 
 		switch (skill_produce_db[idx].req_skill) {
 			case AM_PHARMACY:
-			case CR_ALCHEMY: // added a small chance to the potion success rate. [Aalye] from freya' forum
-			clif_produceeffect(sd,2,nameid);/* 製薬エフェクトパケット */
-			clif_misceffect(&sd->bl,5); /* 他人にも成功を通知*/
-			break;
-		case ASC_CDP:
-			clif_produceeffect(sd,2,nameid);/* 暫定で製薬エフェクト */
-			clif_misceffect(&sd->bl,5); /* 他人にも成功を通知*/
-			break;
-		default: /* 武器製造、コイン製造 */
-			clif_produceeffect(sd,0,nameid);/* 不明なのでとりあえず製造エフェクトパケット */
-			clif_misceffect(&sd->bl,3); /* 他人にも成功を通知*/
+			case ASC_CDP:
+				clif_produceeffect(sd, 2, nameid);
+				clif_misceffect(&sd->bl, 5);
+				break;
+			case AL_HOLYWATER:
+				clif_skill_nodamage(&sd->bl, &sd->bl, AL_HOLYWATER, 1, 1);
+				break;
+			default:
+				clif_produceeffect(sd, 0, nameid);
+				clif_misceffect(&sd->bl, 3);
 			break;
 		}
 
@@ -8958,28 +9026,28 @@ void skill_produce_mix( struct map_session_data *sd, int nameid, int slot1, int 
 			clif_additem(sd, 0, 0, flag);
 			map_addflooritem(&tmp_item, 1, sd->bl.m, sd->bl.x, sd->bl.y, NULL, NULL, NULL, sd->bl.id, 0);
 		}
+		return 1;
 	} else {
 		switch (skill_produce_db[idx].req_skill) {
-		case AM_PHARMACY:
-		case CR_ALCHEMY: // added a small chance to the potion success rate. [Aalye] from freya' forum
-		clif_produceeffect(sd,3,nameid);/* 製薬失敗エフェクトパケット */
-		clif_misceffect(&sd->bl,6); /* 他人にも失敗を通知*/
-			break;
-		case ASC_CDP:
-			{
-			clif_produceeffect(sd,3,nameid);/* 製薬失敗エフェクトパケット */
-			clif_misceffect(&sd->bl,6); /* 他人にも失敗を通知*/
+			case AM_PHARMACY:
+				clif_produceeffect(sd, 3, nameid);
+				clif_misceffect(&sd->bl, 6); 
+				if (flag) //Condensed potions
+					sd->success_counter = 0; //Set to 0 the potion success counter
+				break;
+			case ASC_CDP:
+				clif_produceeffect(sd, 3, nameid);
+				clif_misceffect(&sd->bl, 6);
 				pc_heal(sd, -(sd->status.max_hp>>2), 0);
-			}
-			break;
-		default:
-			clif_produceeffect(sd,1,nameid);/* 不明なのでとりあえず製造失敗エフェクトパケット */
-			clif_misceffect(&sd->bl,2); /* 他人にも失敗を通知*/
-			break;
+				break;
+			default:
+				clif_produceeffect(sd, 1, nameid);
+				clif_misceffect(&sd->bl, 2);
+				break;
 		}
 	}
 
-	return;
+	return 0;
 }
 
 void skill_arrow_create(struct map_session_data *sd, unsigned short nameid) {

@@ -167,8 +167,8 @@ int skill_check_cloaking(struct block_list *bl);
 int skill_encchant_eremental_end(struct block_list *bl, int type);
 int skillnotok(int skillid, struct map_session_data *sd);
 
-int skill_can_produce_mix(struct map_session_data *sd, int nameid, int trigger);
-void skill_produce_mix(struct map_session_data *sd, int nameid, int slot1, int slot2, int slot3);
+int skill_can_produce_mix(struct map_session_data *sd, int nameid, int trigger, unsigned int flag);
+int skill_produce_mix(struct map_session_data *sd, int nameid, int slot1, int slot2, int slot3);
 
 void skill_arrow_create(struct map_session_data *sd, unsigned short nameid);
 

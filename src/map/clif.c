@@ -4573,7 +4573,7 @@ int clif_skill_produce_mix_list(struct map_session_data *sd, int trigger)
 	WPACKETW(0) = 0x18d;
 	c = 0;
 	for(i = 0; i < MAX_SKILL_PRODUCE_DB; i++) {
-		if (skill_can_produce_mix(sd,skill_produce_db[i].nameid,trigger)) {
+		if (skill_can_produce_mix(sd, skill_produce_db[i].nameid, trigger, 1)) {
 			if ((view = itemdb_viewid(skill_produce_db[i].nameid)) > 0)
 				WPACKETW(c*8+ 4) = view;
 			else
@@ -9374,15 +9374,10 @@ void clif_parse_EquipItem(int fd, struct map_session_data *sd) { // S 0x00a9 <in
 		return;
 	}
 
-/*	if (sd->status.inventory[idx].attribute != 0) { // ”j‰ó‚³‚ê‚Ä‚¢‚é
-		clif_equipitemack(sd, idx, 0, 0); // fail
-		return;
-	}*/
-	//ƒyƒbƒg—p‘•”õ‚Å‚ ‚é‚©‚È‚¢‚©
 	if (sd->inventory_data[idx]) {
 		if (sd->inventory_data[idx]->type != 8) { // 8: petequip
 			if (sd->inventory_data[idx]->type == 10) // 10: arrow
-				pc_equipitem(sd, idx, 0x8000); // –î‚ğ–³—‚â‚è‘•”õ‚Å‚«‚é‚æ‚¤‚Éi||G
+				pc_equipitem(sd, idx, 0x8000);
 			else
 				pc_equipitem(sd, idx, RFIFOW(fd,4));
 		} else
@@ -10208,8 +10203,11 @@ void clif_parse_RequestMemo(int fd, struct map_session_data *sd) { // S 0x011d
 void clif_parse_ProduceMix(int fd, struct map_session_data *sd) { // S 0x018e <MakeItemID>.w <slot1ItemID>.w <slot2ItemID>,w <slot3.ItemID>.w
 //	nullpo_retv(sd); // checked before to call function
 
-	sd->state.produce_flag = 0;
+	if (!sd->state.produce_flag) //Check if player casted the required skill, to avoid macros
+		return;
+
 	skill_produce_mix(sd, RFIFOW(fd,2), RFIFOW(fd,4), RFIFOW(fd,6), RFIFOW(fd,8));
+	sd->state.produce_flag = 0;
 
 	return;
 }
