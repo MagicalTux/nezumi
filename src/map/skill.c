@@ -8798,7 +8798,7 @@ int skill_produce_mix( struct map_session_data *sd, int nameid, int slot1, int s
 
 //	nullpo_retv(sd); // checked before to call function
 
-	if (!(idx = skill_can_produce_mix(sd, nameid, -1), 2))
+	if (!(idx = skill_can_produce_mix(sd, nameid, -1, 2)))
 		return 0;
 
 	idx--;
@@ -8948,7 +8948,6 @@ int skill_produce_mix( struct map_session_data *sd, int nameid, int slot1, int s
 				make_per = 5000;
 				break;
 		} //end switch skill_produce_db[idx].req_skill
-	} else {
 	} else { // Weapon Forging - skill bonuses are straight from kRO website, other things from a jRO calculator [DracoRPG]
 		make_per = 5000 + sd->status.job_level * 20 + sd->paramc[4] * 10 + sd->paramc[5] * 10; // Base chance
 		make_per += pc_checkskill(sd, skill_produce_db[idx].req_skill) * 500; // Smithing skills bonus: +5/+10/+15
@@ -8965,8 +8964,7 @@ int skill_produce_mix( struct map_session_data *sd, int nameid, int slot1, int s
 	if(make_per < 1)
 		make_per = 1;
 
-	if(skill_produce_db[idx].req_skill == AM_PHARMACY || skill_produce_db[idx].req_skill == ASC_CDP || skill_produce_db[idx].req_skill == CR_ALCHEMY)
-	{
+	if(skill_produce_db[idx].req_skill == AM_PHARMACY || skill_produce_db[idx].req_skill == ASC_CDP || skill_produce_db[idx].req_skill == CR_ALCHEMY) {
 		if(battle_config.pp_rate != 100)
 			make_per = make_per * battle_config.pp_rate / 100;
 	} else {
@@ -9031,9 +9029,7 @@ int skill_produce_mix( struct map_session_data *sd, int nameid, int slot1, int s
 		switch (skill_produce_db[idx].req_skill) {
 			case AM_PHARMACY:
 				clif_produceeffect(sd, 3, nameid);
-				clif_misceffect(&sd->bl, 6); 
-				if (flag) //Condensed potions
-					sd->success_counter = 0; //Set to 0 the potion success counter
+				clif_misceffect(&sd->bl, 6);
 				break;
 			case ASC_CDP:
 				clif_produceeffect(sd, 3, nameid);
