@@ -1,5 +1,8 @@
 // $Id: Changelog.txt akrus $
 
+06/27/2006
+	* Updated: some newest mobs updated [akrus]
+
 06/11/2006
 	* Updated: new cards are now dropped by monsters [akrus]
 
