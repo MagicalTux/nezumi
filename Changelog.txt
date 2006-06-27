@@ -1,5 +1,11 @@
 // $Id$
 
+2006-06-27
+	* Fixed: Mini Furnace [DarkRaven]
+	         please, don't just copy eA if you don't adjust other files.
+	         example: modify mob_db.txt and don't modify reading of this file.
+	         other example: modify value of produce in Mini Furnace without modify produce_db.txt
+
 2006-06-26
 	* Updated: potion & weapon creation [akrus]
 
