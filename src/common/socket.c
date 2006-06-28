@@ -1124,7 +1124,12 @@ int do_parsepacket(void) {
 				continue;
 			}
 		}
-		RFIFOFLUSH(i);
+		if (session[i]->rdata_size == session[i]->rdata_pos) { // all buffer has been parsed, don't execute memmove (use too much CPU)
+			session[i]->rdata_size = 0;
+			session[i]->rdata_pos = 0;
+		} else {
+			RFIFOFLUSH(i);
+		}
 	}
 
 	return 0;

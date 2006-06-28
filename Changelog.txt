@@ -1,5 +1,8 @@
 // $Id$
 
+2006-06-28
+	* Improved: reduce lag on socket a little [DarkRaven]
+
 2006-06-27
 	* Fixed: Mini Furnace [DarkRaven]
 	         please, don't just copy eA if you don't adjust other files.
