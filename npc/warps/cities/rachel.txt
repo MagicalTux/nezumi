@@ -75,12 +75,14 @@ ra_temin.gat,276,326,0	script	Statue#Rachel	111,{
 	next;
 	mes "Do you want to enter Rachel Sanctuary?";
 	next;
-	if(select("Yes", "No") == 1){
-		close2;
-		warp "ra_san01",139,14;
-		end;
-	}
-	close;
+	menu "Yes",-,"No",L_No;
+
+	close2;
+	warp "ra_san01",139,14;
+	end;
+
+	L_No:
+		close;
 }
 
 //== WEAPON SHOP ==========================
