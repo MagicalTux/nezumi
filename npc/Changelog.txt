@@ -2,8 +2,9 @@
 Date	Added
 
 2006.06.03
-	Changed: /npc/server/Sapho/7New_Hats.txt: new coordonates [Darkraven]
-	Added: /npc/server/Sapho/jobs/1-1/merchant.txt [Darkraven]
+	Added: /npc/server/Sapho/saphoslotteur.txt [Sapho GM Team]
+	Changed: /npc/server/Sapho/7New_Hats.txt: new coordonates [Sapho GM Team]
+	Added: /npc/server/Sapho/jobs/1-1/merchant.txt [Sapho GM Team]
 
 2006.05.28
 	Updated: /npc/other/kafra_bank.txt - with new cities [Darkraven]
