@@ -1,5 +1,8 @@
 // $Id$
 
+i2006-04-07:
+	* Fixed: Frenzy skill disabled in WoE maps
+	
 2006-06-28
 	* Improved: reduce lag on socket a little [DarkRaven]
 
