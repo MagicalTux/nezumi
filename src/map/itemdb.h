@@ -2,13 +2,14 @@
 
 #ifndef _ITEMDB_H_
 #define _ITEMDB_H_
+#define ITEM_NAME_LENGTH 50
 
 #include "map.h"
 
 struct item_data
 {
 	int nameid;
-	char name[25], jname[25]; // 24 + NULL
+	char name[ITEM_NAME_LENGTH], jname[ITEM_NAME_LENGTH];
 	char cardillustname[64];
 	int value_buy; // 0-600000
 	int value_sell; // 0-1000 (but can be more)

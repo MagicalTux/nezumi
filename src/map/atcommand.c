@@ -11077,7 +11077,7 @@ ATCOMMAND_FUNC(mobinfo) {
 			drop_rate = 1;
 		// display drops
 		if (drop_rate > 0) {
-			sprintf(output2, " - %s  %02.02f%%", item_data->name, ((float)drop_rate) / 100.);
+			sprintf(output2, " - %s [%d] %02.02f%%", item_data->name, item_data->nameid, ((float)drop_rate) / 100.);
 			strcat(atcmd_output, output2);
 			if (++j % 3 == 0) {
 				clif_displaymessage(fd, atcmd_output);

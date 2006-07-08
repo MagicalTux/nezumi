@@ -466,10 +466,10 @@ static int itemdb_readdb(void)
 				continue;
 #ifdef __DEBUG
 			if (battle_config.etc_log) {
-				if (strlen(str[1]) > 24)
-					printf(CL_YELLOW "WARNING: Invalid item name" CL_RESET" (id: %d) - Name too long (> 24 char.) -> only 24 first characters are used.\n", nameid);
-				if (strlen(str[2]) > 24)
-					printf(CL_YELLOW "WARNING: Invalid item jname" CL_RESET" (id: %d) - Name too long (> 24 char.) -> only 24 first characters are used.\n", nameid);
+				if (strlen(str[1]) > ITEM_NAME_LENGTH)
+					printf(CL_YELLOW "WARNING: Invalid item name" CL_RESET" (id: %d) - Name too long (> ITEM_NAME_LENGTH char.) -> only ITEM_NAME_LENGTH first characters are used.\n", nameid);
+				if (strlen(str[2]) > ITEM_NAME_LENGTH)
+					printf(CL_YELLOW "WARNING: Invalid item jname" CL_RESET" (id: %d) - Name too long (> ITEM_NAME_LENGTH char.) -> only ITEM_NAME_LENGTH first characters are used.\n", nameid);
 			}
 #endif
 
@@ -479,12 +479,11 @@ static int itemdb_readdb(void)
 				fflush(stdout);
 			}
 
-			//ID,Name,Jname,Type,Price,Sell,Weight,ATK,DEF,Range,Slot,Job,Gender,Loc,wLV,eLV,View
 			id = itemdb_search(nameid);
 			memset(id->name, 0, sizeof(id->name));
-			strncpy(id->name, str[1], 24);
+			strncpy(id->name, str[1], ITEM_NAME_LENGTH);
 			memset(id->jname, 0, sizeof(id->jname));
-			strncpy(id->jname, str[2], 24);
+			strncpy(id->jname, str[2], ITEM_NAME_LENGTH);
 			id->type = atoi(str[3]);
 			if (id->type == 11) {
 				id->type = 2;
@@ -1120,9 +1119,9 @@ static int itemdb_read_sqldb(void) {
 		id = itemdb_search(nameid);
 
 		memset(id->name, 0, sizeof(id->name));
-		strncpy(id->name, sql_get_string(1), 24);
+		strncpy(id->name, sql_get_string(1), ITEM_NAME_LENGTH);
 		memset(id->jname, 0, sizeof(id->jname));
-		strncpy(id->jname, sql_get_string(2), 24);
+		strncpy(id->jname, sql_get_string(2), ITEM_NAME_LENGTH);
 
 		id->type = sql_get_integer(3);
 		if (id->type == 11) {

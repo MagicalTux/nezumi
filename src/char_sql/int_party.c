@@ -180,7 +180,6 @@ void inter_party_fromsql(int party_id) { // fill party_tmp with informations of 
 							break;
 						}
 			memcpy(&party_tmp, &partys[i], sizeof(struct party));
-			printf(CL_WHITE "warning: " CL_RESET "party '%d' is already loaded \n", party_id);
 			return;
 		}
 

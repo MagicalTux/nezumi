@@ -1,7 +1,12 @@
 // $Id$
 
-i2006-04-07:
-	* Fixed: Frenzy skill disabled in WoE maps
+2006-07-07:
+    * Fixed: item_db and mob_db parsing (no more unecessary warnings) [Zug]
+	* Fixed: an error in item_db with Gemini-S58 Card and Tropical Sograt [Zug]
+	* Fixed: Tarot Card of Fate cast time not affected by Dex [Zug]
+
+2006-07-04:
+	* Fixed: Frenzy skill disabled in WoE maps [zug]
 	
 2006-06-28
 	* Improved: reduce lag on socket a little [DarkRaven]

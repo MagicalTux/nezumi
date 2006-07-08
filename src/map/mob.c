@@ -3175,7 +3175,6 @@ int mob_warpslave_sub(struct block_list *bl, va_list ap)
  */
 int mob_warpslave(struct mob_data *md,int x, int y)
 {
-//printf("warp slave\n");
 	map_foreachinarea(mob_warpslave_sub, md->bl.m,
 	                  x - AREA_SIZE, y - AREA_SIZE,
 	                  x + AREA_SIZE, y + AREA_SIZE, BL_MOB,
@@ -4396,6 +4395,7 @@ static int mob_readdb(void)
 				return -1;
 			}
 		}
+		
 		while(fgets(line, sizeof(line), fp)) { // fgets reads until maximum one less than size and add '\0' -> so, it's not necessary to add -1
 			int class, j;
 			char *str[38+2*MAX_MOB_DROP], *p, *np;
@@ -4427,14 +4427,12 @@ static int mob_readdb(void)
 					str[j] = p;
 					*np = 0;
 					p = np + 1;
-					if (j == 39+2*MAX_MOB_DROP) {
+					if (j == 38+2*MAX_MOB_DROP)
 						printf(CL_YELLOW "WARNING: Invalid monster line (more datas than necessary)" CL_RESET ": %s\n", line);
-					}
 				} else {
 					str[j] = p;
-					if (j < 39+2*MAX_MOB_DROP) {
-						printf(CL_YELLOW "WARNING: Invalid monster line (less datas than necessary: %d instead of 56)" CL_RESET ": %s\n", j, line);
-					}
+					if (j < 37+2*MAX_MOB_DROP)
+						printf(CL_YELLOW "WARNING: Invalid monster line (less datas than necessary: %d instead of 58)" CL_RESET ": %s\n", j, line);
 				}
 			}
 
@@ -4609,6 +4607,7 @@ static int mob_readdb(void)
 			mob_db[class].head_mid = 0;
 			mob_db[class].head_buttom = 0;
 			mob_db[class].clothes_color = 0; //Add for player monster dye - Valaris
+			
 		}
 		fclose(fp);
 		printf("DB '" CL_WHITE "%s" CL_RESET "' readed ('" CL_WHITE "%d" CL_RESET "' entrie%s).\n", filename[i], ln, (ln > 1) ? "s" : "");

@@ -2504,7 +2504,7 @@
 12109,Poring_Box,Poring Box,2,,5000,200,,,,,0xFFFFFFFF,7,2,,,,,,{ monster "this",-1,-1,"--ja--",-2,1,""; },{},{}
 //12110,First_Aid_Box,First Aid Box,2,,5000,200,,,,,0xFFFFFFFF,7,2,,,,,,{ getitem groupranditem(IG_Potion),5; },{},{}
 //12111,Wrapped_Food,Wrapped Food,2,,5000,200,,,,,0xFFFFFFFF,7,2,,,,,,{ getitem groupranditem(IG_Fruit),1; getitem groupranditem(IG_Meat),1; getitem groupranditem(IG_Fish),1; },{},{}
-12112,Tropical_Sograt,Tropical Sograt,0,,500,100,,,,,0xFFFFFFFF,7,2,,,,,,{ sc_start SC_Curse¸,10000,1; },{},{}
+12112,Tropical_Sograt,Tropical Sograt,0,,500,100,,,,,0xFFFFFFFF,7,2,,,,,,{ sc_start SC_Curse,10000,1; },{},{}
 12113,Vermilion_the_Beach,Vermilion the Beach,0,,500,100,,,,,0xFFFFFFFF,7,2,,,,,,{ sc_start SC_Stun,10000,1; },{},{}
 // Elemental Converters
 12114,Flame_Element_Converter,Flame Elemental Converter,2,,10,10,,,,,0xFFFFFFFF,7,2,,,,,,{ sc_start SC_FIREWEAPON,180000,1; },{},{}
@@ -2675,7 +2675,7 @@
 4351,Kavach_Icarus_Card,Kavach Icarus Card,6,,10,10,,,,,,,,16,,,,,{ if(getrefine()>4) goto L_next; bonus bFlee,20; bonus bFlee2,1; L_next: bonus bFlee,10; },{},{} //bonus bDex,readparam(bVit)/18;
 4352,General_Egnigem_Cenia_Card,General Egnigem Cenia Card,6,,10,10,,,,,,,,16,,,,,{},{},{}
 4353,Remover_Card,Remover Card,6,,10,10,,,,,,,,16,,,,,{ bonus bMaxHP,(800-(80*getrefine())); bonus bHPrecovRate,10; },{},{} //bonus bMaxHP,(800-(80*getrefine())); bonus bHPrecovRate,20;
-4354,Gemini-S58_Card,Gemini-S58 Card,6,,10,10,,,,,,,,769,,,,,{ if(readparam(bAgi)<90) goto L_next; bonus2 bResEff,Eff_Silence,3000; bonus2 bResEff,Eff_Stun,3000; L_next; if(readparam(bVit)<80) end; bonus2 bResEff,Eff_Stone,5000; bonus2 bResEff,Eff_Sleep,5000; },{},{}, should silent self
+4354,Gemini-S58_Card,Gemini-S58 Card,6,,10,10,,,,,,,,769,,,,,{ if(readparam(bAgi)<90) goto L_next; bonus2 bResEff,Eff_Silence,3000; bonus2 bResEff,Eff_Stun,3000; L_next: if(readparam(bVit)<80) end; bonus2 bResEff,Eff_Stone,5000; bonus2 bResEff,Eff_Sleep,5000; },{},{}, should silent self
 4355,Gremlin_Card,Gremlin Card,6,,10,10,,,,,,,,136,,,,,{ bonus3 bAddMonsterDropItem,12043,RC_Brute,1; },{},{}
 4356,Beholder_Card,Beholder Card,6,,10,10,,,,,,,,136,,,,,{ skill 275,1; },{},{}
 4357,Lord_Knight_Card,Lord Knight Card,6,,10,10,,,,,,,,769,,,,,{ skill 359,1; bonus bMaxHPrate,-50; },{},{} //skill 359,1; bonus2 bSkillAtk,59,50;
