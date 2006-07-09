@@ -14,7 +14,7 @@
 payon.gat,138,182,5	script	Walter::Slotteur	88,{
 	mes "[slotteur]";
 	mes "Bonjour, à quel équipement voulez-vous ajouter un slot?";
-	mes " je ne crée de slots que sur certaines armes.";
+	mes "Je ne crée de slots que sur certaines armes.";
 	next;
 	M_Menu:
 		menu "j'ai changé d'avis...",CLOSEOUT,"Je voudrais qu'on m'explique.",BLABLA,
@@ -24,10 +24,10 @@ payon.gat,138,182,5	script	Walter::Slotteur	88,{
 		getequipname(4),SLOT4,
 		getequipname(5),SLOT5,
 		getequipname(6),SLOT6,
-		getequipname(7),SLOT7,
-		getequipname(8),SLOT8,
-		getequipname(9),SLOT9,
-		getequipname(10),SLOT10;
+		//getequipname(7),SLOT7,
+		//getequipname(8),SLOT8,
+		getequipname(9),SLOT9;//attention à , et ;
+		//getequipname(10),SLOT10;
 	BLABLA:
 		mes "[slotteur]";
 		mes "Certaines personnes, comme moi, peuvent essayer d'ajouter un slot à un objet.";
@@ -149,7 +149,7 @@ payon.gat,138,182,5	script	Walter::Slotteur	88,{
 		set @part,2;//Armor
 		if (getequipisequiped(2)) goto CHECK1;
 		mes "[slotteur]";
-		mes "Je pourrais rien faire pour ajouter un slot dans ton nombril!";
+		mes "Je ne pourrais rien faire pour ajouter un slot dans ton nombril!";
 		goto M_Menu;
 	SLOT3:
 		set @part,3;//Left Hand
@@ -281,6 +281,11 @@ CHECK1:
 	if(getequipid(@part)==2405) goto Boots;
 	if(getequipid(@part)==2203) goto Glasses;
 	if(getequipid(@part)==2201) goto Sunglasses;
+	mes "[slotteur]";
+	mes "Je suis désolé, mais je ne peux rien faire sur cet objet.";
+	mes "Vous trouverez la liste complète des objets sur :";
+	mes "^0000ff'http://sapho.yorre.com/'^000000 sur le forum.";
+	close;
 
 	Battle_axe:
 		set @requis,931; // orcish voucher

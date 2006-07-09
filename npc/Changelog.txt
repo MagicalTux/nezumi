@@ -2,6 +2,8 @@
 Date	Added
 
 2006.06.09
+	Changed: /npc/server/Sapho/other/kafra_bank.txt [Sapho GM Team]
+	Fixed: /npc/server/Sapho/saphoslotteur.txt [Sapho GM Team]
 	Added: npc/server/Sapho/Informateur.txt [Sapho GM Team]
 
 2006.06.03
