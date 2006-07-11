@@ -207,7 +207,7 @@ geffen_in.gat,177,112,1	script	Guide des Mixtures	111,{
 		next;
 		mes "[test de Mage - Mixture No. 4]";
 		mes "* Ingrédient chimique *";
-		mes " - 2750";
+		mes " - 5429";
 		next;
 		mes "[test de Mage - Mixture No. 4]";
 		mes "* Catalyseur *";

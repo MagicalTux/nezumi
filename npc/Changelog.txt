@@ -1,7 +1,10 @@
 // $Id: Changelog.txt 4392 2006-01-04 22:38:08Z Yor $
 Date	Added
 
-2006.06.09
+2006.07.12
+	Fixed: /npc/server/Sapho/jobs/1-1/mage.txt code of solution 4 [Sapho GM Team]
+
+2006.07.09
 	Changed: /npc/server/Sapho/other/kafra_bank.txt [Sapho GM Team]
 	Fixed: /npc/server/Sapho/saphoslotteur.txt [Sapho GM Team]
 	Added: npc/server/Sapho/Informateur.txt [Sapho GM Team]
