@@ -89,6 +89,8 @@
 585,Brusti,Brusti,0,15,,40,,,,,0xFFFFFFFF,7,2,,,,,,{ itemheal rand(17,20),0; itemskill 74,3,"Magnificat"; },{},{}
 586,Mother's_Cake,Mother's Cake,0,,10,100,,,,,0xFFFFFFFF,7,2,,,,,,{ itemheal rand(325,404),0; },{},{}
 587,Red_Thorn_Fruit,Red Thorn Fruit,0,,10,40,,,,,0xFFFFFFFF,7,2,,,,,{ itemheal rand(35,49),rand(10,19); },{},{}
+588,Spaghetti,Spaghetti,0,,10,100,,,,,0xFFFFFFFF,7,2,,,,,{ itemheal rand(45,64),0; },{},{}
+589,Pizza,Pizza,0,,10,150,,,,,0xFFFFFFFF,7,2,,,,,{ itemheal rand(45,64),0; },{},{}
 // Usable Items
 //===================================================================
 601,Fly_Wing,Fly Wing,2,60,,50,,,,,0xFFFFFFFF,7,2,,,,,,{ warp "Random",0,0; },{},{}
@@ -615,7 +617,7 @@
 1366,Light_Epsilon,Light Epsilon,4,,10,2300,180,,1,0,0x000444A2,7,2,34,4,44,1,7,{ bonus bAtkEle,Ele_Holy; skill 28,3; bonus2 bAddRace,RC_Demon,3; },{},{}
 1367,Slaughter,Slaughter,4,,10,2500,120,,1,0,0x000444A2,7,2,34,4,44,1,7,{ bonus bIgnoreDefRace,RC_Brute; bonus2 bWeaponComaRace,RC_Brute,40; bonus bAtkEle,Ele_Earth; },{},{}
 1368,Tomahawk,Tomahawk,4,,10,2500,165,,1,0,0x000444A2,7,2,34,4,44,1,7,{ bonus bAtkEle,Ele_Wind; skill 337,1; },{},{}
-1369,Guillotine,Guillotine,4,,10,3000,215,,1,0,0x000444A2,7,2,34,4,44,1,7,{ bonus2 bWeaponComaRace,RC_DemiHuman,30; bonus2 bSPGainRace,RC_DemiHuman,20; },{},{}
+1369,Guillotine,Guillotine,4,,10,3000,215,,1,0,0x000444A2,7,2,34,4,44,1,7,{ bonus2 bWeaponComaRace,RC_DemiHuman,30; bonus2 bSPDrainValueRace,RC_DemiHuman,2; bonus2 bSPGainRace,RC_DemiHuman,20; },{},{}
 // 1-Handed Spears
 1401,Javelin,Javelin,4,150,,700,28,,3,3,0x00004082,7,2,2,1,4,1,4,{},{},{}
 1402,Javelin_,Javelin,4,150,,700,28,,3,4,0x00004082,7,2,2,1,4,1,4,{},{},{}
@@ -785,6 +787,7 @@
 1769,Mute_Arrow,Mute Arrow,10,3,,3,1,,,,0x000A0848,7,2,32768,,1,,1,{ bonus2 bAddEff,Eff_Silence,1000; },{},{}
 1770,Iron_Arrow,Iron Arrow,10,2,,1,30,,,,0x000A0848,7,2,32768,,1,,1,{},{},{}
 1771,Venom_Knife,Venom Knife,10,50,,5,30,,,,0x00001000,7,2,32768,,1,,2,{},{},{}
+1772,Holy_Arrow,Holy Arrow,10,3,,2,50,,,,0x000A0848,7,2,32768,,1,,1,{ bonus bAtkEle,Ele_Holy; bonus2 bAddRace,RC_Demon,5; },{},{}
 // Knuckles
 1801,Waghnak,Waghnak,4,8000,,400,30,,1,3,0x00008100,7,2,2,1,1,1,12,{},{},{}
 1802,Waghnak_,Waghnak,4,8000,,400,30,,1,4,0x00008100,7,2,2,1,1,1,12,{},{},{}
@@ -1136,7 +1139,7 @@
 2653,Sacrifice_Ring,Sacrifice Ring,5,,10,100,,0,,0,0xFFFFFFFF,7,2,136,,90,0,0,{},{},{}
 2654,Shinobi_Sash,Shinobi Sash,5,,10,300,,0,,0,0x02021040,7,2,136,,30,0,0,{ bonus bStr,1; bonus bAgi,1; bonus bMdef,1; if(isequipped(2337) == 0) end; bonus bUseSPrate,-20; bonus bMaxHP,300; },{},{}
 2655,Bloodied_Shackle_Ball,Bloodied Shackle Ball,5,,10,4000,,0,,0,0xFFFFFFFE,7,2,136,,0,0,0,{ if (isequipped(2408) == 0) end; bonus bAtk,50; bonus2 bAddDefClass,1196,20; bonus2 bAddDefClass,1197,20; },{},{}
-2656,Armor_Charm,Armor Charm,5,,10,1000,,0,,0,0x000654E2,7,2,136,,0,0,0,{ if(isequipped(2312) == 0 || isequipped(2313) == 0) end; bonus bDef,6; bonus bMaxHP,200; },{},{}
+2656,Armor_Charm,Armor Charm,5,,10,1000,,1,,0,0x000654E2,7,2,136,,0,0,0,{ bonus bMaxHP,50; if(isequipped(2312) || isequipped(2313)) goto L_next; end; L_next: bonus bDef,5; bonus bMaxHP,150; },{},{}
 2657,Laboratory_Permit,Laboratory Permit,5,,10,100,,0,,0,0xFFFFFFFF,7,2,136,,0,0,0,{},{},{}
 2658,Nile_Rose_,Nile Rose,5,,10,100,,0,,1,0xFFFFFFFF,7,2,136,,0,0,0,{ bonus bMaxHP,10; },{},{}
 2659,Vesper_Core_01,Vesper Core 01,5,,10,500,,1,,0,0x00CFDF80,2,2,136,,0,0,0,{ bonus bMdef,3; bonus bInt,2; bonus bMaxSPrate,5; },{},{}
@@ -1329,7 +1332,7 @@
 4172,The_Paper_Card,The Paper Card,6,,10,10,,,,,,,,2,,,,,{ bonus bCritAtkRate,20; bonus2 bSPDrainValue,-1,0; },{},{}
 4173,Demon_Pungus_Card,Demon Pungus Card,6,,10,10,,,,,,,,16,,,,,{ bonus2 bAddEffWhenHit,Eff_Sleep,2000; },{},{}
 4174,Deviling_Card,Deviling Card,6,,10,10,,,,,,,,4,,,,,{ bonus2 bSubEle,Ele_Neutral,50; bonus2 bSubEle,Ele_Water,-50; bonus2 bSubEle,Ele_Earth,-50; bonus2 bSubEle,Ele_Fire,-50; bonus2 bSubEle,Ele_Wind,-50; bonus2 bSubEle,Ele_Poison,-50; bonus2 bSubEle,Ele_Holy,-50; bonus2 bSubEle,Ele_Dark,-50; bonus2 bSubEle,Ele_Ghost,-50; bonus2 bSubEle,Ele_Undead,-50; },{},{}
-4175,Poisonous_Toad_Card,Poisonous Toad Card,6,,10,10,,,,,,,,136,,,,,{ bonus4 bAutoSpellWhenHit,52,1,20,1; },{},{}
+4175,Poisonous_Toad_Card,Poisonous Toad Card,6,,10,10,,,,,,,,136,,,,,{ bonus4 bAutoSpell,52,1,20,1; },{},{}
 4176,Dullahan_Card,Dullahan Card,6,,10,10,,,,,,,,2,,,,,{ bonus bCritAtkRate,10; bonus2 bCriticalAddRace,RC_Dragon,7; },{},{}
 4177,Dryad_Card,Dryad Card,6,,10,10,,,,,,,,769,,,,,{ bonus3 bAddMonsterDropItem,993,3,15; bonus2 bSubEle,Ele_Earth,10; },{},{}
 4178,Dragon_Tail_Card,Dragon Tail Card,6,,10,10,,,,,,,,4,,,,,{ bonus bAgi,1; bonus bFlee,10; bonus2 bSkillAtk,46,5; bonus2 bSkillAtk,47,5; },{},{}
@@ -1715,7 +1718,7 @@
 5149,Silver_Tiara,Silver Tiara,5,,10,100,,0,,0,0xFFFFFFFF,7,2,256,,,1,218,{ bonus bInt,2; },{},{}
 5150,Brazil_Event_Hat,Brazil Event Hat,5,,10,100,,1,,0,0xFFFFFFFF,7,2,256,,,1,219,{ bonus bSpeedRate,35; },{},{}
 5151,Note_Headphones,Note Headphones,5,,,100,,1,,1,0xFFFFFFFF,7,2,256,,,1,220,{ bonus bMdef,3; bonus2 bResEff,Eff_Stun,1000; bonus2 bResEff,Eff_Freeze,1000; },{},{}
-5152,Phoenix_Crown,Phoenix Crown,5,,,2000,,1,,0,0xFFFFFFFF,7,2,768,,,1,221,{ bonus2 bResEff,Eff_Stan,1000; bonus bInt,1; bonus bMdef,2; },{},{}
+5152,Phoenix_Crown,Phoenix Crown,5,,,2000,,1,,0,0xFFFFFFFF,7,2,768,,,1,221,{ bonus2 bResEff,Eff_Stun,1000; bonus bInt,1; bonus bMdef,2; },{},{}
 5153,Angeling_Pin,Angeling Pin,5,,,700,,1,,0,0xFFFFFFFF,7,2,256,,,1,222,{ bonus bFlee,5; if (isequipped(2358)==0) end; bonus bLuk,6; bonus bFlee,5; bonus bInt,2; },{},{}
 5154,Father's_Sunglasses,Father's Sunglasses,5,,,100,,1,,0,0xFFFFFFFF,7,2,256,,,1,12,{},{},{}
 5155,Father's_White_Beard,Father's White Beard,5,,,100,,0,,0,0xFFFFFFFF,7,2,1,,0,,25,{ bonus bAtk,20; },{},{}
@@ -1744,13 +1747,13 @@
 5178,Candle,Candle,5,,10,150,,0,,0,0xFFFFFFFF,7,2,256,,0,1,113,{ bonus bAllStats,1; },{},{}
 5179,Golden_Tiara,Golden Tiara,5,,10,100,,0,,0,0xFFFFFFFF,7,2,256,,,1,233,{ bonus bInt,2; },{},{}
 5180,France_Holiday_Hat,France Holiday Hat,5,,10,100,,1,,0,0xFFFFFFFF,7,2,256,,,1,234,{ bonus bVit,1; },{},{}
-5181,Darkness_Helm,Helm of Darkness,5,,10,100,,1,,0,0xFFFFFFFF,7,2,256,,,1,233,{},{},{}
-5182,Nest_Hat,Nest Hat,5,,10,100,,1,,0,0xFFFFFFFF,7,2,256,,,1,234,{},{},{}
-5183,Laurel_Crown,Laurel_Crown,5,,10,100,,1,,0,0xFFFFFFFF,7,2,256,,,1,235,{},{},{}
-5184,Captains_Hat,Captain's Hat,5,,10,100,,1,,0,0xFFFFFFFF,7,2,256,,,1,236,{},{},{}
-5185,Laurel_Crown,Laurel Crown,5,,10,100,,1,,0,0xFFFFFFFF,7,2,256,,,1,237,{},{},{}
-5186,Decoration_Geographer,Decoration Geographer,5,,10,100,,1,,0,0xFFFFFFFF,7,2,256,,,1,238,{},{},{}
-5187,Twin_Ribbon,Twin Ribbon,5,,10,100,,1,,0,0xFFFFFFFF,7,2,256,,,1,239,{},{},{}
+5181,Helm_of_Darkness,Helm of Darkness,5,,10,500,,3,,1,0x000654E2,7,2,768,,50,1,233,{ bonus bStr,2; },{},{}
+5182,Puppy_Hat,Puppy Hat,5,,10,500,,3,,0,0xFFFFFFFF,7,2,256,,30,0,234,{ bonus bAgi,1; bonus4 bAutoSpell,75,1,10+20*(readparam(bAgi)>=77),0; },{},{}
+5183,Nest_Hat,Nest Hat,5,,10,500,,3,,0,0xFFFFFFFF,7,2,256,,10,1,235,{ bonus bDex,1; bonus bAgi,1; bonus2 bResEff,Eff_Stun,1000; },{},{}
+5184,Captain's_Hat,Captain's Hat,5,,10,500,,4,,0,0xFFFFFFFE,7,2,256,,30,1,236,{ bonus2 bSubEle,Ele_Water,5; },{},{}
+5185,Laurel_Crown,Laurel Crown,5,,10,100,,1,,1,0xFFFFFFFF,7,2,256,,10,1,237,{ bonus bLuk,3; bonus2 bResEff,Eff_Blind,500; bonus2 bResEff,Eff_Curse,500; },{},{}
+5186,Geographer_Decoration,Geographer Decoration,5,,10,500,,1,,0,0xFFFFFFFF,7,2,256,,30,0,238,{ bonus bInt,1; bonus4 bAutoSpellWhenHit,28,1,10,0; },{},{}
+5187,Twin_Ribbon,Twin Ribbon,5,,10,200,,3,,1,0xFFFFFFFF,7,2,256,,30,1,239,{ bonus bMaxSP,30; bonus bMdef,3; },{},{}
 
 // More Etc Items
 //===================================================================
@@ -2271,7 +2274,8 @@
 7516,Green_Keycard,Green Keycard,3,,10,0,,,,,,0,2,,,,,,{},{},{}
 7517,Gold_Coin,Golden Coin,3,,10,100,,,,,,0,2,,,,,,{},{},{}
 7518,Women's_Medal,Women's Medal,3,,10,10,,,,,,0,2,,,,,,{},{},{}
-//Some items missing here
+7519,Handsel,Handsel,3,,10,10,,,,,,,,,,,,,{},{},{}
+7520,Please_Be_Rich,Please Be Rich,3,,10,10,,,,,,,,,,,,,{},{},{}
 7521,Burning_Stone,Burning Stone,3,150,,10,,,,,,7,2,,,,,,{},{},{}
 7522,Freezing_Stone,Freezing Stone,3,150,,10,,,,,,7,2,,,,,,{},{},{}
 7523,Windchime_Stone,Windchime Stone,3,150,,10,,,,,,7,2,,,,,,{},{},{}
@@ -2317,7 +2321,7 @@
 7563,Bloody_Rune,Bloody Rune,3,,10,10,,,,,,,,,,,,,{},{},{}
 7564,Rotten_Meat,Rotten Meat,3,,10,10,,,,,,,,,,,,,{},{},{}
 7565,Sticky_Poison,Sticky_Poison,3,,10,10,,,,,,,,,,,,,{},{},{}
-7566,Unknown,Unknown,3,,10,10,,,,,,,,,,,,,{},{},{}
+7566,Will_of_Red_Darkness,Will of Red Darkness,3,,10,10,,,,,,,,,,,,,{},{},{}
 7567,Suspicious_Hat,Suspicious Hat,3,,10,10,,,,,,,,,,,,,{},{},{}
 7568,White_Mask,White Mask,3,,10,10,,,,,,,,,,,,,{},{},{}
 7569,Hammer_of_Wind,Hammer of Wind,3,,10,0,,,,,,,,,,,,,{},{},{}
@@ -2329,6 +2333,8 @@
 7575,Red-colored_Gem,Red-colored Gem,3,,10,50,,,,,,,,,,,,,{},{},{}
 7576,Blue-colored_Gem,Blue-colored Gem,3,,10,50,,,,,,,,,,,,,{},{},{}
 7577,Yellow-colored_Gem,Yellow-colored Gem,3,,10,50,,,,,,,,,,,,,{},{},{}
+7578,Countermagic_Crystal,Countermagic Crystal,3,,10,10,,,,,,,,,,,,,{},{},{}
+7579,Silk_Handkerchief_of_Zhi_Nu,Silk Handkerchief of Zhi Nu,3,,10,10,,,,,,,,,,,,,{},{},{}
 // Pet Eggs
 //===================================================================
 9001,Poring_Egg,Poring Egg,7,,10,0,,,,,,,,,,,,,{},{},{}
@@ -2579,6 +2585,9 @@
 12180,Spearman_Mercenary_Summon_Scroll_Level_8,Spearman Mercenary Summon Scroll Level 8,2,,10,100,,,,,0xFFFFFFFF,7,2,,,,,,{},{},{}
 12181,Spearman_Mercenary_Summon_Scroll_Level_9,Spearman Mercenary Summon Scroll Level 9,2,,10,100,,,,,0xFFFFFFFF,7,2,,,,,,{},{},{}
 12182,Spearman_Mercenary_Summon_Scroll_Level_10,Spearman Mercenary Summon Scroll Level 10,2,,10,100,,,,,0xFFFFFFFF,7,2,,,,,,{},{},{}
+12183,Holy_Arrow_Quiver,Holy Arrow Quiver,2,,10,100,,,,,0xFFFFFFFF,7,2,,,,,,{ getitem 1772,500; },{},{}
+12185,Mercenary's_Red_Potion,Mercenary's Red Potion,2,,10,100,,,,,0xFFFFFFFF,7,2,,,,,,{},{},{}
+12186,Mercenary's_Blue_Potion,Mercenary's Blue Potion,2,,10,100,,,,,0xFFFFFFFF,7,2,,,,,,{},{},{}
 // More Weapons
 //===================================================================
 // Daggers
