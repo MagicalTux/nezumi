@@ -802,3 +802,6 @@ packet_ver: 13
 0x0116,17,dropitem,8:15
 0x0190,18,actionrequest,7:17
 0x0193,2,closekafra,0
+
+//2006-07-03aSakexe
+0x027c,60
