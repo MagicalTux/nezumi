@@ -1,6 +1,9 @@
 // $Id$
 
 2006-07-12
+	* Fixed: Frenzy skill should work during WoE (according to skill description: Can be used during Guild Siege.) [akrus]
+
+2006-07-12
 	* Updated: packet_db.txt [Darkraven]
 
 2006-07-07:
