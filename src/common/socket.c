@@ -1127,7 +1127,8 @@ int do_parsepacket(void) {
 		if (session[i]->rdata_size == session[i]->rdata_pos) { // all buffer has been parsed, don't execute memmove (use too much CPU)
 			session[i]->rdata_size = 0;
 			session[i]->rdata_pos = 0;
-		} else {
+		} else if (session[i]->rdata_size * 2 > session[i]->max_rdata) { // if not enough place to read next packets (at least 50% of RFIFO must be free)
+			// the previous check is done to reduce number of memmove -> reduction of CPU usage
 			RFIFOFLUSH(i);
 		}
 	}
