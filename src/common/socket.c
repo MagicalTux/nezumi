@@ -1119,8 +1119,8 @@ int do_parsepacket(void) {
 			if (!session[i])
 				continue;
 			/* after parse, check client's RFIFO size to know if there is an invalid packet (too big and not parsed) */
-			if (session[i]->rdata_pos == 0 && session[i]->rdata_size == RFIFO_SIZE) {
-				if (session[i]->max_rdata == RFIFO_SIZE) {
+			if (session[i]->rdata_pos == 0 && session[i]->rdata_size == session[i]->max_rdata) {
+				if (session[i]->max_rdata == RFIFO_SIZE) { // if player
 					session[i]->eof = 1;
 					continue;
 				}

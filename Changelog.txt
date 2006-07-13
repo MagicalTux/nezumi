@@ -1,6 +1,7 @@
 // $Id$
 
 2006-07-13
+	* Improved: check on full read buffer of socket [DarkRaven]
 	* Fixed: possible disconnection on some players [DarkRaven]
 	* Improved: reduce lag on socket [DarkRaven]
 	* Added: new packet of client login connection [DarkRaven]
