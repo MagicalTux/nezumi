@@ -1950,10 +1950,10 @@ L_3:
 }
 
 //================================================================//
-//= 51- prt_fild_09.gat                                          =// Ok
+//= 51- prt_fild09.gat                                           =// Ok
 //================================================================//
 
-prt_fild_09.gat,72,321,0	script	Cartologue	85,{
+prt_fild09.gat,72,321,0	script	Cartologue	85,{
         set @jump,0;
         callfunc "F_CardQuest","Cartologue";
 
