@@ -1,5 +1,8 @@
 // $Id$
 
+2006-07-19
+	* Fixed: check options of max_hair_color and max_hair_style when reading a character [DarkRaven]
+
 2006-07-13
 	* Improved: check on full read buffer of socket [DarkRaven]
 	* Fixed: possible disconnection on some players [DarkRaven]
