@@ -1,5 +1,8 @@
 // $Id$
 
+2006-07-22
+	* Added: bonus bSpDrainRate (for Moonlight Dagger and some others) [akrus]
+
 2006-07-19
 	* Fixed: check options of max_hair_color and max_hair_style when reading a character [DarkRaven]
 

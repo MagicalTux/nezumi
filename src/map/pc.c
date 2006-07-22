@@ -2328,48 +2328,71 @@ int pc_bonus(struct map_session_data *sd, int type, int val) {
 		if (sd->state.lr_flag != 2)
 			sd->break_weapon_rate += val;
 		break;
+
 	case SP_BREAK_ARMOR_RATE:
 		if (sd->state.lr_flag != 2)
 			sd->break_armor_rate += val;
 		break;
+
 	case SP_ADD_STEAL_RATE:
 		if (sd->state.lr_flag != 2)
 			sd->add_steal_rate += val;
 		break;
+
 	case SP_DELAYRATE:
 		if (sd->state.lr_flag != 2)
 			sd->delayrate += val;
 		break;
+
 	case SP_CRIT_ATK_RATE:
 		if (sd->state.lr_flag != 2)
 			sd->crit_atk_rate += val;
 		break;
+
 	case SP_NO_REGEN:
 		if (sd->state.lr_flag != 2)
 			sd->no_regen = val;
 		break;
+
 	case SP_UNSTRIPABLE:
 		if (sd->state.lr_flag != 2)
 			sd->unstripable_equip |= EQP_ARMOR;
 		break;
+
 	case SP_SP_GAIN_VALUE:
 		if (!sd->state.lr_flag)
 			sd->sp_gain_value += val;
 		break;
+
 	case SP_IGNORE_DEF_MOB: // 0:normal monsters only, 1:affects boss monsters as well
 		if (!sd->state.lr_flag)
 			sd->ignore_def_mob |= 1 << val;
 		else if (sd->state.lr_flag == 1)
 			sd->ignore_def_mob_ |= 1 << val;
 		break;
+
 	case SP_HP_GAIN_VALUE:
 		if (!sd->state.lr_flag)
 			sd->hp_gain_value += val;
 		break;
+
+	case SP_SP_DRAIN_VALUE:
+		if(!sd->state.lr_flag) {
+			sd->sp_drain_value += val;
+			sd->sp_drain_rate = 1000;
+		}
+		else if(sd->state.lr_flag == 1) {
+			sd->sp_drain_value_ += val;
+			sd->sp_drain_rate_ = 1000;
+		}
+		sd->sp_drain_type = 0;
+		break;
+
 	case SP_INTRAVISION:
 		if(sd->state.lr_flag != 2)
-            sd->special_state.intravision = 1;
+	            sd->special_state.intravision = 1;
         break;
+
 	default:
 		if (battle_config.error_log)
 			printf("pc_bonus: unknown type %d %d !\n", type, val);
