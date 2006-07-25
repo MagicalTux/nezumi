@@ -1215,22 +1215,29 @@ int status_calc_pc(struct map_session_data* sd, int first)
 		sd->flee += (skill * 3) >> 1;
 
 	if(sd->sc_count){
-		if(sd->sc_data[SC_ANGELUS].timer!=-1)	// エンジェラス
+		if(sd->sc_data[SC_ANGELUS].timer != -1)
 			sd->def2 = sd->def2*(110+5*sd->sc_data[SC_ANGELUS].val1)/100;
-		if(sd->sc_data[SC_IMPOSITIO].timer!=-1)	{// インポシティオマヌス
-			sd->watk += sd->sc_data[SC_IMPOSITIO].val1*5;
+		if(sd->sc_data[SC_IMPOSITIO].timer != -1) {
+			sd->watk += sd->sc_data[SC_IMPOSITIO].val1 * 5;
 			idx = sd->equip_index[8];
 			if(idx >= 0 && sd->inventory_data[idx] && sd->inventory_data[idx]->type == 4)
-				sd->watk_ += sd->sc_data[SC_IMPOSITIO].val1*5;
+				sd->watk_ += sd->sc_data[SC_IMPOSITIO].val1 * 5;
 		}
-		if(sd->sc_data[SC_PROVOKE].timer!=-1)
-		{
-			sd->def = sd->def *(100 - 6 * sd->sc_data[SC_PROVOKE].val1) / 100;
-			sd->base_atk = sd->base_atk * (100 + 2 * sd->sc_data[SC_PROVOKE].val1) / 100;
-			sd->watk = sd->watk * (100 + 2 * sd->sc_data[SC_PROVOKE].val1) / 100;
+		if(sd->sc_data[SC_PROVOKE].timer != -1) {
+// Old Formula
+//			sd->def = sd->def *(100 - 6 * sd->sc_data[SC_PROVOKE].val1) / 100;
+			sd->def -= sd->def * sd->sc_data[SC_PROVOKE].val4 / 100;
+// Old Formula
+//			sd->base_atk = sd->base_atk * (100 + 2 * sd->sc_data[SC_PROVOKE].val1) / 100;
+			sd->base_atk += sd->base_atk * sd->sc_data[SC_PROVOKE].val3 / 100;
+// Old Formula
+//			sd->watk = sd->watk * (100 + 2 * sd->sc_data[SC_PROVOKE].val1) / 100;
+			sd->watk += sd->watk * sd->sc_data[SC_PROVOKE].val3 / 100;
 			idx = sd->equip_index[8];
 			if(idx >= 0 && sd->inventory_data[idx] && sd->inventory_data[idx]->type == 4)
-				sd->watk_ = sd->watk_*(100+2*sd->sc_data[SC_PROVOKE].val1)/100;
+// Old Formula
+//				sd->watk_ = sd->watk_*(100+2*sd->sc_data[SC_PROVOKE].val1)/100;
+				sd->watk_ += sd->watk_ * sd->sc_data[SC_PROVOKE].val3 / 100;
 		}
 		if(sd->sc_data[SC_ENDURE].timer!=-1)
 			sd->mdef += sd->sc_data[SC_ENDURE].val1;
@@ -2300,8 +2307,7 @@ int status_get_critical(struct block_list *bl) {
 }
 
 /*==========================================
- * base_atkの取得
- * 戻りは整数で1以上
+ * Base Attack Calculation
  *------------------------------------------
  */
 int status_get_baseatk(struct block_list *bl) {
@@ -2310,36 +2316,37 @@ int status_get_baseatk(struct block_list *bl) {
 	nullpo_retr(1, bl);
 
 	if (bl->type == BL_PC) {
-		batk = ((struct map_session_data *)bl)->base_atk; //設定されているbase_atk
+		batk = ((struct map_session_data *)bl)->base_atk;
 		if (((struct map_session_data *)bl)->status.weapon < 16)
 			batk += ((struct map_session_data *)bl)->weapon_atk[((struct map_session_data *)bl)->status.weapon];
-	} else { //それ以外なら
+	} else {
 		int str, dstr;
 		struct status_change *sc_data;
 		sc_data = status_get_sc_data(bl);
-		str = status_get_str(bl); //STR
+		str = status_get_str(bl);
 		dstr = str / 10;
-		batk = dstr * dstr + str; //base_atkを計算する
-		if (sc_data) { //状態異常あり
-			if (sc_data[SC_PROVOKE].timer != -1) //PCでプロボック(SM_PROVOKE)状態
-				batk = batk*(100+2*sc_data[SC_PROVOKE].val1) / 100; //base_atk増加
-			if (sc_data[SC_CURSE].timer != -1) //呪われていたら
-				batk -= batk * 25 / 100; //base_atkが25%減少
-			if (sc_data[SC_CONCENTRATION].timer != -1) //コンセントレーション
+		batk = dstr * dstr + str;
+		if (sc_data) {
+			if (sc_data[SC_PROVOKE].timer != -1)
+// Old Formula
+//				batk = batk*(100+2*sc_data[SC_PROVOKE].val1) / 100;
+				batk += batk * sc_data[SC_PROVOKE].val3 / 100;
+			if (sc_data[SC_CURSE].timer != -1)
+				batk -= batk * 25 / 100;
+			if (sc_data[SC_CONCENTRATION].timer != -1)
 				batk += batk * (5 * sc_data[SC_CONCENTRATION].val1) / 100;
 			if (sc_data[SC_BLEEDING].timer != -1)
 				batk -= batk * 25 / 100;
 		}
 	}
-	if (batk < 1) //base_atkは最低でも1
+	if (batk < 1)
 		batk = 1;
 
 	return batk;
 }
 
 /*==========================================
- * 対象のAtkを返す(汎用)
- * 戻りは整数で0以上
+ * Attack Rate Calculation
  *------------------------------------------
  */
 int status_get_atk(struct block_list *bl) {
@@ -2360,10 +2367,12 @@ int status_get_atk(struct block_list *bl) {
 
 		if (sc_data) {
 			if (sc_data[SC_PROVOKE].timer != -1)
-				atk = atk * (100 + 2 * sc_data[SC_PROVOKE].val1) / 100;
+// Old Formula
+//				atk = atk * (100 + 2 * sc_data[SC_PROVOKE].val1) / 100;
+				atk += atk * sc_data[SC_PROVOKE].val3 / 100;
 			if (sc_data[SC_CURSE].timer != -1)
 				atk -= atk * 25 / 100;
-			if (sc_data[SC_CONCENTRATION].timer != -1) //コンセントレーション
+			if (sc_data[SC_CONCENTRATION].timer != -1)
 				atk += atk * (5 * sc_data[SC_CONCENTRATION].val1) / 100;
 			if (sc_data[SC_GOSPEL].timer != -1) {
 				if (sc_data[SC_GOSPEL].val4 == BCT_PARTY &&
@@ -2418,7 +2427,9 @@ int status_get_atk2(struct block_list *bl) {
 			if (sc_data[SC_IMPOSITIO].timer != -1)
 				atk2 += sc_data[SC_IMPOSITIO].val1 * 5;
 			if (sc_data[SC_PROVOKE].timer != -1)
-				atk2 = atk2 * (100 + 2 * sc_data[SC_PROVOKE].val1) / 100;
+// Old Formula
+//				atk2 = atk2 * (100 + 2 * sc_data[SC_PROVOKE].val1) / 100;
+				atk2 += atk2 * sc_data[SC_PROVOKE].val3 / 100;
 			if (sc_data[SC_CURSE].timer!=-1 )
 				atk2 -= atk2 * 25 / 100;
 			if (sc_data[SC_DRUMBATTLE].timer != -1)
@@ -2543,7 +2554,9 @@ int status_get_def(struct block_list *bl) {
 					def = 100;
 
 				if (sc_data[SC_PROVOKE].timer != -1)
-					def = (def * (100 - 6 * sc_data[SC_PROVOKE].val1) + 50) / 100;
+// Old Formula
+//					def = (def * (100 - 6 * sc_data[SC_PROVOKE].val1) + 50) / 100;
+					def -= def * sc_data[SC_PROVOKE].val4 / 100;
 
 				if (sc_data[SC_DRUMBATTLE].timer != -1)
 					def += sc_data[SC_DRUMBATTLE].val3;
@@ -3380,8 +3393,10 @@ int status_change_start(struct block_list *bl, int type, intptr_t val1, intptr_t
 	switch(type)
 	{
 		case SC_PROVOKE:
-			calc_flag = 1;
 			if (tick <= 0) tick = 1000;
+			calc_flag = 1;
+			val3 = 2 + 3 * val1;
+			val4 = 5 + 5 * val1;
 			break;
 		case SC_ENDURE:
 			if (tick <= 0) tick = 1000 * 60;
