@@ -3597,8 +3597,7 @@ int buildin_itemskill(struct script_state *st)
 	lv=conv_num(st,& (st->stack->stack_data[st->start+3]));
 	str=conv_str(st,& (st->stack->stack_data[st->start+4]));
 
-	// 詠唱中にスキルアイテムは使用できない
-	if (sd->skilltimer != -1)
+	if (!sd || sd->skilltimer != -1)
 		return 0;
 
 	sd->skillitem = id;

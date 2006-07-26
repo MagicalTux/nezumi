@@ -141,5 +141,5 @@ lhz_in01.gat,278,132,0	warp	lhz048a	1,1,lhz_in01.gat,43,117
 lighthalzen.gat,324,301,0	warp	lhz050	1,1,lhz_in03.gat,239,101
 lhz_in03.gat,237,101,0	warp	lhz050a	1,1,lighthalzen.gat,324,299
 
-lighthalzen.gat,323,322,0	warp	lhz051	1,1,lhz_in03.gat,15,162
-lhz_in03.gat,13,162,0	warp	lhz051a	1,1,lighthalzen.gat,321,322
+lighthalzen.gat,322,322,0	warp	lhz051	1,1,lhz_in03.gat,15,162
+lhz_in03.gat,13,162,0	warp	lhz051a	1,1,lighthalzen.gat,319,322
