@@ -1853,7 +1853,7 @@
 1388,Archangeling@AL_HEAL,attack,28,11,10000,0,10000,no,self,myhpltmaxrate,50,,,,,,18
 1388,Archangeling@AL_HEAL,chase,28,11,10000,0,1000,no,friend,friendhpltmaxrate,50,,,,,,18
 1388,Archangeling@AL_HEAL,chase,28,11,10000,0,10000,no,self,myhpltmaxrate,50,,,,,,18
-1388,Archangeling@CR_GRANDCROSS,attack,254,1,2000,0,0,yes,target,always,0,,,,,,
+1388,Arc Angeling@CR_GRANDCROSS,attack,254,1,2000,0,0,yes,self,always,0,,,,,,
 1388,Archangeling@NPC_BARRIER,attack,204,1,500,1000,5000,no,self,myhpltmaxrate,30,,,,,,18
 1388,Archangeling@NPC_CALLSLAVE,attack,352,1,10000,0,30000,yes,target,always,0,,,,,,
 1388,Archangeling@NPC_CALLSLAVE,idle,352,1,10000,0,30000,yes,self,always,0,,,,,,
@@ -3419,7 +3419,7 @@
 1702,Retribution@NPC_CURSEATTACK,chase,181,3,50,800,5000,no,target,always,0,,,,,,
 1702,Retribution@KN_BOWLINGBASH,attack,62,5,500,800,5000,no,target,always,0,,,,,,
 
-1703,Solace@CR_GRANDCROSS,attack,254,1,2000,0,0,yes,target,always,0,,,,,,
+1703,Solace@CR_GRANDCROSS,attack,254,1,2000,0,0,yes,self,always,0,,,,,,
 1703,Solace@PR_LEXAETERNA,chase,78,1,1000,1000,5000,yes,target,always,0,,,,,,
 1703,Solace@PR_LEXAETERNA,attack,78,1,1000,1000,5000,yes,target,always,0,,,,,,
 1703,Solace@PR_LEXDIVINA,angry,76,5,500,1000,5000,yes,target,always,0,,,,,,
@@ -3747,7 +3747,7 @@
 1749,Medusa@NPC_PETRIFYATTACK,attack,180,5,500,500,5000,no,target,always,0,,,,,,3
 1749,Medusa@NPC_PETRIFYATTACK,chase,180,5,500,500,5000,no,target,always,0,,,,,,3
 
-1751,Valkyrie Randgris@CR_GRANDCROSS,attack,254,1,2000,0,0,yes,target,always,0,,,,,,
+1751,Valkyrie Randgris@CR_GRANDCROSS,attack,254,1,2000,0,0,yes,self,always,0,,,,,,
 1751,Valkyrie Randgris@SA_DISPELL,attack,289,5,500,0,30000,yes,target,always,0,,,,,,
 1751,Valkyrie Randgris@WZ_VERMILION,attack,85,10,2000,0,5000,yes,target,always,0,,,,,,
 1751,Valkyrie Randgris@WZ_VERMILION,chase,85,10,2000,0,5000,yes,target,always,0,,,,,,
@@ -3865,7 +3865,7 @@
 1764,Skeggiold(Blue)@MG_SOULSTRIKE,chase,13,9,10000,500,5000,yes,target,always,0,,,,,,
 1764,Skeggiold(Blue)@CR_HOLYCROSS,attack,253,5,1000,500,5000,no,target,always,0,,,,,,
 
-1765,Valkyrie@CR_GRANDCROSS,attack,254,1,2000,0,0,yes,target,always,0,,,,,,
+1765,Valkyrie@CR_GRANDCROSS,attack,254,1,2000,0,0,yes,self,always,0,,,,,,
 1765,Valkyrie@SA_DISPELL,attack,289,5,500,0,30000,yes,target,always,0,,,,,,
 1765,Valkyrie@WZ_VERMILION,attack,85,10,2000,0,5000,yes,target,always,0,,,,,,
 1765,Valkyrie@WZ_VERMILION,chase,85,10,2000,0,5000,yes,target,always,0,,,,,,
@@ -3915,11 +3915,13 @@
 
 1781,Drosera@KN_PIERCE,attack,56,5,1000,0,5000,yes,target,always,0,,,,,,
 
+1782,Roween@NPC_EMOTION,idle,197,1,2000,0,5000,yes,self,always,0,22,,,,,
 1782,Roween@NPC_COMBOATTACK,attack,171,4,1000,0,5000,yes,target,always,0,,,,,,
 1782,Roween@NPC_COMBOATTACK,chase,171,4,1000,0,5000,yes,target,always,0,,,,,,
 1782,Roween@NPC_WINDATTACK,attack,187,2,1000,0,5000,yes,target,always,0,,,,,,
 1782,Roween@NPC_WINDATTACK,chase,187,2,1000,0,5000,yes,target,always,0,,,,,,
 
+1783,Galion@NPC_EMOTION,idle,197,1,2000,0,5000,yes,self,always,0,7,,,,,
 1783,Galion@NPC_COMBOATTACK,attack,171,2,1000,0,5000,yes,target,always,0,,,,,,
 1783,Galion@NPC_COMBOATTACK,chase,171,2,1000,0,5000,yes,target,always,0,,,,,,
 1783,Galion@AS_SONICBLOW,attack,136,5,1000,0,5000,yes,target,always,0,,,,,,
@@ -3939,6 +3941,7 @@
 1785,Atros@NPC_CALLSLAVE,attack,352,1,10000,0,30000,yes,target,always,0,,,,,,
 1785,Atros@NPC_CALLSLAVE,chase,352,1,10000,0,30000,yes,target,always,0,,,,,,
 
+1791,Galion@NPC_EMOTION,idle,197,1,2000,0,5000,yes,self,always,0,7,,,,,
 1791,Galion@NPC_COMBOATTACK,attack,171,2,1000,0,5000,yes,target,always,0,,,,,,
 1791,Galion@NPC_COMBOATTACK,chase,171,2,1000,0,5000,yes,target,always,0,,,,,,
 1791,Galion@AS_SONICBLOW,attack,136,5,1000,0,5000,yes,target,always,0,,,,,,
@@ -3947,6 +3950,7 @@
 
 1793,Megalith@NPC_EMOTION,idle,197,1,2000,0,5000,yes,self,always,0,9,,,,,
 
+1794,Roween@NPC_EMOTION,idle,197,1,2000,0,5000,yes,self,always,0,22,,,,,
 1794,Roween@NPC_COMBOATTACK,attack,171,4,1000,0,5000,yes,target,always,0,,,,,,
 1794,Roween@NPC_COMBOATTACK,chase,171,4,1000,0,5000,yes,target,always,0,,,,,,
 1794,Roween@NPC_WINDATTACK,attack,187,2,1000,0,5000,yes,target,always,0,,,,,,

@@ -1,5 +1,8 @@
 // $Id$
 
+2006-07-26
+	* Updated: mob_db and item_db SQL files, now up-to-date [akrus]
+
 2006-07-25
 	* Fixed: Provoke skill formulas [akrus]
 
