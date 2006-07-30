@@ -3678,7 +3678,7 @@
 1751,Valkyrie Randgris@NPC_HOLYATTACK,attack,189,5,500,500,5000,no,target,always,0,,,,,,
 1751,Valkyrie Randgris@AS_SONICBLOW,attack,136,10,2000,0,5000,no,target,always,0,,,,,,
 1751,Valkyrie Randgris@NPC_SUMMONSLAVE,attack,196,3,10000,700,60000,no,self,slavele,3,1765,,,,,
-1751,Valkyrie Randgris@NPC_SUMMONSLAVE,chase,196,3,10000,700,60000,no,self,slavele,3,1765,,,,,
+1751,Valkyrie Randgris@NPC_SUMMONSLAVE,idle,196,3,10000,700,60000,no,self,slavele,3,1765,,,,,
 1751,Valkyrie Randgris@NPC_CALLSLAVE,attack,352,1,10000,0,30000,yes,target,always,0,,,,,,
 1751,Valkyrie Randgris@NPC_CALLSLAVE,chase,352,1,10000,0,30000,yes,target,always,0,,,,,,
 1751,Valkyrie Randgris@AL_INCAGI,chase,29,10,2500,700,300000,no,self,always,0,,,,,,
