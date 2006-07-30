@@ -1,6 +1,9 @@
 // $Id: Changelog.txt 4392 2006-01-04 22:38:08Z Yor $
 Date	Added
 
+2006.07.30
+	Added: /npc/server/Sapho/jobs/1-1/thief.txt [Sapho GM Team]
+
 2006.07.12
 	Fixed: /npc/server/Sapho/jobs/1-1/mage.txt code of solution 4 [Sapho GM Team]
 
