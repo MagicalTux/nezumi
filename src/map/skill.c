@@ -913,7 +913,7 @@ int skill_additional_effect(struct block_list* src, struct block_list *bl, int s
 			status_change_start(bl,SC_STAN,skilllv,0,0,0,skill_get_time2(skillid,skilllv),0);
 		break;
 	case BD_LULLABY:
-		if( rand()%100 < 15*sc_def_int/100 )
+		if(rand()%100 < 15 * sc_def_int / 100 )
 			status_change_start(bl,SC_SLEEP,skilllv,0,0,0,skill_get_time2(skillid,skilllv),0);
 		break;
 	case WS_CARTTERMINATION:
@@ -1603,7 +1603,7 @@ int skill_area_sub( struct block_list *bl,va_list ap )
 static int skill_check_unit_range_sub(struct block_list *bl, va_list ap) {
 	struct skill_unit *unit;
 	int *c;
-	int skillid, g_skillid, unit_id;
+	int skillid, unit_id;
 
 	nullpo_retr(0, bl);
 	nullpo_retr(0, ap);
@@ -1617,7 +1617,6 @@ static int skill_check_unit_range_sub(struct block_list *bl, va_list ap) {
 		return 0;
 
 	skillid = va_arg(ap,int);
-	g_skillid = unit->group->skill_id;
 	unit_id = unit->group->unit_id;
 
 	if (skillid == MG_SAFETYWALL || skillid == AL_PNEUMA) {
@@ -1634,8 +1633,6 @@ static int skill_check_unit_range_sub(struct block_list *bl, va_list ap) {
 			return 0;
 	} else if (skillid == HP_BASILICA) {
 		if ((unit_id < 0x8f || unit_id > 0x99) && unit_id != 0x92 && unit_id != 0x83)
-			return 0;
-		if (skillid != g_skillid)
 			return 0;
 	} else
 		return 0;
@@ -3530,7 +3527,6 @@ int skill_castend_nodamage_id(struct block_list *src, struct block_list *bl, int
 	case HP_BASILICA:
 	case CG_HERMODE:
 		{
-
 			struct skill_unit_group *sg;
 			battle_stopwalking(src, 1);
 			skill_clear_unitgroup(src);
@@ -3544,7 +3540,7 @@ int skill_castend_nodamage_id(struct block_list *src, struct block_list *bl, int
 		}
 		break;
 
-	case PA_GOSPEL:				/* ゴスペル */
+	case PA_GOSPEL:
 		skill_clear_unitgroup(src);
 		clif_skill_nodamage(src, bl, skillid, skilllv, 1);
 		skill_unitsetting(src, skillid, skilllv, src->x, src->y, 0);
@@ -5450,7 +5446,6 @@ int skill_unit_onplace(struct skill_unit *src, struct block_list *bl, unsigned i
 		                    skill_get_time2(sg->skill_id, sg->skill_lv), 0);
 		break;
 
-	case 0x9e:	/* 子守唄 */
 	case 0x9f:	/* ニヨルドの宴 */
 	case 0xa0:	/* 永遠の混沌 */
 	case 0xa1:	/* ?太鼓の響き */
@@ -5685,6 +5680,12 @@ int skill_unit_onplace_timer(struct skill_unit *src, struct block_list *bl, unsi
 			status_change_start(bl, type, sg->skill_lv, (intptr_t)src, 0, 0, skill_get_time2(sg->skill_id, sg->skill_lv), 0);
 		break;
 
+	case 0x9e:	/* BD_LULLABY */
+		if (ss->id == bl->id)
+			break;
+		skill_additional_effect(ss, bl, sg->skill_id, sg->skill_lv, BF_LONG|BF_SKILL|BF_MISC, tick);
+		break;
+
 	case 0xb1:	/* デモンストレーション */
 		skill_attack(BF_WEAPON,ss,&src->bl,bl,sg->skill_id,sg->skill_lv,tick,0);
 		if(bl->type == BL_PC && rand()%100 < sg->skill_lv && battle_config.equipment_breaking)
@@ -5692,7 +5693,7 @@ int skill_unit_onplace_timer(struct skill_unit *src, struct block_list *bl, unsi
 		break;
 
 	case 0x99:				/* トーキーボックス */
-		if(sg->src_id == bl->id) //自分が踏んでも発動しない
+		if(sg->src_id == bl->id)
 			break;
 		if(sg->val2==0){
 			clif_talkiebox(&src->bl,sg->valstr);
@@ -5705,16 +5706,6 @@ int skill_unit_onplace_timer(struct skill_unit *src, struct block_list *bl, unsi
 
 	case 0xa6:	/* BA_DISSONANCE */
 		skill_attack(BF_MISC, ss, &src->bl, bl, sg->skill_id, sg->skill_lv, tick, 0);
-		break;
-
-	// Basilica
-	case 0xb4:				/* バジリカ */
-		if (battle_check_target(&src->bl, bl, BCT_ENEMY) > 0 && !(status_get_mode(bl) & 0x20))
-			skill_blown(&src->bl, bl, 1);
-		if (sg->src_id == bl->id)
-			break;
-		if (battle_check_target(&src->bl, bl, BCT_NOENEMY) > 0 && sc_data && sc_data[type].timer == -1)
-			status_change_start(bl, type, sg->skill_lv, (intptr_t)src, 0, 0, skill_get_time2(sg->skill_id, sg->skill_lv), 0);
 		break;
 
 	case 0xb7:
@@ -5815,8 +5806,10 @@ int skill_unit_onout(struct skill_unit *src, struct block_list *bl, unsigned int
 		case 0xa4:	/* 深淵の中に */
 		case 0xa5:	/* 不死身のジークフリード */
 		case 0xad:	/* 私を忘れないで… */
-			if (sc_data[type].timer != -1 && sc_data[type].val4 == (intptr_t)src)
-				status_change_end(bl, type, -1);
+			sc_data = status_get_sc_data(bl);
+			type = SkillStatusChangeTable[sg->skill_id];
+ 			if (sc_data && sc_data[type].timer != -1 && sc_data[type].val4 == sg->group_id)
+	  			status_change_end(bl, type, -1);
 			break;
 		case 0xa6:	/* 不協和音 */
 		case 0xa7:	/* 口笛 */
@@ -5830,6 +5823,11 @@ int skill_unit_onout(struct skill_unit *src, struct block_list *bl, unsigned int
 			status_change_start(bl, SkillStatusChangeTable[sg->skill_id], sg->skill_lv, 0, 0, 0, 20000, 0);
 			break;
 		case 0xb4:	// HP_BASILICA
+			sc_data = status_get_sc_data(bl);
+			type = SkillStatusChangeTable[sg->skill_id];
+			if(sc_data && sc_data[type].timer != -1 && sc_data[type].val3 == BCT_SELF) //Basilica should only ends if the caster moves
+				status_change_end(bl, type, -1);
+			break;
 		case 0xb9:	// CG_HERMODE
 			sc_data = status_get_sc_data(bl);
 			type = SkillStatusChangeTable[sg->skill_id];
@@ -6872,7 +6870,7 @@ int skill_use_id(struct map_session_data *sd, int target_id, int skill_num, int 
 
 	if (sd->opt1 > 0)
 		return 0;
-	if (sc_data)
+	if (sd->sc_count)
 	{
 		if(sc_data[SC_VOLCANO].timer != -1)
 			if (skill_num == WZ_ICEWALL)
@@ -6909,17 +6907,14 @@ int skill_use_id(struct map_session_data *sd, int target_id, int skill_num, int 
 				return 0;
 		}
 
-// Moved code to another part of source because of a bug [akrus]
-/*		if (sc_data[SC_BASILICA].timer != -1)
-		{
-			struct skill_unit_group *sg = (struct skill_unit_group *)sc_data[SC_BASILICA].val4;
-			if (sg && sg->src_id == sd->bl.id && skill_num == HP_BASILICA)
-				;
+		if (sc_data[SC_BASILICA].timer != -1) { // Disallow all other skills in Basilica [celest]
+			// if caster is the owner of basilica
+				if (sc_data[SC_BASILICA].val3 == BCT_SELF && skill_num == HP_BASILICA)
+				; // do nothing
+			// otherwise...
 			else
 				return 0;
 		}
-*/
-
 
 		if(sc_data[SC_DANCING].timer != -1) {
 			if (sc_data[SC_DANCING].val1 == CG_HERMODE && skill_num == BD_ADAPTATION)
@@ -7116,17 +7111,13 @@ int skill_use_id(struct map_session_data *sd, int target_id, int skill_num, int 
 		}
 		break;
 
-	case PF_MEMORIZE: /* メモライズ */
+	case PF_MEMORIZE:
 		break;
 	case HW_MAGICPOWER:
 		break;
-	case HP_BASILICA:		/* バジリカ */
-		if (skill_check_unit_range(sd->bl.m, sd->bl.x, sd->bl.y, sd->skillid, sd->skilllv)) {
-			clif_skill_fail(sd, sd->skillid, 0, 0);
-			return 0;
-		}
-		if (skill_check_unit_range2(sd->bl.m, sd->bl.x, sd->bl.y, sd->skillid, sd->skilllv)) {
-			clif_skill_fail(sd, sd->skillid, 0, 0);
+	case HP_BASILICA:
+		if (sc_data && sc_data[SC_BASILICA].timer != -1 && sc_data[SC_BASILICA].val3 == BCT_SELF) {
+			status_change_end(&sd->bl, SC_BASILICA, -1);
 			return 0;
 		}
 		break;
@@ -7220,15 +7211,12 @@ int skill_use_pos(struct map_session_data *sd,
 
 	if (sd->opt1 > 0)
 		return 0;
-	if (sc_data) {
-		if (sc_data[SC_SILENCE].timer!=-1 ||
-		    sc_data[SC_ROKISWEIL].timer!=-1 ||
-		    sc_data[SC_AUTOCOUNTER].timer != -1 ||
-		    sc_data[SC_STEELBODY].timer != -1 ||
-		    sc_data[SC_DANCING].timer!=-1 ||
-		    sc_data[SC_BERSERK].timer != -1 ||
-		    sc_data[SC_MARIONETTE].timer != -1 ||
-		    (sc_data[SC_GRAVITATION].timer != -1 && sc_data[SC_GRAVITATION].val3 == BCT_SELF && skill_num != HW_GRAVITATION))
+
+	if (sd->sc_count) {
+		if (sc_data[SC_AUTOCOUNTER].timer != -1 ||
+		    sc_data[SC_BLADESTOP].timer != -1 ||
+		    sc_data[SC_DANCING].timer != -1 ||
+		    sc_data[SC_BASILICA].timer != -1)
 			return 0;
 	}
 

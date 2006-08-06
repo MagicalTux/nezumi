@@ -1,5 +1,9 @@
 // $Id$
 
+2006-08-06
+	* Fixed: Lullaby crashing map-server [akrus]
+	* Fixed: Basilica crashing map-server [akrus]
+
 2006-07-26
 	* Updated: mob_db and item_db SQL files, now up-to-date [akrus]
 

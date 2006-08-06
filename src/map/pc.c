@@ -3941,13 +3941,6 @@ int pc_setpos(struct map_session_data *sd, char *mapname_org, int x, int y, int 
 			status_change_end(&sd->bl, SC_BLADESTOP,-1);
 		if(sd->sc_data[SC_DANCING].timer != -1) // clear dance effect when warping [Valaris]
 			skill_stop_dancing(&sd->bl, 0);
-		if(sd->sc_data[SC_BASILICA].timer != -1)
-		{
-			struct skill_unit_group *sg = (struct skill_unit_group *)sd->sc_data[SC_BASILICA].val4;
-			if (sg && sg->src_id == sd->bl.id)
-				skill_delunitgroup(sg);
-			status_change_end(&sd->bl, SC_BASILICA, -1);
-		}
 	}
 	
 	// Duelling system by Daven
@@ -4311,15 +4304,6 @@ static TIMER_FUNC(pc_walk) {
 				skill_unit_move_unit_group((struct skill_unit_group *)sd->sc_data[SC_DANCING].val2,sd->bl.m,dx,dy);
 			if (sd->sc_data[SC_DEVOTION].val1)
 				skill_devotion2(&sd->bl,sd->sc_data[SC_DEVOTION].val1);
-			if (sd->sc_data[SC_BASILICA].timer != -1) { // Basilica cancels if caster moves [celest]
-				/*int i;
-				for (i = 0; i < MAX_SKILLUNITGROUP; i++)
-					if (sd->skillunit[i].skill_id == HP_BASILICA)*/
-				struct skill_unit_group *sg = (struct skill_unit_group *)sd->sc_data[SC_BASILICA].val4;
-				if (sg && sg->src_id == sd->bl.id)
-					skill_delunitgroup(sg);
-				status_change_end(&sd->bl, SC_BASILICA, -1);
-			}
 		}
 
 		if (map_getcell(sd->bl.m, x, y, CELL_CHKNPC))

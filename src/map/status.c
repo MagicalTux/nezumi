@@ -4684,20 +4684,6 @@ TIMER_FUNC(status_change_timer) {
 		}
 		break;
 
-	case SC_LULLABY:
-		if ((--sc_data[type].val2) > 0) {
-			struct skill_unit *unit= (struct skill_unit *)sc_data[type].val4;
-			if (!unit || !unit->group)
-				break;
-			if (unit->group->src_id == bl->id)
-				break;
-			skill_additional_effect(bl, bl, unit->group->skill_id, sc_data[type].val1, BF_LONG|BF_SKILL|BF_MISC, tick);
-			if (unit->group != 0)
-				sc_data[type].timer = add_timer(skill_get_time(unit->group->skill_id, unit->group->skill_lv) / 10 + tick, status_change_timer, bl->id, data);
-			return 0;
-		}
-		break;
-
 	case SC_STONE:
 		if (sc_data[type].val2 != 0) {
 			short *opt1 = status_get_opt1(bl);

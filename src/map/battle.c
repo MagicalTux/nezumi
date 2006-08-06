@@ -3773,8 +3773,6 @@ int battle_check_target( struct block_list *src, struct block_list *target, int 
 {
 	int s_p, s_g, t_p, t_g;
 	struct block_list *ss = src;
-	struct status_change *sc_data;
-	struct status_change *tsc_data;
 
 	nullpo_retr(0, src);
 	nullpo_retr(0, target);
@@ -3800,12 +3798,6 @@ int battle_check_target( struct block_list *src, struct block_list *target, int 
 		return -1;
 
 	if (target->type == BL_PC && ((struct map_session_data *)target)->invincible_timer != -1)
-		return -1;
-
-	sc_data = status_get_sc_data(src);
-	tsc_data = status_get_sc_data(target);
-	if ((sc_data && sc_data[SC_BASILICA].timer != -1) ||
-	    (tsc_data && tsc_data[SC_BASILICA].timer != -1))
 		return -1;
 
 	if (target->type == BL_SKILL) {

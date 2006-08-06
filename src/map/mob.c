@@ -1333,7 +1333,7 @@ static int mob_special_ai_sub_hard_activesearch(struct block_list *bl, va_list a
 	} else
 		return 0;
 
-	//敵味方判定
+
 	if (battle_check_target(&smd->bl, bl, BCT_ENEMY) == 0)
 		return 0;
 
@@ -1342,9 +1342,7 @@ static int mob_special_ai_sub_hard_activesearch(struct block_list *bl, va_list a
 	else
 		mode = smd->mode;
 
-	// アクティブでターゲット射程内にいるなら、ロックする
 	race = mob_db[smd->class].race;
-	//対象がPCの場合
 	if (tsd &&
 	    tsd->bl.m == smd->bl.m && // necessary?
 	    !pc_isdead(tsd) &&
@@ -1439,7 +1437,6 @@ static int mob_ai_sub_hard_activesearch(struct block_list *bl, va_list ap)
 	if ((tsd = (struct map_session_data *)bl) == NULL)
 		return 0;
 
-	//敵味方判定
 	if (battle_check_target(&smd->bl, bl, BCT_ENEMY) == 0)
 		return 0;
 
@@ -1448,9 +1445,7 @@ static int mob_ai_sub_hard_activesearch(struct block_list *bl, va_list ap)
 	else
 		mode = smd->mode;
 
-	// アクティブでターゲット射程内にいるなら、ロックする
 	race = mob_db[smd->class].race;
-	//対象がPCの場合
 	if (tsd->bl.m == smd->bl.m && // necessary?
 	    !pc_isdead(tsd) &&
 	    tsd->invincible_timer == -1 &&
@@ -1894,7 +1889,6 @@ static int mob_ai_sub_hard(struct block_list *bl, va_list ap) {
 				          !((race == 4 || race == 6) && !tsd->perfect_hiding))))
 					mob_unlocktarget(md, tick); // スキルなどによる策敵妨害
 				else if (!battle_check_range(&md->bl, tbl, mob_db[md->class].range)) {
-					// 攻撃範囲外なので移動
 					if (!(mode & 1)) { // 移動しないモード
 						mob_unlocktarget(md, tick);
 						return 0;
@@ -1903,13 +1897,11 @@ static int mob_ai_sub_hard(struct block_list *bl, va_list ap) {
 						return 0;
 					md->state.skillstate = md->state.aggressive ? MSS_FOLLOW : MSS_RUSH;
 					mobskill_use(md, tick, -1);
-//					if (md->timer != -1 && (DIFF_TICK(md->next_walktime, tick) < 0 || distance(md->to_x,md->to_y,tsd->bl.x,tsd->bl.y) < 2))
 					if (md->timer != -1 && md->state.state != MS_ATTACK && (DIFF_TICK(md->next_walktime, tick) < 0 || distance(md->to_x, md->to_y, tbl->x, tbl->y) < 2))
 						return 0; // 既に移動中
 					if (!mob_can_reach(md, tbl, (md->min_chase > 13) ? md->min_chase : 13))
 						mob_unlocktarget(md, tick); // 移動できないのでタゲ解除（IWとか？）
 					else {
-						// 追跡
 						md->next_walktime = tick + 500;
 						i = 0;
 						do {
