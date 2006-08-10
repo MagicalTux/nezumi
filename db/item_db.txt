@@ -756,9 +756,9 @@
 1715,Arbalest_,Arbalest,4,48000,,1000,90,,5,2,0x000A0848,7,2,34,3,33,1,11,{ bonus bDex,2; },{},{}
 1716,Gakkung_Bow_,Gakkung Bow,4,42000,,1100,100,,5,2,0x000A0848,7,2,34,3,33,1,11,{},{},{}
 1718,Hunter_Bow,Hunter Bow,4,64000,,1500,125,,5,0,0x00000800,7,2,34,3,33,1,11,{},{},{}
-1719,Roguemaster's_Bow,Roguemaster's Bow,4,,10,500,75,,11,0,0x00000040,7,2,34,4,48,1,11,{ bonus bAtkRange,11; },{},{}
+1719,Bow_Of_Roguemaster,Roguemaster's Bow,4,,10,500,75,,11,0,0x00000040,7,2,34,4,48,1,11,{},{},{}
 1720,Rudra_Bow,Rudra Bow,4,,10,1200,150,,5,0,0x000A0808,7,2,34,4,48,1,11,{ bonus bAtkEle,Ele_Holy; bonus bInt,5; skill 35,1; skill 28,1; bonus2 bResEff,Eff_Poison,5000; bonus2 bResEff,Eff_Curse,5000; bonus2 bResEff,Eff_Silence,5000; bonus2 bResEff,Eff_Confusion,5000; bonus2 bResEff,Eff_Blind,5000; },{},{}
-1721,Repeating_Crossbow,Repeating Crossbow,4,89000,,2000,95,,9,1,0x00020840,7,2,34,3,65,1,11,{ bonus bAtkRange,4; },{},{}
+1721,Repeating_CrossBow,Repeating Crossbow,4,89000,,2000,95,,9,1,0x00020840,7,2,34,3,65,1,11,{},{},{}
 1722,Ballista,Ballista,4,,10,3500,145,,5,0,0x00080800,7,2,34,4,77,1,11,{},{},{}
 1723,Luna_Bow,Luna Bow,4,,10,2000,100,,5,2,0x00000800,7,2,34,3,30,1,11,{ bonus bDef,2+3*(getrefine()>9)+(getrefine()>6 && getrefine()<=9); },{},{}
 1724,Dragon_Wing,Dragon Wing,4,,10,1200,100,,5,0,0x000A0848,7,2,34,4,60,1,11,{ bonus3 bAddMonsterDropItem,1765,RC_Dragon,300; bonus bIgnoreDefRace,RC_Dragon; },{},{}
@@ -1280,7 +1280,7 @@
 4114,Argiope_Card,Argiope Card,6,,10,10,,,,,,,,16,,,,,{ bonus bDefEle,Ele_Poison; bonus bDef,1; },{},{}
 4115,Hunter_Fly_Card,Hunter Fly Card,6,,10,10,,,,,,,,2,,,,,{ bonus2 bHpDrainRate,30,15; },{},{}
 4116,Isis_Card,Isis Card,6,,10,10,,,,,,,,4,,,,,{ bonus2 bSubEle,Ele_Dark,30; bonus bFlee,5; },{},{}
-4117,Sidewinder_Card,Sidewinder Card,6,,10,10,,,,,,,,2,,,,,{ bonus bDoubleRate,5+45*(getskilllv(48)==10); },{},{}
+4117,Side_Winder_Card,Sidewinder Card,6,,10,10,,,,,,,,2,,,,,{ bonus bDoubleRate,5; },{},{}
 4118,Earth_Petite_Card,Earth Petite Card,6,,10,10,,,,,,,,2,,,,,{ bonus2 bAddRace,RC_Dragon,20; },{},{}
 4119,Bathory_Card,Bathory Card,6,,10,10,,,,,,,,16,,,,,{ bonus bDefEle,Ele_Dark; },{},{}
 4120,Sky_Petite_Card,Sky Petite Card,6,,10,10,,,,,,,,32,,,,,{ bonus2 bSubRace,RC_Dragon,30; },{},{}
@@ -1544,7 +1544,7 @@
 4378,Gold_Acidus_Card,Gold Acidus Card,6,,10,10,,,,,,,,64,,,,,{ if(getrefine()>4) goto L_next; bonus bMaxHPrate,8; bonus bMaxSPrate,8; bonus bHPrecovRate,5; bonus bSPrecovRate,5; end; L_next: bonus bMaxHPrate,4; bonus bMaxSPrate,4; },{},{}
 4379,Blue_Acidus_Card,Blue Acidus Card,6,,10,10,,,,,,,,769,,,,,{ if(getrefine()>4) goto L_next; bonus bSPrecovRate,5; bonus bMaxSP,80; end; L_next: bonus bMaxSP,40; },{},{}
 4380,Red_Ferus_Card,Red Ferus Card,6,,10,10,,,,,,,,2,,,,,{ bonus2 bSkillAtk,80,2; bonus2 bSkillAtk,83,2; },{},{}
-4381,Green_Ferus_Card,Green Ferus Card,6,,10,10,,,,,,,,64,,,,,{ bonus bVit,1; bonus bMaxHPrate,10; if(isequipped(4199,4234,4252,4178) == 0) goto L_next; bonus bDex,5; bonus2 bSkillAtk,394,5; bonus2 bSkillAtk,324,10; bonus2 bSkillAtk,316,10; L_next: if(BaseJob == Job_Bard || BaseJob == Job_Dancer) bonus4 bAutoSpellWhenHit,489,2,50,1; },{},{}
+4381,Green_Ferus_Card,Green Ferus Card,6,,10,10,,,,,,,,64,,,,,{ bonus bVit,1; bonus bMaxHPrate,10; if(isequipped(4297,4234,4252,4178) == 0) goto L_next; bonus bDex,5; bonus2 bSkillAtk,394,5; bonus2 bSkillAtk,324,10; bonus2 bSkillAtk,316,10; L_next: if(BaseJob == Job_Bard || BaseJob == Job_Dancer) bonus4 bAutoSpellWhenHit,489,2,50,1; },{},{}
 4382,Yellow_Novus_Card,Yellow Novus Card,6,,10,10,,,,,,,,16,,,,,{ bonus bMaxHP,500; bonus bHPrecovRate,10; if(isequipped(4208,4258,4325,4327) == 0) goto L_next; bonus bInt,3; bonus2 bSkillAtk,91,10; bonus2 bSkillAtk,21,10; L_next: if(BaseJob != Job_Sage) end; bonus bMagicDamageReturn,20; bonus2 bAddMonsterDropItem,716,10; bonus2 bAddMonsterDropItem,715,100; bonus bCastrate,-20; },{},{}
 4383,Red_Novus_Card,Red Novus Card,6,,10,10,,,,,,,,16,,,,,{ bonus3 bAddEffWhenHit,Eff_Confusion,3000,2; },{},{}
 4384,Hydro_Card,Hydro Card,6,,10,10,,,,,,,,136,,,,,{ bonus3 bAutoSpell,277,1,100; },{},{}
