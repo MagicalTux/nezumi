@@ -97,8 +97,8 @@
 602,Butterfly_Wing,Butterfly Wing,2,300,,50,,,,,0xFFFFFFFF,7,2,,,,,,{ warp "SavePoint",0,0; },{},{}
 603,Old_Blue_Box,Old Blue Box,2,10000,,200,,,,,0xFFFFFFFF,7,2,,,,,,{ getitem -1,1; },{},{}
 604,Dead_Branch,Dead Branch,2,50,,50,,,,,0xFFFFFFFF,7,2,,,,,,{ monster "this",-1,-1,"--ja--",-1,1,""; },{},{}
-605,Anodyne,Anodyne,11,2000,,100,,,,,0xFFFFFFFF,7,2,,,,,,{ itemskill 8,1,"Endure"; },{},{}
-606,Aloevera,Aloevera,11,1500,,100,,,,,0xFFFFFFFF,7,2,,,,,,{ itemskill 6,1,"Provoke"; },{},{}
+605,Anodyne,Anodyne,0,2000,,100,,,,,0xFFFFFFFF,7,2,,,,,,{ sc_start SC_ENDURE,10000,1; },{},{}
+606,Aloebera,Aloevera,0,1500,,100,,,,,0xFFFFFFFF,7,2,,,,,,{ sc_start SC_PROVOKE,30000,1; },{},{}
 607,Yggdrasil_Berry,Yggdrasil Berry,0,2,,300,,,,,0xFFFFFFFF,7,2,,,,,,{ percentheal 100,100; },{},{}
 608,Yggdrasil_Seed,Yggdrasil Seed,0,5000,,300,,,,,0xFFFFFFFF,7,2,,,,,,{ percentheal 50,50; },{},{}
 609,Amulet,Amulet,2,100,,100,,,,,0xFFFFFFFF,7,2,,,,,,{},{},{}
@@ -1762,14 +1762,14 @@
 5187,Twin_Ribbon,Twin Ribbon,5,,10,200,,3,,1,0xFFFFFFFF,7,2,256,,30,1,239,{ bonus bMaxSP,30; bonus bMdef,3; },{},{}
 5188,Wandering_Minstrel_Hat,Wandering Minstrel Hat,5,,10,500,,2,,0,0xFFFFFFFF,7,2,256,,50,1,240,{ bonus bInt,1; bonus bDex,1; },{},{}
 5189,Autumn_Leaves,Autumn Leaves,5,,10,100,,0,,0,0xFFFFFFFF,7,2,256,,,1,241,{ bonus bMaxHP,40; bonus bMaxSP,40; },{},{}
-5190,Independence_Memorial_Hat,Independence Memorial Hat,5,,10,0,,3,,0,0xFFFFFFFF,7,2,256,,,1,242,{},{},{}
-5191,Black_Ribbon,Black Ribbon,5,,10,100,,1,,0,0xFFFFFFFF,7,2,256,,,1,243,{ bonus bMdef,3; },{},{}
-5192,Yellow_Ribbon,Yellow Ribbon,5,,10,100,,1,,0,0xFFFFFFFF,7,2,256,,,1,244,{ bonus bMdef,3; },{},{}
-5193,Green_Ribbon,Green Ribbon,5,,10,100,,1,,0,0xFFFFFFFF,7,2,256,,,1,245,{ bonus bMdef,3; },{},{}
-5194,Pink_Ribbon,Pink Ribbon,5,,10,100,,1,,0,0xFFFFFFFF,7,2,256,,,1,246,{ bonus bMdef,3; },{},{}
-5195,Red_Ribbon,Red Ribbon,5,,10,100,,1,,0,0xFFFFFFFF,7,2,256,,,1,247,{ bonus bMdef,3; },{},{}
-5196,Orange_Ribbon,Orange Ribbon,5,,10,100,,1,,0,0xFFFFFFFF,7,2,256,,,1,248,{ bonus bMdef,3; },{},{}
-5197,White_Ribbon,White Ribbon,5,,10,100,,1,,0,0xFFFFFFFF,7,2,256,,,1,249,{ bonus bMdef,3; },{},{}
+5190,Independence_Memorial_Hat,Independence Memorial Hat,5,,10,0,,3,,0,0xFFFFFFFF,7,2,256,,,1,216,{},{},{}
+5191,Black_Ribbon,Black Ribbon,5,,10,100,,1,,0,0xFFFFFFFF,7,2,256,,,1,242,{ bonus bMdef,3; },{},{}
+5192,Yellow_Ribbon,Yellow Ribbon,5,,10,100,,1,,0,0xFFFFFFFF,7,2,256,,,1,243,{ bonus bMdef,3; },{},{}
+5193,Green_Ribbon,Green Ribbon,5,,10,100,,1,,0,0xFFFFFFFF,7,2,256,,,1,244,{ bonus bMdef,3; },{},{}
+5194,Pink_Ribbon,Pink Ribbon,5,,10,100,,1,,0,0xFFFFFFFF,7,2,256,,,1,245,{ bonus bMdef,3; },{},{}
+5195,Red_Ribbon,Red Ribbon,5,,10,100,,1,,0,0xFFFFFFFF,7,2,256,,,1,246,{ bonus bMdef,3; },{},{}
+5196,Orange_Ribbon,Orange Ribbon,5,,10,100,,1,,0,0xFFFFFFFF,7,2,256,,,1,247,{ bonus bMdef,3; },{},{}
+5197,White_Ribbon,White Ribbon,5,,10,100,,1,,0,0xFFFFFFFF,7,2,256,,,1,248,{ bonus bMdef,3; },{},{}
 
 // More Etc Items
 //===================================================================
@@ -2192,16 +2192,16 @@
 7418,Written_Request_02,Written Request 02,3,,10,10,,,,,,,,,,,,,{},{},{}
 7419,Embryo_Creation_Guide,Embryo Creation Guide,3,,10,10,,,,,,,,,,,,,{},{},{}
 7420,Skull_,Skull,3,,0,10,,,,,,,,,,,,,{},{},{}
-7421,Red_Key,Red Key,3,,10,10,,,,,,,,,,,,,{},{},{}
-7422,Yellow_Key,Yellow Key,3,,10,10,,,,,,,,,,,,,{},{},{}
-7423,Blue_Key,Blue Key,3,,10,10,,,,,,,,,,,,,{},{},{}
-7424,Green_Key,Green Key,3,,10,10,,,,,,,,,,,,,{},{},{}
-7425,Black_Key,Black Key,3,,10,10,,,,,,,,,,,,,{},{},{}
-7426,Red_Magic_Stone,Red Magic Stone,3,,10,10,,,,,,,,,,,,,{},{},{}
-7427,Yellow_Magic_Stone,Yellow Magic Stone,3,,10,10,,,,,,,,,,,,,{},{},{}
-7428,Blue_Magic_Stone,Blue Magic Stone,3,,10,10,,,,,,,,,,,,,{},{},{}
-7429,Green_Magic_Stone,Green Magic Stone,3,,10,10,,,,,,,,,,,,,{},{},{}
-7430,Black_Magic_Stone,Black Magic Stone,3,,10,10,,,,,,,,,,,,,{},{},{}
+7421,Red_Key,Red Key,3,,10,0,,,,,,,,,,,,,{},{},{}
+7422,Yellow_Key,Yellow Key,3,,10,0,,,,,,,,,,,,,{},{},{}
+7423,Blue_Key,Blue Key,3,,10,0,,,,,,,,,,,,,{},{},{}
+7424,Green_Key,Green Key,3,,10,0,,,,,,,,,,,,,{},{},{}
+7425,Black_Key,Black Key,3,,10,0,,,,,,,,,,,,,{},{},{}
+7426,Red_Magic_Stone,Red Magic Stone,3,,10,0,,,,,,,,,,,,,{},{},{}
+7427,Yellow_Magic_Stone,Yellow Magic Stone,3,,10,0,,,,,,,,,,,,,{},{},{}
+7428,Blue_Magic_Stone,Blue Magic Stone,3,,10,0,,,,,,,,,,,,,{},{},{}
+7429,Green_Magic_Stone,Green Magic Stone,3,,10,0,,,,,,,,,,,,,{},{},{}
+7430,Black_Magic_Stone,Black Magic Stone,3,,10,0,,,,,,,,,,,,,{},{},{}
 7431,Books,Books,3,,10,10,,,,,,,,,,,,,{},{},{}
 7432,Leather_Pouch,Leather Pouch,3,,10,10,,,,,,,,,,,,,{},{},{}
 7433,Empty_Scroll,Empty Scroll,3,,2000,10,,,,,,,,,,,,,{},{},{}
