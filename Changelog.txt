@@ -1,6 +1,7 @@
 // $Id$
 
 2006-08-06
+	* Added: delete_account in class of ladmin (nezumi.php) [Yor]
 	* Fixed: Lullaby crashing map-server [akrus]
 	* Fixed: Basilica crashing map-server [akrus]
 
